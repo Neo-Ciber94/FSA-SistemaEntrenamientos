@@ -1,0 +1,22 @@
+.block-1 p {
+  font-size: 30px;
+  font-weight: 300;
+  color: rgb(73, 73, 73);
+}
+
+.block-1 ul {
+  list-style: none;
+}
+
+.block-1 ul li::before {
+  content: "\2022";
+  color: var(--main-color);
+  font-weight: bold;
+  display: inline-block;
+  width: 1em;
+  margin-left: -1em;
+}
+
+.block-1 ul li {
+  font-size: 18px;
+}

@@ -1,0 +1,28 @@
+nav {
+  box-shadow: 0 5px 10px rgba(134, 134, 134, 0.4);
+  padding: 10px 30px;
+  height: 80px;
+}
+
+a.logo {
+  margin-left: 20px;
+}
+
+a.logo img {
+  width: 200px;
+  height: auto;
+}
+
+nav .nav-link {
+  color: black;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+nav .nav-link:hover {
+  color: var(--main-color);
+}
+
+.active {
+  color: var(--main-color);
+}
