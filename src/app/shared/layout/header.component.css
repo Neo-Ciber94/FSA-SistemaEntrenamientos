@@ -1,7 +1,7 @@
 nav {
   box-shadow: 0 5px 10px rgba(134, 134, 134, 0.4);
   padding: 10px 30px;
-  height: 80px;
+  min-height: 80px;
 }
 
 a.logo {
@@ -25,4 +25,17 @@ nav .nav-link:hover {
 
 .active {
   color: var(--main-color);
+}
+
+/* 893px is a hardcoded value for when boostrap use the toggler in the navbar*/
+@media (max-width: 893px) {
+  .navbar-nav {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+  
+  nav .nav-link {
+    margin: 10px 0;
+  }
 }
