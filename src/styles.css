@@ -8,3 +8,8 @@
   box-sizing: border-box;
   color: #444;
 }
+
+::selection {
+  background-color: var(--main-color);
+  color: white;
+}
