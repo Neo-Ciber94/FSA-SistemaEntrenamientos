@@ -8,12 +8,7 @@ import { HeaderComponent } from './shared/layout/header.component';
 import { NotFoundComponent } from './shared/not-found/not-found.component';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    HeaderComponent,
-    FooterComponent,
-    NotFoundComponent,
-  ],
+  declarations: [AppComponent, HeaderComponent, FooterComponent],
   imports: [BrowserModule, AppRoutingModule],
   providers: [],
   bootstrap: [AppComponent],

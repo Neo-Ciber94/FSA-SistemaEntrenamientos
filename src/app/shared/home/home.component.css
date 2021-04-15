@@ -15,7 +15,7 @@ main {
 .jumbotron-content {
   max-width: 600px;
   margin-top: 40px;
-  transform: translate(20%, 20%);
+  transform: translate(20%, 15%);
 }
 
 @media (max-width: 800px) {

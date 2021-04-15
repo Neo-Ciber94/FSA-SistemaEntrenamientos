@@ -2,7 +2,7 @@ nav {
   background-color: white;
   box-shadow: 0 5px 10px rgba(134, 134, 134, 0.4);
   padding: 10px 30px;
-  min-height: 80px;
+  min-height: var(--header-height);
 }
 
 a.logo {
