@@ -17,3 +17,7 @@ form input {
 .buttons .btn {
   font-size: 18px;
 }
+
+.container-responsive {
+  margin-bottom: 50px;
+}
