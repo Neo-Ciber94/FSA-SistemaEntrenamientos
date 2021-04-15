@@ -1,0 +1,11 @@
+div {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+div h1 {
+  position: absolute;
+  top: calc(50% - var(--footer-height) + var(--header-height));
+  font-size: 50px;
+}
