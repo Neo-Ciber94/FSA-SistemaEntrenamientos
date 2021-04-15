@@ -8,17 +8,21 @@
   }
 }
 
-.login-form input {
+.form-container {
+  min-height: 550px;
+}
+
+.form-container input {
   height: 50px !important;
 }
 
-.login-form label,
-.login-form input,
-.login-form button {
+.form-container label,
+.form-container input,
+.form-container button {
   font-size: 20px;
 }
 
-.login-form button {
+.form-container button {
   height: 50px !important;
   margin-top: 20px;
 }
