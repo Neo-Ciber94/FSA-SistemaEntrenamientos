@@ -1,0 +1,28 @@
+.container {
+  width: 1200px;
+}
+
+.form-group {
+  margin-bottom: 10px;
+}
+
+@media (max-width: 800px) {
+  .container {
+    width: 100%;
+  }
+}
+
+.login-form input {
+  height: 50px !important;
+}
+
+.login-form label,
+.login-form input,
+.login-form button {
+  font-size: 20px;
+}
+
+.login-form button {
+  height: 50px !important;
+  margin-top: 20px;
+}

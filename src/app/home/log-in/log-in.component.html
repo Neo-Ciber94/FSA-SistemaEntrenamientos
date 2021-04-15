@@ -1,1 +1,47 @@
-<p>log-in works!</p>
+<h1 class="text-center mt-md-4">Log in</h1>
+
+<div class="container p-md-5 login-form">
+  <form>
+    <!-- Email -->
+    <div class="form-group mb-4">
+      <div>
+        <label class="form-label">Email</label>
+      </div>
+      <div>
+        <input
+          class="form-control"
+          type="email"
+          placeholder="Your email"
+          required
+        />
+      </div>
+    </div>
+
+    <!-- Password -->
+    <div class="form-group">
+      <div>
+        <label class="form-label">Password</label>
+      </div>
+      <div>
+        <input
+          class="form-control"
+          type="password"
+          placeholder="Your password"
+          required
+        />
+      </div>
+    </div>
+
+    <!-- Submit -->
+    <div class="d-flex flex-row justify-content-center">
+      <button type="submit" class="btn btn-danger w-50">Log in</button>
+    </div>
+  </form>
+
+  <div class="text-center my-2">
+    <span>
+      Don't have an account?
+      <a class="link-danger" routerLink="/signup">Sign up</a>
+    </span>
+  </div>
+</div>

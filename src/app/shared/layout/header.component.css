@@ -24,7 +24,7 @@ nav .nav-link:hover {
   color: var(--main-color);
 }
 
-.active {
+nav .nav-link.active {
   color: var(--main-color);
 }
 

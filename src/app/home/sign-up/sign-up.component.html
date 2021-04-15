@@ -1,1 +1,92 @@
-<p>sign-up works!</p>
+<h1 class="text-center mt-md-4">Sign up</h1>
+
+<div class="container p-md-5 login-form">
+  <form>
+    <!-- First Name -->
+    <div class="form-group row">
+      <div class="col-sm-3">
+        <label class="col-form-label">First Name</label>
+      </div>
+      <div class="col-sm-9">
+        <input
+          class="form-control"
+          type="text"
+          placeholder="Your first name"
+          required
+        />
+      </div>
+    </div>
+
+    <!-- Last Name -->
+    <div class="form-group row">
+      <div class="col-sm-3">
+        <label class="col-form-label">Last Name</label>
+      </div>
+      <div class="col-sm-9">
+        <input
+          class="form-control"
+          type="text"
+          placeholder="Your last name"
+          required
+        />
+      </div>
+    </div>
+
+    <!-- Email -->
+    <div class="form-group row">
+      <div class="col-sm-3">
+        <label class="col-form-label">Email</label>
+      </div>
+      <div class="col-sm-9">
+        <input
+          class="form-control"
+          type="email"
+          placeholder="Your email"
+          required
+        />
+      </div>
+    </div>
+
+    <!-- Password -->
+    <div class="form-group row">
+      <div class="col-sm-3">
+        <label class="col-form-label">Password</label>
+      </div>
+      <div class="col-sm-9">
+        <input
+          class="form-control"
+          type="email"
+          placeholder="Your password"
+          required
+        />
+      </div>
+    </div>
+
+    <!-- Confirm password -->
+    <div class="form-group row">
+      <div class="col-sm-3">
+        <label class="col-form-label">Confirm Password</label>
+      </div>
+      <div class="col-sm-9">
+        <input
+          class="form-control"
+          type="email"
+          placeholder="Confirm password"
+          required
+        />
+      </div>
+    </div>
+
+    <!-- Submit -->
+    <div class="d-flex flex-row justify-content-center">
+      <button type="submit" class="btn btn-danger w-50">Sign up</button>
+    </div>
+  </form>
+
+  <div class="text-center my-2">
+    <span>
+      Have an account?
+      <a class="link-danger" routerLink="/login">Log in</a>
+    </span>
+  </div>
+</div>
