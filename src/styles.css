@@ -41,3 +41,10 @@ main {
   background-color: var(--main-color);
   color: white;
 }
+
+.highlight {
+  background-color: var(--main-color);
+  padding: 3px;
+  margin: 0 3px;
+  color: white;
+}

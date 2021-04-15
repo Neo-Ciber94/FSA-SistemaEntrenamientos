@@ -13,7 +13,7 @@ main {
 }
 
 .jumbotron-content {
-  max-width: 600px;
+  max-width: 700px;
   margin-top: 40px;
   transform: translate(20%, 15%);
 }
@@ -37,7 +37,12 @@ main {
 
 .jumbotron-card > p {
   color: white;
-  font-size: clamp(14px, 6vw, 20px);
+  font-size: clamp(14px, 6vw, 18px);
+}
+
+.jumbotron-card > h4 {
+  color: white;
+  font-size: clamp(14px, 6vw, 24px);
 }
 
 .jumbotron-card {
