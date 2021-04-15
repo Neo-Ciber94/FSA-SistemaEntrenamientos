@@ -1,0 +1,49 @@
+--- Home
+fullstackacademy.com
+fullstackacademy.com/home
+fullstackacademy.com/login
+fullstackacademy.com/signup
+fullstackacademy.com/login
+
+--- User
+fullstackacademy.com/users/:user_id/profile
+fullstackacademy.com/users/:user_id/profile/edit
+
+--- Student
+fullstackacademy.com/courses
+fullstackacademy.com/courses/:course_id
+
+fullstackacademy.com/courses/:course_id/classes
+fullstackacademy.com/courses/:course_id/classes/:class_id
+
+fullstackacademy.com/courses/:course_id/classes/:class_id/assignments/:assignment_id
+
+---- Tutor
+fullstackacademy.com/tutors/:tutor_id/courses
+fullstackacademy.com/tutors/:tutor_id/courses/:course_id
+fullstackacademy.com/tutors/:tutor_id/courses/new
+fullstackacademy.com/tutors/:tutor_id/courses/:course_id/edit
+fullstackacademy.com/tutors/:tutor_id/courses/:course_id/delete
+
+fullstackacademy.com/tutors/:tutor_id/courses/:course_id/classes
+fullstackacademy.com/tutors/:tutor_id/courses/:course_id/classes/:class_id
+fullstackacademy.com/tutors/:tutor_id/courses/:course_id/classes/new
+fullstackacademy.com/tutors/:tutor_id/courses/:course_id/classes/:class_id/edit
+fullstackacademy.com/tutors/:tutor_id/courses/:course_id/classes/:class_id/delete
+
+fullstackacademy.com/tutors/tutor_id/courses/:course_id/classes/:class_id/assignments
+fullstackacademy.com/tutors/tutor_id/courses/:course_id/classes/:class_id/assignments/:assignment_id
+fullstackacademy.com/tutors/tutor_id/courses/:course_id/classes/:class_id/assignments/new
+fullstackacademy.com/tutors/tutor_id/courses/:course_id/classes/:class_id/assignments/:assignment_id/edit
+fullstackacademy.com/tutors/tutor_id/courses/:course_id/classes/:class_id/assignments/:assignment_id/delete
+
+---- Admin
+###### fullstackacademy.com/tutors
+fullstackacademy.com/users
+fullstackacademy.com/users/:user_id
+fullstackacademy.com/courses
+fullstackacademy.com/courses/:course_id
+fullstackacademy.com/courses/:course_id/classes
+fullstackacademy.com/courses/:course_id/classes/:class_id
+fullstackacademy.com/courses/:course_id/classes/:class_id/assignments
+fullstackacademy.com/courses/:course_id/classes/:class_id/assignments/:assignment_id

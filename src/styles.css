@@ -48,3 +48,15 @@ main {
   margin: 0 3px;
   color: white;
 }
+
+.container-responsive {
+  width: 60%;
+  padding: 10px;
+  margin: 0 auto;
+}
+
+@media (max-width: 800px) {
+  .container-responsive {
+    width: 100%;
+  }
+}

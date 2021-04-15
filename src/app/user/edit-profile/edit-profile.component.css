@@ -1,0 +1,19 @@
+form label {
+  font-size: 18px;
+}
+
+form input {
+  font-size: 16px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.buttons {
+  justify-content: space-around;
+}
+
+.buttons .btn {
+  font-size: 18px;
+}
