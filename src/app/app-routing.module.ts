@@ -17,6 +17,11 @@ const routes: Routes = [
       import('./views/user/user.module').then((m) => m.UserModule),
   },
   {
+    path: 'courses',
+    loadChildren: () =>
+      import('./views/course/course.module').then((m) => m.CourseModule),
+  },
+  {
     path: 'profile',
     component: ProfileComponent,
   },
