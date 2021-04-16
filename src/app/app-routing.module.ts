@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { NotFoundComponent } from './views/shared/not-found/not-found.component';
 import { EditProfileComponent } from './views/user/edit-profile/edit-profile.component';
 import { ProfileComponent } from './views/user/profile/profile.component';
@@ -24,15 +24,12 @@ const routes: Routes = [
   {
     path: 'profile',
     component: ProfileComponent,
-  },
-  {
-    path: 'profile/edit',
-    component: EditProfileComponent,
-  },
-  {
-    path: 'courses',
-    loadChildren: () =>
-      import('./views/course/course.module').then((m) => m.CourseModule),
+    children: [
+      {
+        path: 'edit',
+        component: EditProfileComponent,
+      },
+    ],
   },
   {
     path: '**',

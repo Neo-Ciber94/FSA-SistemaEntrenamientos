@@ -9,13 +9,7 @@ import { CourseModule } from './views/course/course.module';
 
 @NgModule({
   declarations: [AppComponent],
-  imports: [
-    BrowserModule,
-    SharedModule,
-    CourseModule,
-    AppRoutingModule,
-    NgbModule,
-  ],
+  imports: [BrowserModule, SharedModule, AppRoutingModule, NgbModule],
   providers: [],
   bootstrap: [AppComponent],
 })
