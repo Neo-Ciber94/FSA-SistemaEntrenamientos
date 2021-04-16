@@ -2,7 +2,19 @@
 
 <div class="container">
   <!-- Only for tutor -->
-  <button class="btn btn-danger my-4 fs-5">Create Course</button>
+  <div class="d-flex flex-row my-3">
+    <!-- Create course -->
+    <button class="btn btn-danger me-3 fs-5">Create Course</button>
+    <div ngbDropdown>
+      <button class="btn btn-outline-danger fs-5" ngbDropdownToggle>
+        Sorting
+      </button>
+      <div ngbDropdownMenu>
+        <button ngbDropdownItem>By Name</button>
+        <button ngbDropdownItem>By Name Ascending</button>
+      </div>
+    </div>
+  </div>
 
   <!-- Courses -->
   <div class="courses-list">
