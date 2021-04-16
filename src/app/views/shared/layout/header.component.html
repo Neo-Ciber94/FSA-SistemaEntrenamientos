@@ -15,10 +15,12 @@
       >
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <div [ngTemplateOutlet]="student">
-          <!-- Insert template here-->
-        </div>
+      <div class="collapse navbar-collapse" id="navbarNav" [ngSwitch]="role">
+        <!-- Insert template here -->
+        <div *ngSwitchCase="'student'" [ngTemplateOutlet]="student"></div>
+        <div *ngSwitchCase="'teacher'" [ngTemplateOutlet]="teacher"></div>
+        <div *ngSwitchCase="'admin'" [ngTemplateOutlet]="admin"></div>
+        <div *ngSwitchDefault [ngTemplateOutlet]="home"></div>
       </div>
     </div>
   </nav>
@@ -60,7 +62,7 @@
 </ng-template>
 
 <!-- Tutor -->
-<ng-template #tutor>
+<ng-template #teacher>
   <ul class="navbar-nav ms-auto">
     <li class="nav-item">
       <a class="nav-link" routerLink="courses" routerLinkActive="active"
