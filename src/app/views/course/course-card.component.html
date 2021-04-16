@@ -1,8 +1,20 @@
-<a href="courses/1" class="link">
-  <div class="card shadow p-4">
-    <h2 class="card-title">{{ course }}</h2>
-    <div class="card-text">
-      <strong class="text-white fw-light">Teacher: </strong>{{ teacher }}
-    </div>
+<div class="card shadow p-4">
+  <div class="card-actions">
+    <a class="ms-2" href="#">
+      <i class="fas fa-edit"></i>
+    </a>
+    <a class="ms-2" href="#" (click)="(null)">
+      <i class="fas fa-trash-alt"></i>
+    </a>
   </div>
-</a>
+
+  <h2 class="card-title">
+    <a href="courses/1" class="link">
+      {{ course }}
+    </a>
+  </h2>
+
+  <div class="card-text">
+    <strong class="fw-light">Teacher: </strong>{{ teacher }}
+  </div>
+</div>

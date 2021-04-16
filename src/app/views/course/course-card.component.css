@@ -3,20 +3,44 @@ a {
 }
 
 .card {
-  background-color: var(--main-color);
-  margin: 5px;
+  background-color: white;
   border-radius: 10px;
   transition: 0.2s;
 }
 
 .card:hover {
-  filter: saturate(0.6);
+  background-color: var(--main-color);
   z-index: 1;
 }
 
-.card-title,
-.card-text {
+.card:hover .card-text,
+.card:hover h2.card-title a,
+.card:hover .card-text strong,
+.card:hover .card-actions a i {
   color: white;
+}
+
+.card-title a {
+  color: rgb(99, 99, 99);
+}
+
+.card-title a:hover {
+  color: black !important;
+  text-decoration: wavy;
+}
+
+.card-actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.card-actions a:hover i {
+  color: black !important;
+}
+
+.card-actions a i {
+  font-size: 20px;
 }
 
 ::selection {

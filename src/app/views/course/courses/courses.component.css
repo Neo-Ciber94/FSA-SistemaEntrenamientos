@@ -1,17 +1,18 @@
-.container {
+.courses-list {
   display: grid;
   justify-content: center;
-  grid-template-columns: repeat(auto-fit, 400px);
+  gap: 10px;
+  grid-template-columns: repeat(3, 1fr);
 }
 
 @media (max-width: 1350px) {
-  .container {
+  .courses-list {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (max-width: 900px) {
-  .container {
+  .courses-list {
     grid-template-columns: 1fr;
   }
 }
