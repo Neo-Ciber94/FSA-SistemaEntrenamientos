@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Roles } from 'src/app/models/Roles';
+import { Router } from '@angular/router';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-header',
@@ -7,11 +8,15 @@ import { Roles } from 'src/app/models/Roles';
   styleUrls: ['./header.component.css'],
 })
 export class HeaderComponent implements OnInit {
-  constructor() {}
+  constructor(private userService: UserService, private router: Router) {}
 
   ngOnInit(): void {}
 
   get role() {
-    return Roles.Student;
+    return this.userService.currentUser?.role;
+  }
+
+  logout() {
+    this.userService.logout();
   }
 }
