@@ -50,6 +50,10 @@ body {
   }
 }
 
+.form-container {
+  min-height: 400px;
+}
+
 /* #### Breadcrumnb #### */
 .breadcrumb-link {
   color: var(--text-color);

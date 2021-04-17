@@ -8,10 +8,6 @@
   }
 }
 
-.form-container {
-  min-height: 550px;
-}
-
 .form-container input {
   height: 50px !important;
 }

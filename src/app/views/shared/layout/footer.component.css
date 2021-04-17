@@ -1,4 +1,5 @@
 footer {
+  min-height: 150px;
   color: white;
   background-color: rgb(37, 37, 37);
   position: absolute;

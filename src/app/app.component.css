@@ -1,6 +1,6 @@
 main {
   padding-top: calc(var(--header-height) + 20px);
-  /* padding-bottom: var(--footer-height); */
+  padding-bottom: 200px;
 }
 
 @media (max-width: 1300px) {
