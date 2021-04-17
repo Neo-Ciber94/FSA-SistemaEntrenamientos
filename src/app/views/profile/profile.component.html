@@ -1,39 +1,117 @@
 <div class="container p-4 d-flex flex-column align-items-center">
-  <div class="d-flex flex-column">
-    <div class="profile-photo text-center">
-      <i class="fas fa-user-circle"></i>
-    </div>
-    <!-- First name -->
-    <div class="mt-4">
-      <div class="pb-1 fs-6">
-        <strong>First Name</strong>
-        <div>Example</div>
-      </div>
+  <div class="profile-photo text-center mb-2">
+    <i class="fas fa-user-circle"></i>
+  </div>
 
-      <!-- Last name -->
-      <div class="pt-2 pb-1 fs-6">
-        <strong>Last Name</strong>
-        <div>Example</div>
-      </div>
+  <div class="profile-content">
+    <!-- User details -->
+    <div class="">
+      <div class="card rounded p-3 m-2">
+        <div class="fs-5 fw-light mb-3">User details</div>
 
-      <!-- Role -->
-      <div class="pt-2 pb-1 fs-6">
-        <strong>Role</strong>
-        <div>Student</div>
-      </div>
+        <div class="card-content">
+          <div>
+            <strong>First Name</strong>
+            <div>Example</div>
+          </div>
 
-      <!-- Email -->
-      <div class="pt-2 pb-1 fs-6">
-        <strong>Email</strong>
-        <div>
-          <a href="mailto:example@example.com">example@example.com</a>
+          <div>
+            <strong>Last Name</strong>
+            <div>Example</div>
+          </div>
+
+          <div>
+            <strong>Role</strong>
+            <div>Student</div>
+          </div>
+
+          <div>
+            <strong>Email</strong>
+            <div>
+              <a href="mailto:example@example.com">example@example.com</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Edit -->
+        <div class="text-center mt-auto">
+          <a class="link link-danger fs-6" routerLink="edit">
+            <i class="fas fa-pen mx-1 text-danger"></i>Edit</a
+          >
         </div>
       </div>
-      <div class="text-center mt-4">
-        <a class="link link-danger fs-6" routerLink="edit">
-          <i class="fas fa-pen mx-1 text-danger"></i>Edit</a
-        >
+    </div>
+    <!-- Course details -->
+    <div class="">
+      <div class="card rounded p-3 m-2">
+        <div class="fs-5 fw-light mb-3">Courses</div>
+        <div class="card-content">
+          <ul class="list-group">
+            <li class="list-group-item">
+              <a class="link link-danger" routerLink="/courses/1">Web Design</a>
+            </li>
+            <li class="list-group-item">
+              <a class="link link-danger" routerLink="/courses/1">Web Design</a>
+            </li>
+            <li class="list-group-item">
+              <a class="link link-danger" routerLink="/courses/1">Web Design</a>
+            </li>
+            <li class="list-group-item">
+              <a class="link link-danger" routerLink="/courses/1">Web Design</a>
+            </li>
+            <li class="list-group-item">
+              <a class="link link-danger" routerLink="/courses/1">Web Design</a>
+            </li>
+            <li class="list-group-item">
+              <a class="link link-danger" routerLink="/courses/1">Web Design</a>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
 </div>
+
+<template>
+  <div class="container p-4 d-flex flex-column align-items-center">
+    <div class="d-flex flex-column">
+      <div class="profile-photo text-center">
+        <i class="fas fa-user-circle"></i>
+      </div>
+
+      <!-- First name -->
+      <div class="mt-4">
+        <div class="pb-1 fs-6">
+          <strong>First Name</strong>
+          <div>Example</div>
+        </div>
+
+        <!-- Last name -->
+        <div class="pt-2 pb-1 fs-6">
+          <strong>Last Name</strong>
+          <div>Example</div>
+        </div>
+
+        <!-- Role -->
+        <div class="pt-2 pb-1 fs-6">
+          <strong>Role</strong>
+          <div>Student</div>
+        </div>
+
+        <!-- Email -->
+        <div class="pt-2 pb-1 fs-6">
+          <strong>Email</strong>
+          <div>
+            <a href="mailto:example@example.com">example@example.com</a>
+          </div>
+        </div>
+
+        <div class="text-center mt-4">
+          <a class="link link-danger fs-6" routerLink="edit">
+            <i class="fas fa-pen mx-1 text-danger"></i>Edit</a
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+</template>

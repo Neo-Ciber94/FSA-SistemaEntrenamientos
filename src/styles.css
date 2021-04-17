@@ -7,6 +7,12 @@
   --text-color: #444;
 }
 
+@media (min-width: 450px) {
+  :root {
+    --footer-height: 210px;
+  }
+}
+
 * {
   margin: 0;
   padding: 0;
