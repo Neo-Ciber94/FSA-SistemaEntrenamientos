@@ -55,6 +55,10 @@ body {
 }
 
 /* #### Breadcrumnb #### */
+.breadcrumb-group {
+  font-size: calc(14px + 1.5vw);
+}
+
 .breadcrumb-link {
   color: var(--text-color);
   user-select: none;
