@@ -1,0 +1,78 @@
+.card {
+  border-radius: 10px;
+}
+
+.card a {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.card-title {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.card-text {
+  font-size: 16px;
+}
+
+/* #### Card red #### */
+
+.card-red {
+  background-color: var(--main-color);
+}
+
+.card-red a {
+  color: white;
+  text-decoration: none;
+}
+
+.card-red a:hover {
+  color: black;
+}
+
+.card-red .card-actions a i {
+  color: white;
+}
+
+.card-red .card-actions a:hover i {
+  color: black;
+}
+
+/* #### Card light #### */
+.card-light:hover .card-actions a i {
+  color: white;
+}
+
+.card-light:hover a:hover,
+.card-light:hover .card-actions a:hover i {
+  color: black;
+}
+
+.card-light:hover {
+  background-color: var(--main-color);
+}
+
+.card-light a,
+.card-light .card-title,
+.card-light .card-title *,
+.card-light .card-text,
+.card-light .card-text * {
+  color: var(--text-color);
+}
+
+.card-light:hover a,
+.card-light:hover .card-title,
+.card-light:hover .card-title * {
+  color: white;
+}
+
+.card-light:hover a,
+.card-light:hover .card-text,
+.card-light:hover .card-text * {
+  color: white;
+}
+
+.card-light {
+  background-color: white;
+}

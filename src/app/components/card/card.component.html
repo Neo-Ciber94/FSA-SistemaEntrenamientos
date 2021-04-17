@@ -1,0 +1,16 @@
+<div
+  class="card shadow p-4"
+  [ngClass]="theme === 'red' ? 'card-red' : 'card-light'"
+>
+  <div class="card-actions text-right">
+    <a (click)="onEdit.emit()">
+      <i class="fas fa-edit" [ngClass]="iconClass"></i>
+    </a>
+    <a class="ml-2" (click)="onDelete.emit()">
+      <i class="fas fa-trash-alt" [ngClass]="iconClass"></i>
+    </a>
+  </div>
+  <ng-content select=".card-title"></ng-content>
+  <ng-content select=".card-text"></ng-content>
+  <ng-content></ng-content>
+</div>

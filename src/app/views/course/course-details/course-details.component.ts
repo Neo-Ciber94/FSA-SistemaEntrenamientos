@@ -10,4 +10,12 @@ export class CourseDetailsComponent implements OnInit {
   constructor(private router: Router) {}
 
   ngOnInit(): void {}
+
+  edit() {
+    console.log('EDIT COURSE');
+  }
+
+  delete() {
+    console.log('DELETE COURSE');
+  }
 }

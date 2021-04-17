@@ -36,17 +36,40 @@
       <strong>Classes</strong>
       <div>
         <button class="btn btn-danger fs-5 mt-2">Create Class</button>
-        <div class="my-2">
-          <app-course-class-card></app-course-class-card>
+        <div class="my-2 course-card">
+          <app-card (onEdit)="edit()" (onDelete)="delete()">
+            <div class="d-flex flex-row align-items-center">
+              <div class="class-title fs-4">
+                <a routerLink="classes/1" class="vertical-align-middle">
+                  Basic HTML</a
+                >
+              </div>
+            </div>
+          </app-card>
         </div>
-        <div class="my-2">
-          <app-course-class-card></app-course-class-card>
+
+        <div class="my-2 course-card">
+          <app-card (onEdit)="edit()" (onDelete)="delete()">
+            <div class="d-flex flex-row align-items-center">
+              <div class="class-title fs-4">
+                <a routerLink="classes/1" class="vertical-align-middle">
+                  Basic HTML</a
+                >
+              </div>
+            </div>
+          </app-card>
         </div>
-        <div class="my-2">
-          <app-course-class-card></app-course-class-card>
-        </div>
-        <div class="my-2">
-          <app-course-class-card></app-course-class-card>
+
+        <div class="my-2 course-card">
+          <app-card (onEdit)="edit()" (onDelete)="delete()">
+            <div class="d-flex flex-row align-items-center">
+              <div class="class-title fs-4">
+                <a routerLink="classes/1" class="vertical-align-middle">
+                  Basic HTML</a
+                >
+              </div>
+            </div>
+          </app-card>
         </div>
       </div>
     </div>

@@ -9,4 +9,12 @@ export class CoursesComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {}
+
+  edit() {
+    console.log('EDIT COURSE');
+  }
+
+  delete() {
+    console.log('DELETE COURSE');
+  }
 }
