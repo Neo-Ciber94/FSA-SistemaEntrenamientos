@@ -1,6 +1,5 @@
 footer {
-  /* min-height: 150px; */
-  min-height: 20vh;
+  height: var(--footer-height);
   color: white;
   background-color: rgb(37, 37, 37);
   position: absolute;
