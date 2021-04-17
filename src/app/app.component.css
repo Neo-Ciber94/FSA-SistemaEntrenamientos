@@ -1,10 +1,34 @@
 main {
   padding-top: calc(var(--header-height) + 20px);
-  padding-bottom: var(--footer-height);
+  /* padding-bottom: var(--footer-height); */
+}
+
+@media (max-width: 1300px) {
+  main {
+    padding-bottom: 20vh;
+  }
+}
+
+@media (max-width: 580px) {
+  main {
+    padding-bottom: 30vh;
+  }
 }
 
 @media (max-width: 400px) {
   main {
     padding-top: calc(var(--header-height) + 50px);
+  }
+}
+
+@media (max-width: 390px) {
+  main {
+    padding-bottom: 35vh;
+  }
+}
+
+@media (max-width: 330px) {
+  main {
+    padding-bottom: 45vh;
   }
 }
