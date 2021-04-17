@@ -6,8 +6,8 @@ fullstackacademy.com/signup
 fullstackacademy.com/login
 
 --- User
-fullstackacademy.com/users/:user_id/profile
-fullstackacademy.com/users/:user_id/profile/edit
+fullstackacademy.com/profile
+fullstackacademy.com/profile/edit
 
 --- Student
 fullstackacademy.com/courses
