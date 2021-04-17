@@ -1,0 +1,4 @@
+<span *ngFor="let b of breadcrumbs; let i = index">
+  <a [routerLink]="b.url">{{ capitalize ? (b.label | titlecase) : b.label }}</a>
+  <span *ngIf="i < breadcrumbs.length - 1"> / </span>
+</span>

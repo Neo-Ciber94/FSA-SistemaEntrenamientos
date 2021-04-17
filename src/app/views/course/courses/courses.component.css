@@ -16,3 +16,21 @@
     grid-template-columns: 1fr;
   }
 }
+
+.course-actions {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 10px;
+}
+
+@media (max-width: 450px) {
+  .course-actions {
+    flex-direction: column;
+    margin-bottom: 0px;
+  }
+
+  .course-actions button {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}

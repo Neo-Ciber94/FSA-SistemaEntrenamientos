@@ -11,4 +11,12 @@ export class CourseCardComponent {
 
   @Input()
   teacher?: string;
+
+  edit() {
+    console.log('EDIT');
+  }
+
+  delete() {
+    console.log('DELETE');
+  }
 }

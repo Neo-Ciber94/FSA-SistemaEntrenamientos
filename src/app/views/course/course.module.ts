@@ -7,9 +7,10 @@ import { ComponentsModule } from 'src/app/components/components.module';
 import { CourseCardComponent } from './course-card.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { CourseDetailsComponent } from './course-details/course-details.component';
+import { CourseClassCardComponent } from './course-class-card/course-class-card.component';
 
 @NgModule({
-  declarations: [CoursesComponent, CourseCardComponent, CourseDetailsComponent],
+  declarations: [CoursesComponent, CourseCardComponent, CourseDetailsComponent, CourseClassCardComponent],
   imports: [ComponentsModule, CommonModule, CourseRoutingModule, NgbModule],
 })
 export class CourseModule {}

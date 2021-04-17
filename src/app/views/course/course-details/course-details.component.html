@@ -1,1 +1,46 @@
-<p>course-details works!</p>
+<h2 class="mx-5 my-3">
+  <app-breadcrumb [skipLast]="true"></app-breadcrumb>
+  / <span class="text-danger">Web Design</span>
+</h2>
+
+<div class="container p-4 text-left">
+  <div>
+    <div class="mb-4 fs-5">
+      <strong>Teacher</strong>
+      <div>Alex Alexander</div>
+    </div>
+    <div class="mb-4 fs-5">
+      <strong>Course</strong>
+      <div>Web Design</div>
+    </div>
+
+    <div class="mb-4 fs-5">
+      <strong>Description</strong>
+      <p class="text-justify">
+        Web design encompasses many different skills and disciplines in the
+        production and maintenance of websites. The different areas of web
+        design include web graphic design; user interface design (UI design);
+        authoring, including standardised code and proprietary software; user
+        experience design (UX design); and search engine optimization. Often
+        many individuals will work in teams covering different aspects of the
+        design process, although some designers will cover them all.
+      </p>
+    </div>
+
+    <div class="mb-4 fs-5">
+      <strong>Classes</strong>
+      <div class="my-2">
+        <app-course-class-card></app-course-class-card>
+      </div>
+      <div class="my-2">
+        <app-course-class-card></app-course-class-card>
+      </div>
+      <div class="my-2">
+        <app-course-class-card></app-course-class-card>
+      </div>
+      <div class="my-2">
+        <app-course-class-card></app-course-class-card>
+      </div>
+    </div>
+  </div>
+</div>

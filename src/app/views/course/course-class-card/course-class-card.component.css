@@ -1,0 +1,28 @@
+.class-card {
+  background-color: var(--main-color);
+  border-radius: 10px;
+  box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.3);
+  transition-duration: 0.2s;
+}
+
+.class-card:hover {
+  transform: scale(1.02);
+}
+
+.class-card a i {
+  color: white;
+}
+
+.class-title a {
+  color: white;
+  text-decoration: none;
+}
+
+.card-actions a {
+  cursor: pointer;
+}
+
+.card-actions a:hover i,
+.class-title a:hover {
+  color: black;
+}

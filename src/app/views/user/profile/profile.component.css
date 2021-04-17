@@ -1,19 +1,4 @@
-.profile {
-  margin: 20px 0;
-}
-
 .profile-photo i {
   color: var(--main-color);
   font-size: 200px;
-}
-
-.profile-info-group {
-  margin-top: 20px;
-  margin-bottom: 20px;
-  font-size: 18px;
-}
-
-.profile-info a {
-  margin-top: 25px;
-  font-size: 18px;
 }

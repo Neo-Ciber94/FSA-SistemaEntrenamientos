@@ -35,8 +35,16 @@ a {
   justify-content: flex-end;
 }
 
+.card-actions a {
+  cursor: pointer;
+}
+
 .card-actions a:hover i {
   color: black !important;
+}
+
+.card-actions a:active i {
+  color: rgb(92, 40, 40) !important;
 }
 
 .card-actions a i {
