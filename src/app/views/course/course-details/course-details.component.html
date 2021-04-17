@@ -1,6 +1,11 @@
-<h2 class="mx-5 my-3">
+<!-- <h2 class="mx-5 my-3">
   <app-breadcrumb [skipLast]="true"></app-breadcrumb>
   / <span class="text-danger">Web Design</span>
+</h2> -->
+
+<h2 class="mx-5 my-3">
+  <span><a routerLink="/courses" class="breadcrumb-link">Courses</a></span> /
+  <span class="breadcrumb-link active">Web Design</span>
 </h2>
 
 <div class="container p-4 text-left">
@@ -29,17 +34,20 @@
 
     <div class="mb-4 fs-5">
       <strong>Classes</strong>
-      <div class="my-2">
-        <app-course-class-card></app-course-class-card>
-      </div>
-      <div class="my-2">
-        <app-course-class-card></app-course-class-card>
-      </div>
-      <div class="my-2">
-        <app-course-class-card></app-course-class-card>
-      </div>
-      <div class="my-2">
-        <app-course-class-card></app-course-class-card>
+      <div>
+        <button class="btn btn-danger fs-5 mt-2">Create Class</button>
+        <div class="my-2">
+          <app-course-class-card></app-course-class-card>
+        </div>
+        <div class="my-2">
+          <app-course-class-card></app-course-class-card>
+        </div>
+        <div class="my-2">
+          <app-course-class-card></app-course-class-card>
+        </div>
+        <div class="my-2">
+          <app-course-class-card></app-course-class-card>
+        </div>
       </div>
     </div>
   </div>

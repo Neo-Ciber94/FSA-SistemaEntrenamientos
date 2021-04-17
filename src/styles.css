@@ -4,13 +4,14 @@
   --main-color: #cc2326;
   --header-height: 80px;
   --footer-height: 200px;
+  --text-color: #444;
 }
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  color: #444;
+  color: var(--text-color);
   font-family: "Rubik", sans-serif;
 }
 
@@ -48,4 +49,23 @@ body {
   .container-responsive {
     width: 100%;
   }
+}
+
+/* #### Breadcrumnb #### */
+.breadcrumb-link {
+  color: var(--text-color);
+  user-select: none;
+  cursor: pointer;
+}
+
+a.breadcrumb-link {
+  text-decoration: none;
+}
+
+.breadcrumb-link:hover:not(.active) {
+  color: var(--danger);
+}
+
+.active.breadcrumb-link {
+  color: var(--danger);
 }

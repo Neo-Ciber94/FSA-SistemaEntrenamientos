@@ -37,6 +37,8 @@ fullstackacademy.com/tutors/tutor_id/courses/:course_id/classes/:class_id/assign
 fullstackacademy.com/tutors/tutor_id/courses/:course_id/classes/:class_id/assignments/:assignment_id/edit
 fullstackacademy.com/tutors/tutor_id/courses/:course_id/classes/:class_id/assignments/:assignment_id/delete
 
+#### assignments -> activity
+
 ---- Admin
 ###### fullstackacademy.com/tutors
 fullstackacademy.com/users
