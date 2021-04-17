@@ -14,6 +14,25 @@
       <input class="form-control" value="Example" required />
     </div>
 
+    <!-- Role -->
+    <div class="form-group">
+      <label class="form-label fw-bold">Role</label>
+      <div ngbDropdown>
+        <button
+          class="btn btn-outline-danger w-100 text-left"
+          type="button"
+          ngbDropdownToggle
+        >
+          Student
+        </button>
+        <div ngbDropdownMenu>
+          <button ngbDropdownItem type="button">Student</button>
+          <button ngbDropdownItem type="button">Tutor</button>
+          <button ngbDropdownItem type="button">Admin</button>
+        </div>
+      </div>
+    </div>
+
     <!-- Email -->
     <div class="form-group">
       <label class="form-label fw-bold">Email</label>
