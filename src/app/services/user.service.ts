@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { User } from '../models/User';
+import { UserLogin } from '../models/UserLogin';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
-  private userSubject = new BehaviorSubject<User | null>(null);
+  private userSubject = new BehaviorSubject<UserLogin | null>(null);
 
   constructor() {}
 
-  login(user: User) {
+  login(user: UserLogin) {
     this.userSubject.next(user);
   }
 
@@ -18,7 +18,7 @@ export class UserService {
     this.userSubject.next(null);
   }
 
-  get currentUser(): User | null {
+  get currentUser(): UserLogin | null {
     return this.userSubject.value;
   }
 }

@@ -1,5 +1,8 @@
 import { NgModule } from '@angular/core';
-import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
+import { AdminCoursesComponent } from './views/admin/admin-courses/admin-courses.component';
+import { AdminUsersComponent } from './views/admin/admin-users/admin-users.component';
+import { AdminGuard } from './views/admin/admin.guard';
 import { NotFoundComponent } from './views/shared/not-found/not-found.component';
 
 const routes: Routes = [
@@ -14,13 +17,22 @@ const routes: Routes = [
       import('./views/profile/profile.module').then((m) => m.ProfileModule),
   },
   {
+    path: '',
+    loadChildren: () =>
+      import('./views/admin/admin.module').then((m) => m.AdminModule),
+  },
+  {
     path: 'courses',
     loadChildren: () =>
       import('./views/course/course.module').then((m) => m.CourseModule),
   },
   {
-    path: '**',
+    path: '404',
     component: NotFoundComponent,
+  },
+  {
+    path: '**',
+    redirectTo: 'notfound',
   },
 ];
 
