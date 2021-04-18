@@ -6,7 +6,6 @@ main {
   background-image: url("src/assets/images/homepage-jumbotron.jpg");
   background-size: cover;
   background-repeat: no-repeat;
-  height: 90vh;
   width: 100%;
   margin: 20px 0;
   overflow: hidden;
@@ -15,10 +14,10 @@ main {
 .jumbotron-content {
   max-width: 700px;
   margin-top: 40px;
-  transform: translate(20%, 15%);
+  transform: translate(20%, 5%);
 }
 
-@media (max-width: 800px) {
+@media (max-width: 900px) {
   .jumbotron {
     padding: 5px;
   }
