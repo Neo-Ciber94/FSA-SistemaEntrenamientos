@@ -31,6 +31,6 @@ export class AuthService {
   }
 
   isAdmin() {
-    return true;
+    return false;
   }
 }

@@ -21,72 +21,23 @@
   <!-- Courses -->
   <div class="courses-list">
     <app-card
+      *ngFor="let _ of [0, 0, 0, 0, 0]"
       theme="light"
       iconClass="fs-5"
       (onEdit)="edit()"
       (onDelete)="delete()"
     >
-      <div class="card-title">
-        <a href="courses/1">Web Design</a>
-      </div>
-      <div class="card-text">
-        Teacher: <span class="fw-light">Alex Alexander</span>
-      </div>
-    </app-card>
-
-    <app-card
-      theme="light"
-      iconClass="fs-5"
-      (onEdit)="edit()"
-      (onDelete)="delete()"
-    >
-      <div class="card-title">
-        <a href="courses/1">Web Design</a>
-      </div>
-      <div class="card-text">
-        Teacher: <span class="fw-light">Alex Alexander</span>
-      </div>
-    </app-card>
-
-    <app-card
-      theme="light"
-      iconClass="fs-5"
-      (onEdit)="edit()"
-      (onDelete)="delete()"
-    >
-      <div class="card-title">
-        <a href="courses/1">Web Design</a>
-      </div>
-      <div class="card-text">
-        Teacher: <span class="fw-light">Alex Alexander</span>
-      </div>
-    </app-card>
-
-    <app-card
-      theme="light"
-      iconClass="fs-5"
-      (onEdit)="edit()"
-      (onDelete)="delete()"
-    >
-      <div class="card-title">
-        <a href="courses/1">Web Design</a>
-      </div>
-      <div class="card-text">
-        Teacher: <span class="fw-light">Alex Alexander</span>
-      </div>
-    </app-card>
-    <app-card
-      theme="light"
-      iconClass="fs-5"
-      (onEdit)="edit()"
-      (onDelete)="delete()"
-    >
-      <div class="card-title">
-        <a href="courses/1">Web Design</a>
-      </div>
-      <div class="card-text">
-        Teacher: <span class="fw-light">Alex Alexander</span>
-      </div>
+      <a routerLink="1">
+        <h5>Web Design</h5>
+        <div>ID:<span class="ms-2 fw-lighter">1</span></div>
+        <div>Teacher:<span class="ms-2 fw-lighter">Alex Alexander</span></div>
+      </a>
     </app-card>
   </div>
 </div>
+
+<style>
+  app-card:hover * {
+    color: white;
+  }
+</style>
