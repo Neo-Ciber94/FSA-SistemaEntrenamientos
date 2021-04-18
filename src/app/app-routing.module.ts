@@ -24,12 +24,9 @@ const routes: Routes = [
       import('./views/course/course.module').then((m) => m.CourseModule),
   },
   {
-    path: '404',
-    component: NotFoundComponent,
-  },
-  {
     path: '**',
-    redirectTo: 'notfound',
+
+    component: NotFoundComponent,
   },
 ];
 

@@ -17,13 +17,17 @@
   }
 }
 
+.course-actions * {
+  height: 40px;
+}
+
 .course-actions {
   display: flex;
   flex-direction: row;
   margin-bottom: 10px;
 }
 
-@media (max-width: 450px) {
+@media (max-width: 760px) {
   .course-actions {
     flex-direction: column;
     margin-bottom: 0px;
@@ -31,6 +35,12 @@
 
   .course-actions button {
     width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .course-actions input {
+    width: 100%;
+    margin-top: 10px;
     margin-bottom: 10px;
   }
 }

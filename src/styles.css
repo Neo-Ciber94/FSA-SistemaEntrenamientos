@@ -62,24 +62,25 @@ body {
 }
 
 /* #### Breadcrumnb #### */
-.breadcrumb-group {
+.breadcrumb {
+  background-color: transparent;
   font-size: calc(14px + 1.5vw);
 }
 
-.breadcrumb-link {
+.breadcrumb-item * {
   color: var(--text-color);
   user-select: none;
   cursor: pointer;
 }
 
-a.breadcrumb-link {
+.breadcrumb-item a {
   text-decoration: none;
 }
 
-.breadcrumb-link:hover:not(.active) {
+.breadcrumb-item:hover * {
   color: var(--danger);
 }
 
-.active.breadcrumb-link {
+.breadcrumb-item.active {
   color: var(--danger);
 }

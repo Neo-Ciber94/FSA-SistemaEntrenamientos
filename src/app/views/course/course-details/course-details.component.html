@@ -1,11 +1,8 @@
-<!-- <h2 class="mx-5 my-3">
-  <app-breadcrumb [skipLast]="true"></app-breadcrumb>
-  / <span class="text-danger">Web Design</span>
-</h2> -->
-
-<div class="mx-5 my-3 breadcrumb-group">
-  <span><a routerLink="/courses" class="breadcrumb-link">Courses</a></span> /
-  <span class="breadcrumb-link active">Web Design</span>
+<div class="mx-5 my-3">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a routerLink="/courses">Courses</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Web Design</li>
+  </ol>
 </div>
 
 <div class="container p-4 text-left">

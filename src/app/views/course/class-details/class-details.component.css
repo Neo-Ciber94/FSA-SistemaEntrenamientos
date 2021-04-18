@@ -1,9 +1,0 @@
-.class-card {
-  width: 70vw;
-}
-
-@media (max-width: 800px) {
-  .class-card {
-    width: 100vw;
-  }
-}
