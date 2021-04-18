@@ -15,7 +15,11 @@
       >
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse" id="navbarNav" [ngSwitch]="role">
+      <div
+        class="collapse navbar-collapse"
+        id="navbarNav"
+        [ngSwitch]="role | async"
+      >
         <!-- Insert template here -->
         <div *ngSwitchCase="'student'" [ngTemplateOutlet]="student"></div>
         <div *ngSwitchCase="'teacher'" [ngTemplateOutlet]="teacher"></div>

@@ -7,3 +7,10 @@ export interface User {
   hash: string;
   creationDate: Date;
 }
+
+export interface NewUser {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+}
