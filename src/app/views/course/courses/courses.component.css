@@ -17,7 +17,7 @@
   }
 }
 
-.course-actions * {
+.course-actions *:not(.dropdown-menu) {
   height: 40px;
 }
 
@@ -38,7 +38,7 @@
     margin-bottom: 10px;
   }
 
-  .course-actions input {
+  .course-actions input[type="text"] {
     width: 100%;
     margin-top: 10px;
     margin-bottom: 10px;
