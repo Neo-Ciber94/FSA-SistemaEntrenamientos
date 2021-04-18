@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { NewUser, User } from '../models/User';
 import { UserLogin } from '../models/UserLogin';
 
@@ -7,6 +7,9 @@ import { UserLogin } from '../models/UserLogin';
   providedIn: 'root',
 })
 export class AuthService {
+  readonly userSubject = new BehaviorSubject<User | null>(null);
+  readonly currentUser = this.userSubject.asObservable();
+
   login(credentials: UserLogin): Observable<User> {
     throw new Error('Not implemented');
   }
@@ -23,8 +26,8 @@ export class AuthService {
     throw new Error('Not implemented');
   }
 
-  getCurrentUser(): Observable<User> {
-    throw new Error('Not implemented');
+  getCurrentUser(): Observable<User | null> {
+    return this.currentUser;
   }
 
   isAdmin() {
