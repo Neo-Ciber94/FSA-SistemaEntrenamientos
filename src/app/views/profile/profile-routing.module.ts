@@ -12,6 +12,14 @@ const routes: Routes = [
     path: 'edit',
     component: EditProfileComponent,
   },
+  {
+    path: ':id',
+    component: ProfileComponent,
+  },
+  {
+    path: ':id/edit',
+    component: EditProfileComponent,
+  },
 ];
 
 @NgModule({

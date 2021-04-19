@@ -10,10 +10,11 @@ import {
  * Repeat the inner children the given number of times.
  */
 @Directive({
+  // tslint:disable-next-line: directive-selector
   selector: '[repeat]',
 })
 export class RepeatDirective implements DoCheck {
-  private count: number = 0;
+  private count = 0;
   private isDirty = true;
 
   constructor(

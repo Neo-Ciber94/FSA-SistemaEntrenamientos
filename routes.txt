@@ -1,51 +1,38 @@
---- Home
+-- Home
 fullstackacademy.com
 fullstackacademy.com/home
 fullstackacademy.com/login
 fullstackacademy.com/signup
-fullstackacademy.com/login
 
---- User
+-- Profile
 fullstackacademy.com/profile
 fullstackacademy.com/profile/edit
 
---- Student
-fullstackacademy.com/courses
-fullstackacademy.com/courses/:course_id
+fullstackacademy.com/profile/:id
+fullstackacademy.com/profile/:id/edit
 
-fullstackacademy.com/courses/:course_id/classes
-fullstackacademy.com/courses/:course_id/classes/:class_id
-
-fullstackacademy.com/courses/:course_id/classes/:class_id/assignments/:assignment_id
-
----- Tutor
-fullstackacademy.com/tutors/:tutor_id/courses
-fullstackacademy.com/tutors/:tutor_id/courses/:course_id
-fullstackacademy.com/tutors/:tutor_id/courses/new
-fullstackacademy.com/tutors/:tutor_id/courses/:course_id/edit
-fullstackacademy.com/tutors/:tutor_id/courses/:course_id/delete
-
-fullstackacademy.com/tutors/:tutor_id/courses/:course_id/classes
-fullstackacademy.com/tutors/:tutor_id/courses/:course_id/classes/:class_id
-fullstackacademy.com/tutors/:tutor_id/courses/:course_id/classes/new
-fullstackacademy.com/tutors/:tutor_id/courses/:course_id/classes/:class_id/edit
-fullstackacademy.com/tutors/:tutor_id/courses/:course_id/classes/:class_id/delete
-
-fullstackacademy.com/tutors/tutor_id/courses/:course_id/classes/:class_id/assignments
-fullstackacademy.com/tutors/tutor_id/courses/:course_id/classes/:class_id/assignments/:assignment_id
-fullstackacademy.com/tutors/tutor_id/courses/:course_id/classes/:class_id/assignments/new
-fullstackacademy.com/tutors/tutor_id/courses/:course_id/classes/:class_id/assignments/:assignment_id/edit
-fullstackacademy.com/tutors/tutor_id/courses/:course_id/classes/:class_id/assignments/:assignment_id/delete
-
-#### assignments -> activity
-
----- Admin
-###### fullstackacademy.com/tutors
+-- Users
 fullstackacademy.com/users
-fullstackacademy.com/users/:user_id
+
+-- Courses
 fullstackacademy.com/courses
-fullstackacademy.com/courses/:course_id
+fullstackacademy.com/courses/new
+fullstackacademy.com/courses/:id
+fullstackacademy.com/courses/:id/delete
+fullstackacademy.com/courses/:id/edit
+
+-- Classes
 fullstackacademy.com/courses/:course_id/classes
-fullstackacademy.com/courses/:course_id/classes/:class_id
-fullstackacademy.com/courses/:course_id/classes/:class_id/assignments
-fullstackacademy.com/courses/:course_id/classes/:class_id/assignments/:assignment_id
+fullstackacademy.com/courses/:course_id/classes/new
+fullstackacademy.com/courses/:course_id/classes/:class_id/1
+fullstackacademy.com/courses/:course_id/classes/:class_id/1/edit
+fullstackacademy.com/courses/:course_id/classes/:class_id/1/delete
+
+-- Activities
+fullstackacademy.com/courses/:course_id/classes/:class_id/activities
+fullstackacademy.com/courses/:course_id/classes/:class_id/activities/:id
+fullstackacademy.com/courses/:course_id/classes/:class_id/activities/new
+fullstackacademy.com/courses/:course_id/classes/:class_id/activities/new?type=test
+fullstackacademy.com/courses/:course_id/classes/:class_id/activities/new?type=lesson
+fullstackacademy.com/courses/:course_id/classes/:class_id/activities/:id/edit
+fullstackacademy.com/courses/:course_id/classes/:class_id/activities/:id/delete
