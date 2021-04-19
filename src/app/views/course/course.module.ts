@@ -8,6 +8,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { CourseDetailsComponent } from './course-details/course-details.component';
 import { CourseCreateComponent } from './course-create/course-create.component';
 import { ClassesModule } from '../classes/classes.module';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -17,9 +18,9 @@ import { ClassesModule } from '../classes/classes.module';
   ],
   imports: [
     ComponentsModule,
-    ClassesModule,
     CommonModule,
     CourseRoutingModule,
+    RouterModule,
     NgbModule,
   ],
 })

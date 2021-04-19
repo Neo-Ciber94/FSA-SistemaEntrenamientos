@@ -91,7 +91,7 @@ body {
 /* #### Breadcrumb #### */
 .breadcrumb {
   background-color: transparent;
-  font-size: calc(14px + 1.5vw);
+  font-size: calc(12px + 1vw);
 }
 
 .breadcrumb-item * {

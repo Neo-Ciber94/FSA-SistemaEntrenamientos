@@ -1,0 +1,61 @@
+<div class="mx-5 my-3">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a routerLink="/courses">Courses</a></li>
+    <li class="breadcrumb-item"><a routerLink="/courses/1">Web Design</a></li>
+    <li
+      class="breadcrumb-item active"
+      [innerText]="isEditing ? 'Edit Class' : 'Create Class'"
+    ></li>
+  </ol>
+</div>
+
+<div class="container form-container p-4">
+  <form>
+    <!-- Course id -->
+    <div class="form-group mb-4">
+      <div>
+        <label class="form-label fs-5 mb-0">ID</label>
+      </div>
+      <div>
+        <input class="form-control" type="text" value="1" readonly />
+      </div>
+    </div>
+
+    <!-- Course name -->
+    <div class="form-group mb-4">
+      <div>
+        <label class="form-label fs-5 mb-0">Name</label>
+      </div>
+      <div>
+        <input
+          class="form-control"
+          type="text"
+          placeholder="Course name"
+          required
+        />
+      </div>
+    </div>
+
+    <!-- Course description -->
+    <div class="form-group mb-4">
+      <div>
+        <label class="form-label fs-5 mb-0">Description</label>
+      </div>
+      <div>
+        <textarea class="form-control" rows="4"></textarea>
+      </div>
+    </div>
+
+    <!-- Buttons -->
+    <div class="flex-responsive gap-2">
+      <button
+        class="btn btn-secondary w-50 mt-0"
+        type="button"
+        (click)="back()"
+      >
+        Cancel
+      </button>
+      <button class="btn btn-danger w-50 mt-0">Save</button>
+    </div>
+  </form>
+</div>

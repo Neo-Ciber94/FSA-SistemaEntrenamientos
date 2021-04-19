@@ -25,12 +25,13 @@ const routes: Routes = [
     component: CourseCreateComponent,
   },
   {
-    path: ':course_id',
-    component: CourseDetailsComponent,
+    path: ':course_id/classes',
+    loadChildren: () =>
+      import('../classes/classes.module').then((m) => m.ClassesModule),
   },
   {
-    path: ':course_id/classes/:class_id',
-    component: ClassDetailsComponent,
+    path: ':course_id',
+    component: CourseDetailsComponent,
   },
 ];
 
