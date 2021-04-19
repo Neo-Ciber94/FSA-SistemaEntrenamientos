@@ -9,22 +9,13 @@ import { AuthService } from 'src/app/services/auth.service';
   templateUrl: './log-in.component.html',
   styleUrls: ['./log-in.component.css'],
 })
-export class LogInComponent implements OnInit, AfterViewInit {
+export class LogInComponent implements OnInit {
   readonly formGroup: FormGroup = new FormGroup({
     email: new FormControl(),
     password: new FormControl(),
   });
 
   constructor(private authService: AuthService, private router: Router) {}
-  ngAfterViewInit(): void {
-    setTimeout(() => {
-      alert(`Valid users:\n
-      admin@admin.com       (password: 123)
-      teacher@teacher.com   (password: 123)
-      student@student.com   (password: 123)
-      `);
-    }, 200);
-  }
 
   ngOnInit(): void {}
 
