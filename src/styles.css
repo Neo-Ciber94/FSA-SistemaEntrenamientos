@@ -1,10 +1,19 @@
 @import url("https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap");
 
 :root {
-  --main-color: #cc2326;
   --header-height: 80px;
   --footer-height: 250px;
+
+  --primary-color: #cc2326;
+  --accent-color: white;
+  --bg-color: white;
   --text-color: #444;
+
+  --navbar-bg-color: white;
+  --navbar-link-color: black;
+
+  --footer-text-color: white;
+  --footer-bg-color: rgb(37, 37, 37);
 }
 
 @media (min-width: 450px) {
@@ -27,6 +36,7 @@ html {
 
 body {
   min-height: 100%;
+  background-color: var(--bg-color);
 }
 
 body {
@@ -34,12 +44,12 @@ body {
 }
 
 ::selection {
-  background-color: var(--main-color);
+  background-color: var(--primary-color);
   color: white;
 }
 
 .highlight {
-  background-color: var(--main-color);
+  background-color: var(--primary-color);
   padding: 3px;
   margin: 0 3px;
   color: white;
@@ -61,7 +71,7 @@ body {
   min-height: 400px;
 }
 
-/* #### Breadcrumnb #### */
+/* #### Breadcrumb #### */
 .breadcrumb {
   background-color: transparent;
   font-size: calc(14px + 1.5vw);

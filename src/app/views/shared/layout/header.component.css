@@ -1,5 +1,5 @@
 nav {
-  background-color: white;
+  background-color: var(--navbar-bg-color);
   box-shadow: 0 5px 10px rgba(134, 134, 134, 0.4);
   padding: 10px 30px;
   min-height: var(--header-height);
@@ -15,17 +15,17 @@ a.logo img {
 }
 
 nav .nav-link {
-  color: black;
+  color: var(--navbar-link-color);
   font-size: 20px;
   font-weight: 500;
 }
 
 nav .nav-link:hover {
-  color: var(--main-color);
+  color: var(--primary-color);
 }
 
 nav .nav-link.active {
-  color: var(--main-color);
+  color: var(--primary-color);
 }
 
 /* 893px is a hardcoded value for when boostrap use the toggler in the navbar*/

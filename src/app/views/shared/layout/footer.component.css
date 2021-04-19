@@ -1,7 +1,7 @@
 footer {
   height: var(--footer-height);
-  color: white;
-  background-color: rgb(37, 37, 37);
+  color: var(--footer-text-color);
+  background-color: var(--footer-bg-color);
   position: absolute;
   bottom: 0;
   width: 100%;

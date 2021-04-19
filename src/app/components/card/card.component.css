@@ -1,4 +1,5 @@
 .card {
+  --red-card-link-hover-color: black;
   border-radius: 10px;
 }
 
@@ -19,38 +20,38 @@
 /* #### Card red #### */
 
 .card-red {
-  background-color: var(--main-color);
+  background-color: var(--primary-color);
 }
 
 .card-red a {
-  color: white;
+  color: var(--accent-color);
   text-decoration: none;
 }
 
 .card-red a:hover {
-  color: black;
+  color: var(--red-card-link-hover-color);
 }
 
 .card-red .card-actions a i {
-  color: white;
+  color: var(--accent-color);
 }
 
 .card-red .card-actions a:hover i {
-  color: black;
+  color: var(--red-card-link-hover-color);
 }
 
 /* #### Card light #### */
 .card-light:hover .card-actions a i {
-  color: white;
+  color: var(--accent-color);
 }
 
 .card-light:hover a:hover,
 .card-light:hover .card-actions a:hover i {
-  color: black;
+  color: var(--red-card-link-hover-color);
 }
 
 .card-light:hover {
-  background-color: var(--main-color);
+  background-color: var(--primary-color);
 }
 
 .card-light a,
@@ -64,15 +65,15 @@
 .card-light:hover a,
 .card-light:hover .card-title,
 .card-light:hover .card-title * {
-  color: white;
+  color: var(--accent-color);
 }
 
 .card-light:hover a,
 .card-light:hover .card-text,
 .card-light:hover .card-text * {
-  color: white;
+  color: var(--accent-color);
 }
 
 .card-light {
-  background-color: white;
+  background-color: var(--accent-color);
 }
