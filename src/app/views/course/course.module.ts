@@ -9,6 +9,7 @@ import { CourseDetailsComponent } from './course-details/course-details.componen
 import { CourseCreateComponent } from './course-create/course-create.component';
 import { ClassesModule } from '../classes/classes.module';
 import { RouterModule } from '@angular/router';
+import { DirectivesModule } from 'src/app/directives/directives.module';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { RouterModule } from '@angular/router';
     CommonModule,
     CourseRoutingModule,
     RouterModule,
+    DirectivesModule,
     NgbModule,
   ],
 })

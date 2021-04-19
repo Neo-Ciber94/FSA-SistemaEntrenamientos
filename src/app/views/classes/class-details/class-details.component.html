@@ -6,7 +6,6 @@
   </ol>
 </div>
 
-<h3 class="text-center">Tasks</h3>
 <div class="container p-3 d-flex flex-column justify-content-center">
   <h4>Basic HTML</h4>
   <p>
@@ -18,10 +17,12 @@
     describes the structure of a web page semantically and originally included
     cues for the appearance of the document.
   </p>
+
+  <h3 class="text-center">Activities</h3>
   <div class="class-actions my-2">
-    <button class="btn btn-outline-danger me-3 fs-5">Create Task</button>
+    <button class="btn btn-outline-danger me-3 fs-5">Create Activity</button>
   </div>
-  <div class="class-card my-1" *ngFor="let _ of [0, 0, 0, 0, 0]">
+  <div class="class-card my-1" *repeat="5">
     <app-card theme="light" iconClass="fs-5">
       <a routerLink="learn/2">
         <div class="d-flex flex-row align-items-center card-title">

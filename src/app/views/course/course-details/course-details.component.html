@@ -42,7 +42,7 @@
           >Create Class</a
         >
 
-        <div class="my-2 course-card" *ngFor="let _ of [0, 0, 0, 0, 0]">
+        <div class="my-2 course-card" *repeat="5">
           <app-card editRoute="classes/1/edit" (onDelete)="delete()">
             <a routerLink="classes/1"> Basic HTML </a>
           </app-card>
