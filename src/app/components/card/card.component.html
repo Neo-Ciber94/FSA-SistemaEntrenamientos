@@ -3,13 +3,29 @@
   [ngClass]="theme === 'red' ? 'card-red' : 'card-light'"
 >
   <div class="card-actions text-right">
-    <a (click)="onEdit.emit()">
+    <!-- Edit button -->
+    <a *ngIf="editRoute" (click)="onEdit.emit()" [routerLink]="editRoute">
       <i class="fas fa-edit" [ngClass]="iconClass"></i>
     </a>
-    <a class="ml-2" (click)="onDelete.emit()">
+    <a *ngIf="editRoute == null" (click)="onEdit.emit()">
+      <i class="fas fa-edit" [ngClass]="iconClass"></i>
+    </a>
+
+    <!-- Delete button -->
+    <a
+      *ngIf="deleteRoute"
+      class="ml-2"
+      (click)="onDelete.emit()"
+      [routerLink]="deleteRoute"
+    >
+      <i class="fas fa-trash-alt" [ngClass]="iconClass"></i>
+    </a>
+    <a *ngIf="deleteRoute == null" class="ml-2" (click)="onDelete.emit()">
       <i class="fas fa-trash-alt" [ngClass]="iconClass"></i>
     </a>
   </div>
+
+  <!-- Card content -->
   <ng-content select=".card-title"></ng-content>
   <ng-content select=".card-text"></ng-content>
   <ng-content></ng-content>

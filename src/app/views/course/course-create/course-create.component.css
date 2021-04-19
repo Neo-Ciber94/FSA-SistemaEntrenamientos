@@ -1,0 +1,11 @@
+@media (max-width: 400px) {
+  .d-flex {
+    gap: 0 !important;
+    flex-direction: column !important;
+  }
+
+  .d-flex button {
+    margin-top: 5px !important;
+    width: 100% !important;
+  }
+}

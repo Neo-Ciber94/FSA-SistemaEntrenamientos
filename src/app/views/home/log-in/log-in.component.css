@@ -7,18 +7,3 @@
     width: 100%;
   }
 }
-
-.form-container input {
-  height: 50px !important;
-}
-
-.form-container label,
-.form-container input,
-.form-container button {
-  font-size: 20px;
-}
-
-.form-container button {
-  height: 50px !important;
-  margin-top: 20px;
-}
