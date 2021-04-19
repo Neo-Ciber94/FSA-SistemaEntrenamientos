@@ -5,8 +5,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SharedModule } from './views/shared/shared.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { CourseModule } from './views/course/course.module';
-import { AdminModule } from './views/admin/admin.module';
 
 @NgModule({
   declarations: [AppComponent],
