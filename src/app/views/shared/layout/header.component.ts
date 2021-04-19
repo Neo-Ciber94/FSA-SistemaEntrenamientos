@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Role } from 'src/app/models/Role';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
@@ -13,10 +14,15 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {}
 
   get role() {
-    return this.authService.getCurrentUser();
+    return this.authService.userRole;
+  }
+
+  get Roles() {
+    return Role;
   }
 
   logout() {
     this.authService.logout();
+    this.router.navigateByUrl('/');
   }
 }

@@ -1,7 +1,38 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
+import { Role } from '../models/Role';
 import { NewUser, User } from '../models/User';
 import { UserLogin } from '../models/UserLogin';
+
+const USERS: User[] = [
+  {
+    id: 1,
+    firstName: 'Admin',
+    lastName: 'Admin',
+    creationDate: new Date(),
+    email: 'admin@admin.com',
+    hash: '123',
+    salt: '1',
+  },
+  {
+    id: 2,
+    firstName: 'Teacher',
+    lastName: 'Teacher',
+    creationDate: new Date(),
+    email: 'teacher@teacher.com',
+    hash: '123',
+    salt: '1',
+  },
+  {
+    id: 3,
+    firstName: 'Student',
+    lastName: 'Student',
+    creationDate: new Date(),
+    email: 'student@student.com',
+    hash: '123',
+    salt: '1',
+  },
+];
 
 @Injectable({
   providedIn: 'root',
@@ -10,12 +41,20 @@ export class AuthService {
   readonly userSubject = new BehaviorSubject<User | null>(null);
   readonly currentUser = this.userSubject.asObservable();
 
-  login(credentials: UserLogin): Observable<User> {
-    throw new Error('Not implemented');
+  login(credentials: UserLogin): Observable<User | null> {
+    const match = USERS.find(
+      (e) => e.email === credentials.username && e.hash === credentials.password
+    );
+    if (match) {
+      this.userSubject.next(match);
+      return of(match);
+    } else {
+      return of(null);
+    }
   }
 
   logout() {
-    throw new Error('Not implemented');
+    this.userSubject.next(null);
   }
 
   register(user: NewUser): Observable<User> {
@@ -23,14 +62,26 @@ export class AuthService {
   }
 
   isLogin(): boolean {
-    throw new Error('Not implemented');
+    return this.userSubject.value == null;
   }
 
   getCurrentUser(): Observable<User | null> {
     return this.currentUser;
   }
 
-  isAdmin() {
-    return false;
+  get userRole() {
+    const name = this.userSubject.value?.firstName.toLowerCase();
+    if (name == null) {
+      return null;
+    }
+
+    switch (name) {
+      case 'admin':
+        return Role.Admin;
+      case 'teacher':
+        return Role.Teacher;
+      default:
+        return Role.Student;
+    }
   }
 }

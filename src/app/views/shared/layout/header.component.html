@@ -15,15 +15,11 @@
       >
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div
-        class="collapse navbar-collapse"
-        id="navbarNav"
-        [ngSwitch]="role | async"
-      >
+      <div class="collapse navbar-collapse" id="navbarNav" [ngSwitch]="role">
         <!-- Insert template here -->
-        <div *ngSwitchCase="'student'" [ngTemplateOutlet]="student"></div>
-        <div *ngSwitchCase="'teacher'" [ngTemplateOutlet]="teacher"></div>
-        <div *ngSwitchCase="'admin'" [ngTemplateOutlet]="admin"></div>
+        <div *ngSwitchCase="Roles.Student" [ngTemplateOutlet]="student"></div>
+        <div *ngSwitchCase="Roles.Teacher" [ngTemplateOutlet]="teacher"></div>
+        <div *ngSwitchCase="Roles.Admin" [ngTemplateOutlet]="admin"></div>
         <div *ngSwitchDefault [ngTemplateOutlet]="home"></div>
       </div>
     </div>
@@ -34,12 +30,22 @@
 <ng-template #home>
   <ul class="navbar-nav ms-auto">
     <li class="nav-item">
-      <a class="nav-link" routerLink="/signup" routerLinkActive="active"
+      <a
+        class="nav-link"
+        routerLink="/signup"
+        data-bs-toggle="collapse"
+        data-bs-target=".navbar-collapse.show"
+        routerLinkActive="active"
         >SIGN UP</a
       >
     </li>
     <li class="nav-item">
-      <a class="nav-link" routerLink="/login" routerLinkActive="active"
+      <a
+        class="nav-link"
+        routerLink="/login"
+        data-bs-toggle="collapse"
+        data-bs-target=".navbar-collapse.show"
+        routerLinkActive="active"
         >LOG IN</a
       >
     </li>
@@ -50,17 +56,34 @@
 <ng-template #student>
   <ul class="navbar-nav ms-auto">
     <li class="nav-item">
-      <a class="nav-link" routerLink="courses" routerLinkActive="active"
+      <a
+        class="nav-link"
+        routerLink="courses"
+        data-bs-toggle="collapse"
+        data-bs-target=".navbar-collapse.show"
+        routerLinkActive="active"
         >COURSES</a
       >
     </li>
     <li class="nav-item">
-      <a class="nav-link" routerLink="profile" routerLinkActive="active"
+      <a
+        class="nav-link"
+        routerLink="profile"
+        data-bs-toggle="collapse"
+        data-bs-target=".navbar-collapse.show"
+        routerLinkActive="active"
         >PROFILE</a
       >
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="/" (click)="logout()">LOG OUT</a>
+      <a
+        class="nav-link"
+        href="/"
+        (click)="logout()"
+        data-bs-toggle="collapse"
+        data-bs-target=".navbar-collapse.show"
+        >LOG OUT</a
+      >
     </li>
   </ul>
 </ng-template>
@@ -69,17 +92,34 @@
 <ng-template #teacher>
   <ul class="navbar-nav ms-auto">
     <li class="nav-item">
-      <a class="nav-link" routerLink="courses" routerLinkActive="active"
+      <a
+        class="nav-link"
+        routerLink="courses"
+        routerLinkActive="active"
+        data-bs-toggle="collapse"
+        data-bs-target=".navbar-collapse.show"
         >COURSES</a
       >
     </li>
     <li class="nav-item">
-      <a class="nav-link" routerLink="profile" routerLinkActive="active"
+      <a
+        class="nav-link"
+        routerLink="profile"
+        routerLinkActive="active"
+        data-bs-toggle="collapse"
+        data-bs-target=".navbar-collapse.show"
         >PROFILE</a
       >
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="/" (click)="logout()">LOG OUT</a>
+      <a
+        class="nav-link"
+        href="/"
+        (click)="logout()"
+        data-bs-toggle="collapse"
+        data-bs-target=".navbar-collapse.show"
+        >LOG OUT</a
+      >
     </li>
   </ul>
 </ng-template>
@@ -88,20 +128,44 @@
 <ng-template #admin>
   <ul class="navbar-nav ms-auto">
     <li class="nav-item">
-      <a class="nav-link" routerLink="users" routerLinkActive="active">USERS</a>
+      <a
+        class="nav-link"
+        routerLink="users"
+        routerLinkActive="active"
+        data-bs-toggle="collapse"
+        data-bs-target=".navbar-collapse.show"
+        >USERS</a
+      >
     </li>
     <li class="nav-item">
-      <a class="nav-link" routerLink="courses" routerLinkActive="active"
+      <a
+        class="nav-link"
+        routerLink="courses"
+        routerLinkActive="active"
+        data-bs-toggle="collapse"
+        data-bs-target=".navbar-collapse.show"
         >COURSES</a
       >
     </li>
     <li class="nav-item">
-      <a class="nav-link" routerLink="profile" routerLinkActive="active"
+      <a
+        class="nav-link"
+        routerLink="profile"
+        routerLinkActive="active"
+        data-bs-toggle="collapse"
+        data-bs-target=".navbar-collapse.show"
         >PROFILE</a
       >
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="/" (click)="logout()">LOG OUT</a>
+      <a
+        class="nav-link"
+        href="/"
+        (click)="logout()"
+        data-bs-toggle="collapse"
+        data-bs-target=".navbar-collapse.show"
+        >LOG OUT</a
+      >
     </li>
   </ul>
 </ng-template>
