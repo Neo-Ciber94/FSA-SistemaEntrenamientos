@@ -111,3 +111,19 @@ body {
 .breadcrumb-item.active {
   color: var(--danger);
 }
+
+/* #### Flexbox #### */
+.flex-responsive {
+  display: flex;
+  flex-direction: row;
+}
+
+@media (max-width: 450px) {
+  .flex-responsive {
+    flex-direction: column;
+  }
+
+  .flex-responsive > * {
+    width: 100% !important;
+  }
+}

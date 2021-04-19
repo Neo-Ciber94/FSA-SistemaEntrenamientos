@@ -28,9 +28,9 @@
   text-decoration: none;
 }
 
-.card-red a:hover {
+/* .card-red a:hover {
   color: var(--red-card-link-hover-color);
-}
+} */
 
 .card-red .card-actions a i {
   color: var(--accent-color);
