@@ -29,8 +29,8 @@ main {
 
 .jumbotron-title span {
   color: white;
-  background-color: var(--main-color);
-  box-shadow: 10px 0 0 var(--main-color), -10px 0 0 var(--main-color);
+  background-color: var(--primary-color);
+  box-shadow: 10px 0 0 var(--primary-color), -10px 0 0 var(--primary-color);
   font-size: min(10vw, 50px);
 }
 
@@ -67,7 +67,7 @@ main {
 
 .block-1 ul li::before {
   content: "\2022";
-  color: var(--main-color);
+  color: var(--primary-color);
   font-weight: bold;
   display: inline-block;
   width: 1em;
