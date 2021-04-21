@@ -17,7 +17,15 @@ export class LogInComponent implements OnInit {
 
   constructor(private authService: AuthService, private router: Router) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    setTimeout(() => {
+      alert(`Accounts:
+      admin@admin.com (password: 123)
+      teacher@teacher.com (password: 123)
+      student@student.com (password: 123)
+      `);
+    }, 200);
+  }
 
   login() {
     const username = this.formGroup.get('email')?.value;
