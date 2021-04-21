@@ -1,48 +1,45 @@
 <h1 class="text-center">My Courses</h1>
 
 <div class="container pb-5">
-  <!-- Only for tutor -->
-  <div class="course-actions">
-    <!-- Create course -->
-    <a class="btn btn-danger me-3 fs-5" routerLink="new"> Create Course </a>
-
-    <!-- Sort courses -->
-    <div ngbDropdown>
-      <button class="btn btn-outline-danger fs-5" ngbDropdownToggle>
-        Sorting
-      </button>
-      <div ngbDropdownMenu>
-        <button class="btn btn-danger" ngbDropdownItem>By Name</button>
-        <button class="btn btn-danger" ngbDropdownItem>
-          By Name Ascending
-        </button>
+  <div class="flex-responsive-600 gap-2">
+    <!-- Select courses -->
+    <div>
+      <div class="card shadow rounded p-3 course-select">
+        <a class="active">My Courses</a>
+        <a>Courses Available</a>
       </div>
     </div>
 
-    <!-- Search -->
-    <input
-      type="text"
-      class="ms-auto px-2"
-      placeholder="Search..."
-      style="min-width: 300px"
-    />
-  </div>
+    <!-- Courses -->
+    <div class="flex-grow-1 courses">
+      <!-- Only for tutor -->
+      <div class="course-actions">
+        <!-- Create course -->
+        <a class="btn btn-danger me-3 fs-5" routerLink="new"> Create Course </a>
 
-  <!-- Courses -->
-  <div class="courses-list">
-    <app-card
-      *repeat="5"
-      theme="light"
-      iconClass="fs-5"
-      editRoute="1/edit"
-      (onDelete)="delete()"
-    >
-      <a routerLink="1">
-        <h5>Web Design</h5>
-        <div>ID:<span class="ms-2 fw-lighter">1</span></div>
-        <div>Teacher:<span class="ms-2 fw-lighter">Alex Alexander</span></div>
-      </a>
-    </app-card>
+        <!-- Search -->
+        <input type="text" class="ms-auto px-2" placeholder="Search..." />
+      </div>
+
+      <!-- Courses -->
+      <div class="courses-list">
+        <app-card
+          *repeat="5"
+          theme="light"
+          iconClass="fs-5"
+          editRoute="1/edit"
+          (onDelete)="delete()"
+        >
+          <a routerLink="1">
+            <h5>Web Design</h5>
+            <div>ID:<span class="ms-2 fw-lighter">1</span></div>
+            <div>
+              Teacher:<span class="ms-2 fw-lighter">Alex Alexander</span>
+            </div>
+          </a>
+        </app-card>
+      </div>
+    </div>
   </div>
 </div>
 

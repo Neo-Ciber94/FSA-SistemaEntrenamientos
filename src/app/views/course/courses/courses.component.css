@@ -38,3 +38,35 @@
     margin-bottom: 5px;
   }
 }
+
+.course-select {
+  position: fixed;
+  width: 200px;
+}
+
+.courses {
+  margin-left: 200px;
+}
+
+@media (max-width: 600px) {
+  .course-select {
+    position: initial;
+    width: initial;
+  }
+
+  .courses {
+    margin-left: 0px;
+  }
+}
+
+.course-select a {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.course-select a:hover,
+.course-select a.active {
+  color: var(--primary-color);
+}
