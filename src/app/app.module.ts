@@ -5,7 +5,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SharedModule } from './views/shared/shared.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { RepeatDirective } from './directives/repeat.directive';
 
 @NgModule({
   declarations: [AppComponent],

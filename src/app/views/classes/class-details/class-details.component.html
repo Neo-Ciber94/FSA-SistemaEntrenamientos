@@ -20,10 +20,12 @@
 
   <h3 class="text-center">Activities</h3>
   <div class="class-actions my-2">
-    <button class="btn btn-outline-danger me-3 fs-5">Create Activity</button>
+    <a class="btn btn-outline-danger me-3 fs-5" routerLink="activities/new"
+      >Create Activity</a
+    >
   </div>
   <div class="class-card my-1" *repeat="5">
-    <app-card theme="light" iconClass="fs-5">
+    <app-card theme="light" iconClass="fs-5" editRoute="activities/2/edit">
       <a routerLink="activities/2">
         <div class="d-flex flex-row align-items-center card-title">
           <div class="me-3">

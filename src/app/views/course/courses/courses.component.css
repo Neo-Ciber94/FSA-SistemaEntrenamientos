@@ -62,6 +62,7 @@
 .course-select a {
   text-overflow: ellipsis;
   white-space: nowrap;
+  color: var(--text-color);
   font-size: 18px;
   font-weight: 500;
 }

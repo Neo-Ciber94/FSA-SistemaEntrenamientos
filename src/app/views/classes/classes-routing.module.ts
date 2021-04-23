@@ -22,6 +22,11 @@ const routes: Routes = [
     path: ':id/edit',
     component: ClassCreateComponent,
   },
+  {
+    path: ':id/activities',
+    loadChildren: () =>
+      import('../activities/activities.module').then((m) => m.ActivitiesModule),
+  },
 ];
 
 @NgModule({

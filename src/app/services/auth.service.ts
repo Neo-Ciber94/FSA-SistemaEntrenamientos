@@ -13,6 +13,7 @@ const USERS: User[] = [
     email: 'admin@admin.com',
     hash: '123',
     salt: '1',
+    role: Role.Admin,
   },
   {
     id: 2,
@@ -22,6 +23,7 @@ const USERS: User[] = [
     email: 'teacher@teacher.com',
     hash: '123',
     salt: '1',
+    role: Role.Teacher,
   },
   {
     id: 3,
@@ -31,6 +33,7 @@ const USERS: User[] = [
     email: 'student@student.com',
     hash: '123',
     salt: '1',
+    role: Role.Student,
   },
 ];
 
