@@ -28,20 +28,15 @@ fullstackacademy.com/courses/:course_id/classes/:class_id/1
 fullstackacademy.com/courses/:course_id/classes/:class_id/1/edit
 fullstackacademy.com/courses/:course_id/classes/:class_id/1/delete
 
--- Activities
-fullstackacademy.com/courses/:course_id/classes/:class_id/activities
-fullstackacademy.com/courses/:course_id/classes/:class_id/activities/:id
-fullstackacademy.com/courses/:course_id/classes/:class_id/activities/new
-fullstackacademy.com/courses/:course_id/classes/:class_id/activities/new?type=test
-fullstackacademy.com/courses/:course_id/classes/:class_id/activities/new?type=lesson
-fullstackacademy.com/courses/:course_id/classes/:class_id/activities/:id/edit
-fullstackacademy.com/courses/:course_id/classes/:class_id/activities/:id/delete
+-- Lesson
+fullstackacademy.com/courses/:course_id/classes/:class_id/lessons/:id
+fullstackacademy.com/courses/:course_id/classes/:class_id/lessons/new
+fullstackacademy.com/courses/:course_id/classes/:class_id/lessons/:id/edit
+fullstackacademy.com/courses/:course_id/classes/:class_id/lessons/:id/delete
 
--- Tasks
-fullstackacademy.com/courses/:course_id/classes/:class_id/tasks
-fullstackacademy.com/courses/:course_id/classes/:class_id/tasks/:id
-fullstackacademy.com/courses/:course_id/classes/:class_id/tasks/new
-fullstackacademy.com/courses/:course_id/classes/:class_id/tasks/new?type=test
-fullstackacademy.com/courses/:course_id/classes/:class_id/tasks/new?type=lesson
-fullstackacademy.com/courses/:course_id/classes/:class_id/tasks/:id/edit
-fullstackacademy.com/courses/:course_id/classes/:class_id/tasks/:id/delete
+-- Assessment
+fullstackacademy.com/courses/:course_id/classes/:class_id/assessment/:id
+fullstackacademy.com/courses/:course_id/classes/:class_id/assessment/new
+fullstackacademy.com/courses/:course_id/classes/:class_id/assessment/:id/take
+fullstackacademy.com/courses/:course_id/classes/:class_id/assessment/:id/edit
+fullstackacademy.com/courses/:course_id/classes/:class_id/assessment/:id/delete

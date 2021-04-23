@@ -23,9 +23,16 @@ const routes: Routes = [
     component: ClassCreateComponent,
   },
   {
-    path: ':id/activities',
+    path: ':id/lessons',
     loadChildren: () =>
-      import('../activities/activities.module').then((m) => m.ActivitiesModule),
+      import('../lessons/lessons.module').then((m) => m.LessonsModule),
+  },
+  {
+    path: ':id/assessments',
+    loadChildren: () =>
+      import('../assessments/assessments.module').then(
+        (m) => m.AssessmentsModule
+      ),
   },
 ];
 

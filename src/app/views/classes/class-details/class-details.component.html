@@ -1,10 +1,8 @@
-<div class="mx-5 my-3">
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a routerLink="/courses">Courses</a></li>
-    <li class="breadcrumb-item"><a routerLink="/courses/1">Web Design</a></li>
-    <li class="breadcrumb-item active">Basic HTML</li>
-  </ol>
-</div>
+<ol class="breadcrumb">
+  <li class="breadcrumb-item"><a routerLink="/courses">Courses</a></li>
+  <li class="breadcrumb-item"><a routerLink="/courses/1">Web Design</a></li>
+  <li class="breadcrumb-item active">Basic HTML</li>
+</ol>
 
 <div class="container p-3 d-flex flex-column justify-content-center">
   <h4>Basic HTML</h4>
@@ -18,15 +16,23 @@
     cues for the appearance of the document.
   </p>
 
-  <h3 class="text-center">Activities</h3>
-  <div class="class-actions my-2">
-    <a class="btn btn-outline-danger me-3 fs-5" routerLink="activities/new"
-      >Create Activity</a
-    >
+  <h3 class="text-center">Tasks</h3>
+  <div class="flex-responsive">
+    <div class="class-actions my-2">
+      <a class="btn btn-outline-danger me-3 fs-5" routerLink="lessons/new"
+        >New Lesson</a
+      >
+    </div>
+    <div class="class-actions my-2">
+      <a class="btn btn-outline-danger me-3 fs-5" routerLink="assessments/new"
+        >New Assessment</a
+      >
+    </div>
   </div>
-  <div class="class-card my-1" *repeat="5">
-    <app-card theme="light" iconClass="fs-5" editRoute="activities/2/edit">
-      <a routerLink="activities/2">
+
+  <div class="class-card my-1" *repeat="2">
+    <app-card theme="light" iconClass="fs-5" editRoute="lessons/2/edit">
+      <a routerLink="lessons/2">
         <div class="d-flex flex-row align-items-center card-title">
           <div class="me-3">
             <!-- Checkmark only for students -->
@@ -35,6 +41,22 @@
             <!-- <i class="far fa-circle fs-4"></i> -->
           </div>
           <div class="fs-5">HTML and HTML5</div>
+        </div>
+      </a>
+    </app-card>
+  </div>
+
+  <div class="class-card my-1" *repeat="2">
+    <app-card theme="light" iconClass="fs-5" editRoute="assessments/2/edit">
+      <a routerLink="assessments/2">
+        <div class="d-flex flex-row align-items-center card-title">
+          <div class="me-3">
+            <!-- Checkmark only for students -->
+            <!-- <i class="far fa-file-alt"></i> -->
+            <!-- <i class="far fa-check-circle fs-4"></i> -->
+            <i class="far fa-circle fs-4"></i>
+          </div>
+          <div class="fs-5">HTML and Headers</div>
         </div>
       </a>
     </app-card>

@@ -1,0 +1,16 @@
+<ol class="breadcrumb">
+  <li class="breadcrumb-item"><a routerLink="/courses">Courses</a></li>
+  <li class="breadcrumb-item"><a routerLink="/courses/1">Web Design</a></li>
+  <li class="breadcrumb-item">
+    <a routerLink="/courses/1/classes/1">Basic HTML</a>
+  </li>
+  <li class="breadcrumb-item active">HTML and HTML5</li>
+</ol>
+
+<h1 class="text-center">{{ title }}</h1>
+<div class="container p-4">
+  <app-multi-choice
+    *ngFor="let question of multiChoiceQuestions"
+    [multiChoice]="question"
+  ></app-multi-choice>
+</div>
