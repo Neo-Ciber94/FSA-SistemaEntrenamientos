@@ -8,6 +8,7 @@ import {
   Validator,
 } from '@angular/forms';
 import { getNextId } from 'src/app/utils/nextId';
+import { objToString } from 'src/app/utils/objToString';
 
 interface InputItem {
   id: number;
@@ -39,7 +40,7 @@ export class InputListComponent implements OnInit, ControlValueAccessor {
   ngOnInit(): void {}
 
   get values() {
-    return this.items.map((e) => e.value + '');
+    return this.items.map((e) => objToString(e.value));
   }
 
   @Input()
@@ -83,9 +84,9 @@ export class InputListComponent implements OnInit, ControlValueAccessor {
     if (obj == null || obj.length === 0) {
       this.items = [];
     } else if (Array.isArray(obj)) {
-      this.values = [...obj.map((e) => e + '')];
+      this.values = [...obj.map(objToString)];
     } else {
-      this.values = [obj + ''];
+      this.values = [objToString(obj)];
     }
   }
 

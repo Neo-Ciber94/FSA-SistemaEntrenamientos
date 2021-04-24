@@ -119,7 +119,7 @@ body {
 }
 
 .flex-buttons .btn {
-  width: 50%;
+  width: 100%;
 }
 
 @media (max-width: 450px) {
@@ -190,4 +190,9 @@ body {
   .flex-responsive-800 * {
     width: 100%;
   }
+}
+
+.validation-error {
+  color: var(--danger);
+  font-size: 14px;
 }

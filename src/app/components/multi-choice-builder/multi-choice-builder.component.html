@@ -1,35 +1,74 @@
-<form [formGroup]="formGroup">
-  <div *ngFor="let e of elements">
-    <div class="quetion-btn-options">
+<form [formGroup]="formGroup" (ngSubmit)="submit()">
+  <div class="text-center">
+    <input
+      [ngClass]="
+        wasValidated && formGroup.get('assessmentTitle')!.invalid
+          ? 'is-invalid'
+          : ''
+      "
+      class="form-control border-0 p-1 m-1 fs-2 w-100 text-center text-danger"
+      placeholder="Assessment Title"
+      formControlName="assessmentTitle"
+      required
+    />
+    <div class="invalid-feedback">Assessment title is required</div>
+  </div>
+
+  <div *ngIf="elements.length === 0" class="no-questions user-select-none">
+    No questions
+  </div>
+  <div *ngFor="let e of elements" class="question py-2 px-4 m-1">
+    <div class="question-btn-options">
+      <button (click)="moveQuestionUp(e.id)">
+        <i class="fas fa-angle-up"></i>
+      </button>
+      <button (click)="moveQuestionDown(e.id)">
+        <i class="fas fa-angle-down"></i>
+      </button>
       <button (click)="openQuestionEditor(e.id)">
         <i class="fas fa-edit"></i>
       </button>
-      <button (click)="deleteQuestion(e.id)" class="ml-2">
+      <button (click)="deleteQuestion(e.id)">
         <i class="far fa-trash-alt"></i>
       </button>
     </div>
     <app-multi-choice
+      [isInvalid]="wasValidated && e.multipleChoiceQuestion.selected == null"
       [formGroup]="formGroup"
       [multiChoice]="e.multipleChoiceQuestion"
     ></app-multi-choice>
   </div>
+
+  <!-- Error message -->
+  <div
+    *ngIf="wasValidated && elements.length === 0"
+    class="alert alert-danger text-center"
+  >
+    At least 1 question is required
+  </div>
+
+  <!-- Actions -->
+  <div class="flex-buttons gap-2 mb-2 mt-4 w-100">
+    <button
+      type="button"
+      class="btn btn-outline-danger fs-5"
+      (click)="openQuestionEditor()"
+    >
+      Add Question
+    </button>
+    <button
+      type="button"
+      class="btn btn-outline-warning fs-5"
+      (click)="debug()"
+      *ngIf="showDebug"
+    >
+      Debug Submit
+    </button>
+  </div>
+
+  <!-- Content -->
+  <ng-content></ng-content>
 </form>
-
-<button
-  type="button"
-  class="btn btn-outline-danger w-100 mb-2 fs-5"
-  (click)="openQuestionEditor()"
->
-  Add Question
-</button>
-
-<div class="flex-buttons gap-2">
-  <button type="button" class="btn btn-secondary fs-5">Cancel</button>
-  <button type="submit" class="btn btn-danger fs-5">Save</button>
-  <button type="button" class="btn btn-warning fs-5" (click)="debug()">
-    Debug Submit
-  </button>
-</div>
 
 <!-- Question editor -->
 <ng-template #questionEditor let-modal>

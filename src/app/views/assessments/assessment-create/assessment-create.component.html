@@ -11,5 +11,12 @@
 </ol>
 
 <div class="container p-4">
-  <app-multi-choice-builder></app-multi-choice-builder>
+  <app-multi-choice-builder (submitForm)="onSubmit($event)">
+    <div class="flex-buttons gap-2">
+      <button type="button" class="btn btn-secondary fs-5" (click)="back()">
+        Cancel
+      </button>
+      <button type="submit" class="btn btn-danger fs-5">Save</button>
+    </div>
+  </app-multi-choice-builder>
 </div>

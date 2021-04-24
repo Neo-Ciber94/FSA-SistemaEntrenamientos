@@ -9,20 +9,26 @@
     <input
       *ngIf="formGroup != null"
       class="form-check-input"
+      [ngClass]="isInvalid ? 'is-invalid' : ''"
       type="radio"
       formControlName="{{ multiChoice.key }}"
       value="{{ choice.value }}"
+      checked="{{ multiChoice.selected === choice ? 'checked' : '' }}"
     />
 
     <!-- Only view -->
     <input
       *ngIf="formGroup == null"
+      [ngClass]="isInvalid ? 'is-invalid' : ''"
       class="form-check-input"
       type="radio"
       value="{{ choice.value }}"
+      checked="{{ multiChoice.selected === choice ? 'checked' : '' }}"
     />
     <label class="form-check-label" for="{{ multiChoice.key }}">
       {{ choice.value }}
     </label>
   </div>
+
+  <div *ngIf="isInvalid" class="validation-error">Select an answer</div>
 </div>
