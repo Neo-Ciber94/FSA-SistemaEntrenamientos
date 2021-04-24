@@ -1,0 +1,36 @@
+<div class="d-flex flex-column">
+  <div class="form-group d-flex flex-row" *ngFor="let item of items">
+    <div class="flex-grow-1">
+      <input
+        #input
+        class="form-control"
+        type="{{ type }}"
+        value="{{ item.value }}"
+        (change)="update(item.id, input.value)"
+        [disabled]="isDisabled ? 'disabled' : ''"
+      />
+    </div>
+    <button class="delete-btn mx-2" (click)="delete(item.id)">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+
+  <button type="button" class="btn btn-dark w-100" (click)="add()">Add</button>
+</div>
+
+<style>
+  .delete-btn {
+    font-size: 22px;
+    background: none;
+    outline: none;
+    border: none;
+  }
+
+  .delete-btn i {
+    color: rgba(0, 0, 0, 0.4);
+  }
+
+  .delete-btn:hover i {
+    color: var(--danger);
+  }
+</style>

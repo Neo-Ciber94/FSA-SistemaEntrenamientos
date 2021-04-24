@@ -112,6 +112,26 @@ body {
   color: var(--danger);
 }
 
+/* #### Buttons actions */
+.flex-buttons {
+  display: flex;
+  flex-direction: row;
+}
+
+.flex-buttons .btn {
+  width: 50%;
+}
+
+@media (max-width: 450px) {
+  .flex-buttons {
+    flex-direction: column;
+  }
+
+  .flex-buttons .btn {
+    width: 100%;
+  }
+}
+
 /* #### Flexbox #### */
 .flex-responsive,
 .flex-responsive-500,

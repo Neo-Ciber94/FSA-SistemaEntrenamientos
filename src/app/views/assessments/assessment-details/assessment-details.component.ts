@@ -1,4 +1,6 @@
+import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { MultiChoiceQuestion } from 'src/app/components/multi-choice/MultiChoiceQuestion';
 
 @Component({
@@ -10,7 +12,7 @@ export class AssessmentDetailsComponent implements OnInit {
   title = 'HTML and Headers';
   multiChoiceQuestions: MultiChoiceQuestion[] = [];
 
-  constructor() {}
+  constructor(private router: Router, private location: Location) {}
 
   ngOnInit(): void {
     this.multiChoiceQuestions = [
@@ -33,5 +35,9 @@ export class AssessmentDetailsComponent implements OnInit {
         ],
       },
     ];
+  }
+
+  back() {
+    this.location.back();
   }
 }

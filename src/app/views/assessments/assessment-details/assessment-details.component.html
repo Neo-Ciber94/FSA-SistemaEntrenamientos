@@ -13,4 +13,10 @@
     *ngFor="let question of multiChoiceQuestions"
     [multiChoice]="question"
   ></app-multi-choice>
+
+  <!-- Actions -->
+  <div class="flex-buttons gap-2">
+    <button class="btn btn-secondary" (click)="back()">Back</button>
+    <a class="btn btn-danger" routerLink="edit">Edit</a>
+  </div>
 </div>

@@ -1,0 +1,18 @@
+.quetion-btn-options {
+  text-align: right;
+}
+
+.quetion-btn-options button {
+  background: none;
+  outline: none;
+  border: none;
+}
+
+.quetion-btn-options button i {
+  font-size: 20px;
+  color: rgba(100, 100, 100, 0.2);
+}
+
+.quetion-btn-options button:hover i {
+  color: rgba(100, 100, 100, 0.9);
+}

@@ -1,8 +1,26 @@
-<div class="form-group">
+<div class="form-group" [formGroup]="formGroup!">
   <label class="form-label fw-bold">{{ multiChoice.question }}</label>
 
-  <div class="form-check" *ngFor="let choice of multiChoice.choices">
-    <input class="form-check-input" type="radio" name="{{ multiChoice.key }}" />
+  <div
+    class="form-check"
+    *ngFor="let choice of multiChoice.choices; let i = index"
+  >
+    <!-- With FormGroup -->
+    <input
+      *ngIf="formGroup != null"
+      class="form-check-input"
+      type="radio"
+      formControlName="{{ multiChoice.key }}"
+      value="{{ choice.value }}"
+    />
+
+    <!-- Only view -->
+    <input
+      *ngIf="formGroup == null"
+      class="form-check-input"
+      type="radio"
+      value="{{ choice.value }}"
+    />
     <label class="form-check-label" for="{{ multiChoice.key }}">
       {{ choice.value }}
     </label>

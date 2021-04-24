@@ -1,1 +1,71 @@
-<p>multi-choice-builder works!</p>
+<form [formGroup]="formGroup">
+  <div *ngFor="let e of elements">
+    <div class="quetion-btn-options">
+      <button (click)="openQuestionEditor(e.id)">
+        <i class="fas fa-edit"></i>
+      </button>
+      <button (click)="deleteQuestion(e.id)" class="ml-2">
+        <i class="far fa-trash-alt"></i>
+      </button>
+    </div>
+    <app-multi-choice
+      [formGroup]="formGroup"
+      [multiChoice]="e.multipleChoiceQuestion"
+    ></app-multi-choice>
+  </div>
+</form>
+
+<button
+  type="button"
+  class="btn btn-outline-danger w-100 mb-2 fs-5"
+  (click)="openQuestionEditor()"
+>
+  Add Question
+</button>
+
+<div class="flex-buttons gap-2">
+  <button type="button" class="btn btn-secondary fs-5">Cancel</button>
+  <button type="submit" class="btn btn-danger fs-5">Save</button>
+  <button type="button" class="btn btn-warning fs-5" (click)="debug()">
+    Debug Submit
+  </button>
+</div>
+
+<!-- Question editor -->
+<ng-template #questionEditor let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">New Question</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="questionEditorFormGroup">
+      <div class="text-center mb-2">
+        <input
+          class="border-0 text-center p-2 fs-5 w-100"
+          formControlName="questionTitle"
+          required
+        />
+      </div>
+      <app-input-list formControlName="questionChoices"></app-input-list>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-outline-dark w-25"
+      (click)="modal.close()"
+    >
+      Cancel
+    </button>
+    <button type="button" class="btn btn-danger w-25" (click)="addQuestion()">
+      Add
+    </button>
+  </div>
+</ng-template>
