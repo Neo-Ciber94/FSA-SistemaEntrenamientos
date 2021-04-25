@@ -1,0 +1,13 @@
+.editorKind {
+  width: 300px;
+}
+
+.editorKind label {
+  width: 50%;
+}
+
+@media (max-width: 600px) {
+  .editorKind {
+    width: 100%;
+  }
+}

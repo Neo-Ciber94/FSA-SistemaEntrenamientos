@@ -10,4 +10,65 @@
   ></li>
 </ol>
 
-<div class="container p-4"></div>
+<div class="container p-4">
+  <div
+    class="btn-group btn-group-toggle my-2 editorKind"
+    ngbRadioGroup
+    name="editorKind"
+    [(ngModel)]="editorKind"
+  >
+    <label ngbButtonLabel class="btn-outline-danger">
+      <input ngbButton type="radio" [value]="EditorKind.Text" /> Text
+    </label>
+    <label ngbButtonLabel class="btn-outline-danger">
+      <input ngbButton type="radio" [value]="EditorKind.Markdown" /> Markdown
+    </label>
+  </div>
+
+  <form [formGroup]="formGroup">
+    <input
+      type="text"
+      class="form-control text-center text-danger fs-3 w-100 mb-2"
+      placeholder="Lesson title"
+      formControlName="title"
+      required
+    />
+
+    <div
+      class="btn-group btn-group-toggle"
+      *ngIf="editorKind === EditorKind.Markdown"
+    >
+      <label class="btn-outline-secondary" ngbButtonLabel>
+        <input
+          #input
+          type="checkbox"
+          ngbButton
+          (change)="togglePreview(input.checked)"
+        />
+        Preview
+      </label>
+    </div>
+
+    <textarea
+      [ngClass]="preview ? 'd-none' : 'd-block'"
+      class="form-control mt-2"
+      formControlName="content"
+      style="min-height: 200px"
+      required
+    ></textarea>
+
+    <div
+      class="markdown-preview p-2 border rounded mt-2 markdown-body"
+      [ngClass]="preview ? 'd-block' : 'd-none'"
+    >
+      <markdown [data]="content" emoji></markdown>
+    </div>
+
+    <div class="flex-buttons gap-2 mt-4">
+      <button type="button" class="btn btn-secondary" (click)="back()">
+        Cancel
+      </button>
+      <button class="btn btn-danger">Save</button>
+    </div>
+  </form>
+</div>

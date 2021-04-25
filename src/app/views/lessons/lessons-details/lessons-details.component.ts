@@ -1,3 +1,4 @@
+import { Location } from '@angular/common';
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import * as marked from 'marked';
 
@@ -9,12 +10,16 @@ import * as marked from 'marked';
 export class LessonsDetailsComponent implements OnInit {
   content = CONTENT;
 
-  constructor() {}
+  constructor(private location: Location) {}
 
   ngOnInit(): void {}
 
   isMarkdown() {
     return true;
+  }
+
+  back() {
+    this.location.back();
   }
 }
 
