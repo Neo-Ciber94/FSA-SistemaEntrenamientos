@@ -35,11 +35,10 @@
     />
 
     <!-- Editor -->
-    <!-- prettier-ignore -->
     <div
       *ngIf="
         editorKind === EditorKind.Markdown;
-        then markdownEditor
+        then markdownEditor;
         else textEditor
       "
     ></div>
@@ -107,4 +106,10 @@
   </ul>
 
   <div [ngbNavOutlet]="nav"></div>
+  <a
+    href="https://www.markdownguide.org/cheat-sheet/"
+    target="_blank"
+    class="text-danger small"
+    >What is markdown?</a
+  >
 </ng-template>
