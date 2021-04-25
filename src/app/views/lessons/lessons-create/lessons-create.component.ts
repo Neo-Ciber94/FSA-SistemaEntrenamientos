@@ -1,5 +1,5 @@
 import { Location } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CustomValidators } from 'src/app/utils/custom-validators';
@@ -7,6 +7,11 @@ import { CustomValidators } from 'src/app/utils/custom-validators';
 enum EditorKind {
   Markdown,
   Text,
+}
+
+enum MarkdownEditorTab {
+  Write,
+  Preview,
 }
 
 @Component({
@@ -27,7 +32,7 @@ export class LessonsCreateComponent implements OnInit {
   });
 
   editorKind: EditorKind = EditorKind.Text;
-  preview = false;
+  markdownTab: MarkdownEditorTab = MarkdownEditorTab.Write;
 
   constructor(private router: Router, private location: Location) {}
 
@@ -41,26 +46,23 @@ export class LessonsCreateComponent implements OnInit {
     return EditorKind;
   }
 
+  get MarkdownEditorTab() {
+    return MarkdownEditorTab;
+  }
+
   get content() {
     return this.formGroup.get('content')?.value as string;
+  }
+
+  getControl(name: string) {
+    return this.formGroup.get(name) as FormControl;
   }
 
   back() {
     this.location.back();
   }
 
-  togglePreview(preview: boolean) {
-    if (preview) {
-      const textArea = document.querySelector('form textarea') as HTMLElement;
-      const markdownPreview = document.querySelector(
-        'form .markdown-preview'
-      ) as HTMLElement;
-
-      markdownPreview.style.height = `${
-        textArea.getBoundingClientRect().height
-      }px`;
-    }
-
-    this.preview = preview;
+  submit() {
+    console.log(this.formGroup.getRawValue());
   }
 }

@@ -112,7 +112,7 @@ body {
   color: var(--danger);
 }
 
-/* #### Buttons actions */
+/* #### Buttons */
 .flex-buttons {
   display: flex;
   flex-direction: row;
@@ -133,11 +133,7 @@ body {
 }
 
 /* #### Flexbox #### */
-.flex-responsive,
-.flex-responsive-500,
-.flex-responsive-600,
-.flex-responsive-700,
-.flex-responsive-800 {
+.flex-responsive {
   display: flex;
   flex-direction: row;
 }
@@ -148,46 +144,6 @@ body {
   }
 
   .flex-responsive * {
-    width: 100%;
-  }
-}
-
-@media (max-width: 500px) {
-  .flex-responsive-500 {
-    flex-direction: column;
-  }
-
-  .flex-responsive-500 * {
-    width: 100%;
-  }
-}
-
-@media (max-width: 600px) {
-  .flex-responsive-600 {
-    flex-direction: column;
-  }
-
-  .flex-responsive-600 * {
-    width: 100%;
-  }
-}
-
-@media (max-width: 700px) {
-  .flex-responsive-700 {
-    flex-direction: column;
-  }
-
-  .flex-responsive-700 * {
-    width: 100%;
-  }
-}
-
-@media (max-width: 800px) {
-  .flex-responsive-800 {
-    flex-direction: column;
-  }
-
-  .flex-responsive-800 * {
     width: 100%;
   }
 }

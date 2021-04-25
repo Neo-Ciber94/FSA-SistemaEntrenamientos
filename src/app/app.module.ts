@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, SecurityContext } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -14,7 +14,8 @@ import { MarkdownModule } from 'ngx-markdown';
     SharedModule,
     AppRoutingModule,
     NgbModule,
-    MarkdownModule.forRoot(),
+    // FIXME: Is secure sanitize
+    MarkdownModule.forRoot({ sanitize: SecurityContext.NONE }),
   ],
   providers: [],
   bootstrap: [AppComponent],

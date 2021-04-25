@@ -34,35 +34,15 @@
       required
     />
 
+    <!-- Editor -->
+    <!-- prettier-ignore -->
     <div
-      class="btn-group btn-group-toggle"
-      *ngIf="editorKind === EditorKind.Markdown"
-    >
-      <label class="btn-outline-secondary" ngbButtonLabel>
-        <input
-          #input
-          type="checkbox"
-          ngbButton
-          (change)="togglePreview(input.checked)"
-        />
-        Preview
-      </label>
-    </div>
-
-    <textarea
-      [ngClass]="preview ? 'd-none' : 'd-block'"
-      class="form-control mt-2"
-      formControlName="content"
-      style="min-height: 200px"
-      required
-    ></textarea>
-
-    <div
-      class="markdown-preview p-2 border rounded mt-2 markdown-body"
-      [ngClass]="preview ? 'd-block' : 'd-none'"
-    >
-      <markdown [data]="content" emoji></markdown>
-    </div>
+      *ngIf="
+        editorKind === EditorKind.Markdown;
+        then markdownEditor
+        else textEditor
+      "
+    ></div>
 
     <div class="flex-buttons gap-2 mt-4">
       <button type="button" class="btn btn-secondary" (click)="back()">
@@ -72,3 +52,59 @@
     </div>
   </form>
 </div>
+
+<ng-template #textEditor>
+  <!-- Text Editor -->
+  <textarea
+    class="form-control mt-2"
+    [formControl]="getControl('content')"
+    style="min-height: 200px"
+    required
+  ></textarea>
+</ng-template>
+
+<ng-template #markdownEditor>
+  <ul
+    ngbNav
+    #nav="ngbNav"
+    [(activeId)]="markdownTab"
+    [animation]="false"
+    class="nav-tabs"
+  >
+    <li [ngbNavItem]="MarkdownEditorTab.Write">
+      <a ngbNavLink>Write</a>
+      <ng-template ngbNavContent>
+        <!-- Text Editor -->
+        <textarea
+          class="form-control markdown-write"
+          [formControl]="getControl('content')"
+          style="min-height: 200px"
+          required
+        ></textarea>
+      </ng-template>
+    </li>
+    <li [ngbNavItem]="MarkdownEditorTab.Preview">
+      <a ngbNavLink>Preview</a>
+      <ng-template ngbNavContent>
+        <!-- Markdown Preview -->
+        <div
+          class="markdown-preview p-2 border rounded markdown-body"
+          style="min-height: 200px"
+        >
+          <markdown
+            [data]="content.length === 0 ? 'Nothing to preview' : content"
+            emoji
+          ></markdown>
+        </div>
+      </ng-template>
+    </li>
+    <!-- <li
+      class="nav-item ms-auto"
+      *ngIf="markdownTab === MarkdownEditorTab.Preview"
+    >
+      <button class="btn nav-link text-danger">Split</button>
+    </li> -->
+  </ul>
+
+  <div [ngbNavOutlet]="nav"></div>
+</ng-template>

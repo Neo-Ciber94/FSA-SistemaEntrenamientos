@@ -11,3 +11,14 @@
     width: 100%;
   }
 }
+
+/* ### Markdown Tabs */
+
+.nav-tabs a:not(.active) {
+  color: var(--danger);
+}
+
+.markdown-write,
+.markdown-preview {
+  border-top: none !important;
+}

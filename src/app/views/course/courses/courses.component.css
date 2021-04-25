@@ -1,3 +1,22 @@
+.courses-container {
+  display: flex;
+  flex-direction: row;
+}
+
+@media (max-width: 600px) {
+  .courses-container {
+    flex-direction: column;
+  }
+
+  .courses-container * {
+    width: 100%;
+  }
+}
+
+app-card:hover * {
+  color: white;
+}
+
 .courses-list {
   display: grid;
   justify-content: center;
