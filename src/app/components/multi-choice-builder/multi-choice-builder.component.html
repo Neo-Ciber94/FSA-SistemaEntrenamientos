@@ -33,7 +33,9 @@
       </button>
     </div>
     <app-multi-choice
-      [isInvalid]="wasValidated && e.multipleChoiceQuestion.selected == null"
+      [isInvalid]="
+        wasValidated && e.multipleChoiceQuestion.selected?.value == null
+      "
       [formGroup]="formGroup"
       [multiChoice]="e.multipleChoiceQuestion"
     ></app-multi-choice>

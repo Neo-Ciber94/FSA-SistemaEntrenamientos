@@ -1,1 +1,13 @@
-<p>lessons-create works!</p>
+<ol class="breadcrumb">
+  <li class="breadcrumb-item"><a routerLink="/courses">Courses</a></li>
+  <li class="breadcrumb-item"><a routerLink="/courses/1">Web Design</a></li>
+  <li class="breadcrumb-item">
+    <a routerLink="/courses/1/classes/1">Basic HTML</a>
+  </li>
+  <li
+    class="breadcrumb-item active"
+    [innerHTML]="isEditing ? 'Edit Lesson' : 'Create Lesson'"
+  ></li>
+</ol>
+
+<div class="container p-4"></div>

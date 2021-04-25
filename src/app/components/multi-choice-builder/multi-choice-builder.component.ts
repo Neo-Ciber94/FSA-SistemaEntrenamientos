@@ -1,4 +1,6 @@
 import {
+  AfterViewInit,
+  ChangeDetectorRef,
   Component,
   EventEmitter,
   Input,
@@ -37,18 +39,25 @@ export class MultiChoiceBuilderComponent implements OnInit {
   private questionEditorModal?: NgbModalRef;
   private isSubmitting = false;
 
-  formGroup!: FormGroup;
+  elements: EditableMultipleChoice[] = [];
+  formGroup: FormGroup = new FormGroup({});
   questionEditorFormGroup!: FormGroup;
   selectedItemId?: number;
   wasValidated = false;
 
-  @Input()
-  elements: EditableMultipleChoice[] = [];
-
   constructor(private modalService: NgbModal) {}
-
   ngOnInit(): void {
     this.render();
+  }
+
+  @Input()
+  set questions(items: MultiChoiceQuestion[]) {
+    this.elements = items.map((e) => {
+      return {
+        id: getNextId(),
+        multipleChoiceQuestion: e,
+      };
+    });
   }
 
   get showDebug() {
@@ -161,7 +170,6 @@ export class MultiChoiceBuilderComponent implements OnInit {
   private render() {
     const controls: any = {};
 
-    console.log(this.elements);
     for (const e of this.elements) {
       const multiChoiceQuestion = e.multipleChoiceQuestion;
       controls[multiChoiceQuestion.key] = new FormControl(
