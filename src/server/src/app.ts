@@ -2,24 +2,30 @@ import 'reflect-metadata';
 import express from 'express';
 import { Express } from 'express';
 import morgan from 'morgan';
+import cookieParser from 'cookie-parser';
 import { createConnection } from 'typeorm';
-import { createExpressServer } from 'routing-controllers';
+import { createExpressServer, useExpressServer } from 'routing-controllers';
 import { AutenticateToken } from './middlewares/AutenticateToken';
 
-export const SECRET_KEY = '71962c672c8a782e9f6d663be94f9e5fd07037ca';
 const PORT = process.env.PORT || 3000;
 
 // Create express server
-const app = createExpressServer({
+const app = express();
+
+// Setup express middlewares
+app.use(cookieParser());
+app.use(morgan('dev'));
+
+// Setup express controllers
+useExpressServer(app, {
   cors: true,
   defaults: {
     nullResultCode: 404,
     undefinedResultCode: 404,
   },
   controllers: [__dirname + '/controllers/*.ts'],
-  // middlewares: [morgan('dev'), express.json(), AutenticateToken],
-  middlewares: [morgan('dev'), express.json()],
-}) as Express;
+  middlewares: [AutenticateToken],
+});
 
 // Connect to database
 createConnection()

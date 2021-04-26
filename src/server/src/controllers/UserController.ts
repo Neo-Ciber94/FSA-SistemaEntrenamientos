@@ -1,29 +1,22 @@
-import { Get, JsonController, OnUndefined, Param } from 'routing-controllers';
-import { Role } from '../entities/Rol';
+import { Get, JsonController, Param } from 'routing-controllers';
 import { User } from '../entities/User';
+import { SanitizedUser } from '../types/Users';
 
 @JsonController('/api/users')
 export class UserController {
   @Get()
   async getAllUsers() {
     const users = await User.find();
-    return sanitizeUser(users);
+    // return sanitizeUser(users);
+    return users;
   }
 
   @Get('/:id')
   async getUser(@Param('id') id: number) {
     const user = await User.findOne(id);
-    return user && sanitizeUser(user);
+    //return user && sanitizeUser(user);
+    return user;
   }
-}
-
-interface SanitizedUser {
-  id: number;
-  firstName: string;
-  lastName: string;
-  email: string;
-  creationDate: Date;
-  role: Role;
 }
 
 /**

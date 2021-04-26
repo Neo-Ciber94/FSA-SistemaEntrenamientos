@@ -2,6 +2,8 @@ import {
   BaseEntity,
   Column,
   Entity,
+  FindOneOptions,
+  Index,
   JoinColumn,
   ManyToOne,
   OneToOne,
@@ -10,6 +12,7 @@ import {
 import { Role } from './Rol';
 
 @Entity()
+@Index('idx_token', ['refreshToken'])
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
@@ -29,10 +32,37 @@ export class User extends BaseEntity {
   @Column()
   salt!: string;
 
+  @Column({ type: 'varchar', nullable: true, unique: true })
+  refreshToken!: string | null;
+
   @Column({ default: () => 'NOW()' })
   creationDate!: Date;
 
   @ManyToOne(() => Role, (role) => role.user)
   @JoinColumn()
   role!: Role;
+
+  isLogged() {
+    return this.refreshToken != null;
+  }
+
+  static findByEmail(
+    email: string,
+    options?: FindOneOptions<User>
+  ): Promise<User | undefined> {
+    return User.findOne({
+      where: { email },
+      ...options,
+    });
+  }
+
+  static findByRefreshToken(
+    refreshToken: string,
+    options?: FindOneOptions<User>
+  ): Promise<User | undefined> {
+    return User.findOne({
+      where: { refreshToken },
+      ...options,
+    });
+  }
 }
