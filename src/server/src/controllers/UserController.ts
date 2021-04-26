@@ -26,6 +26,9 @@ interface SanitizedUser {
   role: Role;
 }
 
+/**
+ * Returns the user without password information.
+ */
 function sanitizeUser(user: User): SanitizedUser;
 function sanitizeUser(user: User[]): SanitizedUser[];
 function sanitizeUser(user: User | User[]): SanitizedUser | SanitizedUser[] {

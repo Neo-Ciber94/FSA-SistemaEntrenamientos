@@ -17,7 +17,8 @@ const app = createExpressServer({
     undefinedResultCode: 404,
   },
   controllers: [__dirname + '/controllers/*.ts'],
-  middlewares: [morgan('dev'), express.json(), AutenticateToken],
+  // middlewares: [morgan('dev'), express.json(), AutenticateToken],
+  middlewares: [morgan('dev'), express.json()],
 }) as Express;
 
 // Connect to database
