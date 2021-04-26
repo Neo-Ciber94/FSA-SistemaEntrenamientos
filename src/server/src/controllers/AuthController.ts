@@ -1,12 +1,4 @@
-import {
-  Body,
-  JsonController,
-  Param,
-  Post,
-  Put,
-  Req,
-  Res,
-} from 'routing-controllers';
+import { Body, JsonController, Post, Put, Req, Res } from 'routing-controllers';
 import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { User } from '../entities/User';
@@ -16,7 +8,6 @@ import {
   ACCESS_TOKEN_SECRET,
   JWT_ACCESS_EXPIRATION_MS,
   JWT_REFRESH_EXPIRATION_MS,
-  REFRESH_TOKEN_SECRET,
 } from '../config/config';
 import { v4 as uuidv4 } from 'uuid';
 import { Claims } from '../types/Claims';
@@ -103,7 +94,7 @@ export class AuthController {
 
   @Post('/logout')
   async logout(@Req() request: Request, @Res() response: Response) {
-    const refreshToken = getRefreshToken(request);
+    const refreshToken = getRefreshTokenCookie(request);
 
     if (refreshToken) {
       const user = await User.findByRefreshToken(refreshToken);
@@ -121,7 +112,7 @@ export class AuthController {
 
   @Post('/token')
   async getToken(@Req() request: Request, @Res() response: Response) {
-    const refreshToken = getRefreshToken(request);
+    const refreshToken = getRefreshTokenCookie(request);
 
     if (refreshToken) {
       const user = await User.findByRefreshToken(refreshToken, {
@@ -166,7 +157,7 @@ function newJwtSession(claims: Claims): Session {
   return { jwtToken, jwtExpiration, refreshToken };
 }
 
-function getRefreshToken(request: Request): string | undefined {
+function getRefreshTokenCookie(request: Request): any | undefined {
   const cookies = request.cookies;
 
   if (cookies) {

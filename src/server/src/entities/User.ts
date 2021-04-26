@@ -42,10 +42,6 @@ export class User extends BaseEntity {
   @JoinColumn()
   role!: Role;
 
-  isLogged() {
-    return this.refreshToken != null;
-  }
-
   static findByEmail(
     email: string,
     options?: FindOneOptions<User>

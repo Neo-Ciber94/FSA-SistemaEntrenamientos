@@ -33,7 +33,7 @@ export class AutenticateToken implements ExpressMiddlewareInterface {
         const user = await User.findOne(claims.id);
 
         // If still logged allow request, otherwise `401 Unauthorized`
-        if (user && user.isLogged()) {
+        if (await checkIsAuthorized(request, user)) {
           next();
         } else {
           response.sendStatus(401);
@@ -43,4 +43,21 @@ export class AutenticateToken implements ExpressMiddlewareInterface {
       response.sendStatus(401);
     }
   }
+}
+
+async function checkIsAuthorized(request: Request, user?: User) {
+  if (user && user.refreshToken) {
+    // Check if the cookie exists and match the user refreshToken
+    const refreshToken = request.cookies['refreshToken'];
+    if (user.refreshToken === refreshToken) {
+      return true;
+    } else {
+      // Otherwise remove the token from the user
+      user.refreshToken = null;
+      await User.save(user);
+      return false;
+    }
+  }
+
+  return false;
 }
