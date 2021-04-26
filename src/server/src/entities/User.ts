@@ -29,6 +29,9 @@ export class User extends BaseEntity {
   @Column()
   salt!: string;
 
+  @Column({ default: () => 'NOW()' })
+  creationDate!: Date;
+
   @ManyToOne(() => Role, (role) => role.user)
   @JoinColumn()
   role!: Role;
