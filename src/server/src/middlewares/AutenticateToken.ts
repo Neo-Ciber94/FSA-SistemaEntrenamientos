@@ -55,9 +55,9 @@ async function checkIsAuthorized(request: Request, user?: User) {
       // Otherwise remove the token from the user
       user.refreshToken = null;
       await User.save(user);
-      return false;
     }
   }
 
+  // Fallback
   return false;
 }

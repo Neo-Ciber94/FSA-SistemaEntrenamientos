@@ -13,6 +13,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Claims } from '../types/Claims';
 import { NewUser, UpdateUser } from '../types/Users';
 import { Session } from '../types/Session';
+import { RoleName } from '../types/RoleName';
 
 @JsonController('/api/auth')
 export class AuthController {
@@ -76,10 +77,10 @@ export class AuthController {
         const claims: Claims = {
           id: user.id,
           email: user.email,
-          role: user.role.name,
+          role: user.role.name as RoleName,
         };
 
-        const session = newJwtSession(claims);
+        const session = newSession(claims);
         setRefreshTokenCookie(response, session.refreshToken);
 
         // Save refresh token in database
@@ -123,9 +124,9 @@ export class AuthController {
         const claims: Claims = {
           id: user.id,
           email: user.email,
-          role: user.role.name,
+          role: user.role.name as RoleName,
         };
-        const session = newJwtSession(claims);
+        const session = newSession(claims);
         setRefreshTokenCookie(response, session.refreshToken);
 
         // Updates refresh token in the database
@@ -150,11 +151,11 @@ async function encryptPassword(data: {
 }
 
 // prettier-ignore
-function newJwtSession(claims: Claims): Session {
-  const jwtToken = jwt.sign(claims, ACCESS_TOKEN_SECRET, {expiresIn: `${JWT_ACCESS_EXPIRATION_MS}ms`});
-  const jwtExpiration = new Date(new Date().getTime() + JWT_ACCESS_EXPIRATION_MS);
+function newSession(claims: Claims): Session {
+  const token = jwt.sign(claims, ACCESS_TOKEN_SECRET, {expiresIn: `${JWT_ACCESS_EXPIRATION_MS}ms`});
+  const tokenExpiration = new Date(new Date().getTime() + JWT_ACCESS_EXPIRATION_MS);
   const refreshToken = uuidv4();
-  return { jwtToken, jwtExpiration, refreshToken };
+  return { token, tokenExpiration, refreshToken };
 }
 
 function getRefreshTokenCookie(request: Request): any | undefined {

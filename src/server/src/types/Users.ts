@@ -1,4 +1,4 @@
-import { Role } from '../entities/Rol';
+import { RoleName } from './RoleName';
 
 export interface NewUser {
   firstName: string;
@@ -21,5 +21,6 @@ export interface SanitizedUser {
   lastName: string;
   email: string;
   creationDate: Date;
-  role: Role; // roleName: string?
+  role: RoleName;
+  token: string;
 }

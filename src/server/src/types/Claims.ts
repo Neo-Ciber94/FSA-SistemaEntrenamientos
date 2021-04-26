@@ -1,5 +1,7 @@
+import { RoleName } from './RoleName';
+
 export interface Claims {
   id: number;
   email: string;
-  role: string;
+  role: RoleName;
 }

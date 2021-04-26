@@ -1,5 +1,5 @@
 export interface Session {
-  jwtToken: string;
-  jwtExpiration: Date;
+  token: string;
+  tokenExpiration: Date;
   refreshToken: string;
 }
