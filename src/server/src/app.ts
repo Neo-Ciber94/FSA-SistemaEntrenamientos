@@ -24,7 +24,7 @@ useExpressServer(app, {
     undefinedResultCode: 404,
   },
   controllers: [__dirname + '/controllers/*.ts'],
-  middlewares: [AutenticateToken],
+  middlewares: [__dirname + '/middlewares/*.ts'],
 });
 
 // Connect to database

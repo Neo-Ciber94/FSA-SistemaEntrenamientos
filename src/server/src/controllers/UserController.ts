@@ -7,15 +7,13 @@ export class UserController {
   @Get()
   async getAllUsers() {
     const users = await User.find();
-    // return sanitizeUser(users);
-    return users;
+    return sanitizeUser(users);
   }
 
   @Get('/:id')
   async getUser(@Param('id') id: number) {
     const user = await User.findOne(id);
-    //return user && sanitizeUser(user);
-    return user;
+    return user && sanitizeUser(user);
   }
 }
 
