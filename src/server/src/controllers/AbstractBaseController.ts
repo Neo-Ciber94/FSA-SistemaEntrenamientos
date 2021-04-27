@@ -6,26 +6,28 @@ import {
   Param,
   Post,
   Put,
+  QueryParam,
 } from 'routing-controllers';
 import { DeepPartial, Repository } from 'typeorm';
-import { Role } from '../entities/Rol';
 
 type Entity<T> = { id: number } & DeepPartial<T>;
 
-export class AbstractBaseController<T extends Entity<T>> {
-  constructor(
-    protected readonly repository: Repository<T>,
-    protected readonly relations: string[] = []
-  ) {}
+export abstract class AbstractBaseController<T extends Entity<T>> {
+  constructor(protected readonly repository: Repository<T>) {}
 
   @Get()
-  getAll(): Promise<T[]> {
-    return this.repository.find({ relations: this.relations });
+  getAll(@QueryParam('include') include?: string): Promise<T[]> {
+    const relations = include ? include.split(',') : [];
+    return this.repository.find({ relations });
   }
 
   @Get('/:id')
-  getById(@Param('id') id: number): Promise<T | undefined> {
-    return this.repository.findOne(id, { relations: this.relations });
+  getById(
+    @Param('id') id: number,
+    @QueryParam('include') include?: string
+  ): Promise<T | undefined> {
+    const relations = include ? include.split(',') : [];
+    return this.repository.findOne(id, { relations });
   }
 
   @Post()
@@ -34,11 +36,16 @@ export class AbstractBaseController<T extends Entity<T>> {
   }
 
   @Put()
-  async update(@Body() entity: T): Promise<T | undefined> {
-    const entityToUpdate = this.repository.findOne(entity.id, {
-      relations: this.relations,
+  async update(
+    @Body() entity: T,
+    @QueryParam('include') include?: string
+  ): Promise<T | undefined> {
+    const relations = include ? include.split(',') : [];
+    const entityToUpdate = await this.repository.findOne(entity.id, {
+      relations,
     });
-    if (entityToUpdate == null) {
+
+    if (entityToUpdate == null || entity.id != entityToUpdate.id) {
       return undefined;
     }
 
@@ -46,23 +53,18 @@ export class AbstractBaseController<T extends Entity<T>> {
   }
 
   @Delete('/:id')
-  async delete(@Param('id') id: number): Promise<T | undefined> {
+  async delete(
+    @Param('id') id: number,
+    @QueryParam('include') include?: string
+  ): Promise<T | undefined> {
+    const relations = include ? include.split(',') : [];
     const entityToDelete = await this.repository.findOne(id, {
-      relations: this.relations,
+      relations,
     });
     const deleteResult = await this.repository.delete(id);
 
     if (deleteResult.affected && deleteResult.affected > 0 && entityToDelete) {
       return entityToDelete;
-    } else {
-      return undefined;
     }
-  }
-}
-
-@Controller('/api/roles')
-export class RoleController extends AbstractBaseController<Role> {
-  constructor() {
-    super(Role.getRepository());
   }
 }

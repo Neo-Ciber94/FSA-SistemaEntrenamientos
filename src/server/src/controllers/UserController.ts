@@ -1,18 +1,18 @@
 import { Get, JsonController, Param } from 'routing-controllers';
 import { User } from '../entities/User';
-import { SanitizedUser } from '../types/Users';
+import { RoleName, UserDTO } from '../types';
 
-@JsonController('/api/users')
+@JsonController('/users')
 export class UserController {
   @Get()
   async getAllUsers() {
-    const users = await User.find();
+    const users = await User.find({ relations: ['role'] });
     return sanitizeUser(users);
   }
 
   @Get('/:id')
   async getUser(@Param('id') id: number) {
-    const user = await User.findOne(id);
+    const user = await User.findOne(id, { relations: ['role'] });
     return user && sanitizeUser(user);
   }
 }
@@ -20,11 +20,11 @@ export class UserController {
 /**
  * Returns the user without password information.
  */
-function sanitizeUser(user: User): SanitizedUser;
-function sanitizeUser(user: User[]): SanitizedUser[];
-function sanitizeUser(user: User | User[]): SanitizedUser | SanitizedUser[] {
+function sanitizeUser(user: User): UserDTO;
+function sanitizeUser(user: User[]): UserDTO[];
+function sanitizeUser(user: User | User[]): UserDTO | UserDTO[] {
   if (Array.isArray(user)) {
-    const result: SanitizedUser[] = [];
+    const result: UserDTO[] = [];
     for (const e of user) {
       result.push(sanitizeUser(e));
     }
@@ -36,7 +36,7 @@ function sanitizeUser(user: User | User[]): SanitizedUser | SanitizedUser[] {
       lastName: user.lastName,
       email: user.email,
       creationDate: user.creationDate,
-      role: user.role,
+      role: user.role.name as RoleName,
     };
   }
 }

@@ -18,13 +18,13 @@ export class StudentCourse extends BaseEntity {
 
   @OneToOne(() => User)
   @JoinColumn()
-  student!: User;
+  user!: User;
 
   @ManyToOne(() => Course, (course) => course.students)
   @JoinColumn()
   course!: Course;
 
-  @Column()
+  @Column({ default: false })
   isCompleted!: boolean;
 
   @ManyToOne(() => StudentAssessment, (assesment) => assesment.student)

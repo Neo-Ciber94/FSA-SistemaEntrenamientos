@@ -15,7 +15,7 @@ import { NewUser, UpdateUser } from '../types/Users';
 import { Session } from '../types/Session';
 import { RoleName } from '../types/RoleName';
 
-@JsonController('/api/auth')
+@JsonController('/auth')
 export class AuthController {
   @Post('/signup')
   async signup(@Body() user: NewUser) {

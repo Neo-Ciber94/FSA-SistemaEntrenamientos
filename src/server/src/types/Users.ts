@@ -14,13 +14,3 @@ export interface UpdateUser {
   email: string;
   password: string;
 }
-
-export interface SanitizedUser {
-  id: number;
-  firstName: string;
-  lastName: string;
-  email: string;
-  creationDate: Date;
-  role: RoleName;
-  token: string;
-}

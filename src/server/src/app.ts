@@ -1,11 +1,9 @@
 import 'reflect-metadata';
 import express from 'express';
-import { Express } from 'express';
 import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
 import { createConnection } from 'typeorm';
-import { createExpressServer, useExpressServer } from 'routing-controllers';
-import { AutenticateToken } from './middlewares/AutenticateToken';
+import { useExpressServer } from 'routing-controllers';
 
 const PORT = process.env.PORT || 3000;
 
@@ -19,6 +17,7 @@ app.use(morgan('dev'));
 // Setup express controllers
 useExpressServer(app, {
   cors: true,
+  routePrefix: '/api',
   defaults: {
     nullResultCode: 404,
     undefinedResultCode: 404,
