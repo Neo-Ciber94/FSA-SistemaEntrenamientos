@@ -8,16 +8,16 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Question } from './Question';
-import { StudentAssessment } from './StudentAssessment';
+import { AssessmentAnswers } from './AssessmentAnswers';
 
 @Entity()
 export class Answer extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @ManyToOne(() => StudentAssessment, (assessment) => assessment.answers)
+  @ManyToOne(() => AssessmentAnswers, (assessment) => assessment.answers)
   @JoinColumn()
-  studentAssessment!: StudentAssessment;
+  assessmentAnswers!: AssessmentAnswers;
 
   @OneToOne(() => Question)
   @JoinColumn()

@@ -11,17 +11,17 @@ import {
 } from 'typeorm';
 import { Answer } from './Answer';
 import { Assessment } from './Assessment';
-import { StudentCourse } from './StudentCourse';
+import { CourseStudent } from './CourseStudent';
 
 @Entity()
 @Check(`"calification" >= 0`)
-export class StudentAssessment extends BaseEntity {
+export class AssessmentAnswers extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @OneToMany(() => StudentCourse, (student) => student.studentAssessments)
+  @OneToMany(() => CourseStudent, (student) => student.assessmentAnswers)
   @JoinColumn()
-  student!: StudentCourse;
+  student!: CourseStudent;
 
   @OneToOne(() => Assessment)
   @JoinColumn()
@@ -30,7 +30,7 @@ export class StudentAssessment extends BaseEntity {
   @Column({ unsigned: true })
   calification!: number;
 
-  @OneToMany(() => Answer, (answer) => answer.studentAssessment)
+  @OneToMany(() => Answer, (answer) => answer.assessmentAnswers)
   @JoinColumn()
   answers!: Answer[];
 }

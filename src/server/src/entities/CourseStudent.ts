@@ -8,11 +8,11 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Course } from './Course';
-import { StudentAssessment } from './StudentAssessment';
+import { AssessmentAnswers } from './AssessmentAnswers';
 import { User } from './User';
 
 @Entity()
-export class StudentCourse extends BaseEntity {
+export class CourseStudent extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
@@ -27,7 +27,7 @@ export class StudentCourse extends BaseEntity {
   @Column({ default: false })
   isCompleted!: boolean;
 
-  @ManyToOne(() => StudentAssessment, (assesment) => assesment.student)
+  @ManyToOne(() => AssessmentAnswers, (assesment) => assesment.student)
   @JoinColumn()
-  studentAssessments!: StudentAssessment[];
+  assessmentAnswers!: AssessmentAnswers[];
 }

@@ -8,7 +8,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { CourseClass } from './CourseClass';
-import { StudentCourse } from './StudentCourse';
+import { CourseStudent } from './CourseStudent';
 import { User } from './User';
 
 @Entity()
@@ -22,6 +22,9 @@ export class Course extends BaseEntity {
   @Column({ type: 'text', nullable: true })
   description!: string | null;
 
+  @Column({ default: false })
+  isAvailable!: boolean;
+
   @OneToOne(() => User)
   @JoinColumn()
   teacher!: User;
@@ -30,7 +33,7 @@ export class Course extends BaseEntity {
   @JoinColumn()
   classes!: CourseClass[];
 
-  @OneToMany(() => StudentCourse, (student) => student.course)
+  @OneToMany(() => CourseStudent, (student) => student.course)
   @JoinColumn()
-  students!: StudentCourse[];
+  students!: CourseStudent[];
 }

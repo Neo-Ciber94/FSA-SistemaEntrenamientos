@@ -6,6 +6,6 @@ export * from './Lesson';
 export * from './Question';
 export * from './QuestionChoice';
 export * from './Rol';
-export * from './StudentAssessment';
-export * from './StudentCourse';
+export * from './AssessmentAnswers';
+export * from './CourseStudent';
 export * from './User';
