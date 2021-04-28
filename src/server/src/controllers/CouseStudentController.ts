@@ -9,9 +9,7 @@ import {
 import { Response } from 'express';
 import { Course, User, CourseStudent } from '../entities';
 import { RoleName } from '../types';
-
-// Minimun number of assessments a course class must have
-const MIN_NUMBER_OF_CLASS_ASSESSMENTS = 3;
+import { MIN_NUMBER_OF_CLASS_ASSESSMENTS } from '../config';
 
 @JsonController('/courses')
 export class CourseStudentController {
