@@ -6,7 +6,7 @@ import {
   RouterStateSnapshot,
   Router,
 } from '@angular/router';
-import { Role } from 'src/app/models/Role';
+import { RoleName } from 'src/app/models/RoleName';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Injectable({
@@ -23,7 +23,7 @@ export class AdminGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): boolean {
-    if (this.authService.userRole === Role.Admin) {
+    if (this.authService.userRole === RoleName.Admin) {
       return true;
     }
 

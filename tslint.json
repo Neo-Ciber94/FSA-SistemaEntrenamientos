@@ -144,5 +144,8 @@
       "app",
       "kebab-case"
     ]
+  },
+  "linterOptions": {
+    "exclude": ["src/server/**/*.ts"]
   }
 }

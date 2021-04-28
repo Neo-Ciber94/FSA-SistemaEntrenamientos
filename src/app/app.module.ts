@@ -6,6 +6,9 @@ import { AppComponent } from './app.component';
 import { SharedModule } from './views/shared/shared.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { MarkdownModule } from 'ngx-markdown';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpTokenInterceptor } from './interceptors/http-token.interceptor';
+import { environment } from 'src/environments/environment';
 
 @NgModule({
   declarations: [AppComponent],
@@ -14,10 +17,14 @@ import { MarkdownModule } from 'ngx-markdown';
     SharedModule,
     AppRoutingModule,
     NgbModule,
+    HttpClientModule,
     // FIXME: Is secure sanitize
     MarkdownModule.forRoot({ sanitize: SecurityContext.NONE }),
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: HttpTokenInterceptor, multi: true },
+    { provide: 'API_URL', useValue: environment.apiUrl },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

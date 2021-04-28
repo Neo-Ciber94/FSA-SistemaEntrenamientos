@@ -1,90 +1,80 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
-import { Role } from '../models/Role';
-import { NewUser, User } from '../models/User';
+import { RoleName } from '../models/RoleName';
+import { User } from '../models/User';
+import { UserSignup } from '../models/UserSignup';
 import { UserLogin } from '../models/UserLogin';
-
-const USERS: User[] = [
-  {
-    id: 1,
-    firstName: 'Admin',
-    lastName: 'Admin',
-    creationDate: new Date(),
-    email: 'admin@admin.com',
-    hash: '123',
-    salt: '1',
-    role: Role.Admin,
-  },
-  {
-    id: 2,
-    firstName: 'Teacher',
-    lastName: 'Teacher',
-    creationDate: new Date(),
-    email: 'teacher@teacher.com',
-    hash: '123',
-    salt: '1',
-    role: Role.Teacher,
-  },
-  {
-    id: 3,
-    firstName: 'Student',
-    lastName: 'Student',
-    creationDate: new Date(),
-    email: 'student@student.com',
-    hash: '123',
-    salt: '1',
-    role: Role.Student,
-  },
-];
+import { UserUpdate } from '../models/UserUpdate';
+import { Session } from '../models/Session';
+import { ApiService } from './api.service';
+import { UserService } from './user.service';
+import { catchError, mergeMap, tap } from 'rxjs/operators';
+import { ResponseBody } from 'src/shared';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  readonly userSubject = new BehaviorSubject<User | null>(null);
-  readonly currentUser = this.userSubject.asObservable();
+  private currentUserBehaviourSubject = new BehaviorSubject<User | undefined>(
+    undefined
+  );
 
-  login(credentials: UserLogin): Observable<User | null> {
-    const match = USERS.find(
-      (e) => e.email === credentials.username && e.hash === credentials.password
-    );
-    if (match) {
-      this.userSubject.next(match);
-      return of(match);
-    } else {
-      return of(null);
-    }
+  private tokenBehaviourSubject = new BehaviorSubject<string | undefined>(
+    undefined
+  );
+
+  private refreshTokenTimeoutId?: number;
+
+  constructor(
+    private apiService: ApiService,
+    private userSevice: UserService
+  ) {}
+
+  signup(userSignup: UserSignup) {
+    // Would fail if the email exists
+    return this.apiService.post<UserSignup, User>('auth/signup', userSignup);
+  }
+
+  update(userUpdate: UserUpdate) {
+    return this.apiService.put<UserUpdate, User>('auth/update', userUpdate);
+  }
+
+  login(userLogin: UserLogin) {
+    this.apiService
+      .post<UserLogin, ResponseBody<User>>('auth/login', userLogin)
+      .pipe(
+        tap({
+          next: (session) => {},
+          error: (error) => {},
+        })
+      );
   }
 
   logout() {
-    this.userSubject.next(null);
+    clearTimeout(this.refreshTokenTimeoutId);
+    return this.apiService.post<void, void>('auth/logout');
   }
 
-  register(user: NewUser): Observable<User> {
-    throw new Error('Not implemented');
+  private handleLoginError(error: any, next: Observable<Session>) {
+    console.error(error);
+    return next;
   }
 
-  isLogin(): boolean {
-    return this.userSubject.value == null;
+  private setAuth(session: Session) {
+    this.tokenBehaviourSubject.next(session.token);
+
+    this.refreshTokenTimeoutId = setTimeout(() => {
+      this.apiService.get<Session>('auth/token').subscribe((newSession) => {
+        this.setAuth(newSession);
+      });
+    });
   }
 
-  getCurrentUser(): Observable<User | null> {
-    return this.currentUser;
+  getToken() {
+    return this.tokenBehaviourSubject.value;
   }
 
-  get userRole() {
-    const name = this.userSubject.value?.firstName.toLowerCase();
-    if (name == null) {
-      return null;
-    }
-
-    switch (name) {
-      case 'admin':
-        return Role.Admin;
-      case 'teacher':
-        return Role.Teacher;
-      default:
-        return Role.Student;
-    }
+  getCurrentUser() {
+    return this.currentUserBehaviourSubject.value;
   }
 }

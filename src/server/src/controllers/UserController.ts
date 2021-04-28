@@ -1,6 +1,7 @@
-import { Get, JsonController, Param } from 'routing-controllers';
+import { Get, JsonController, Param, QueryParam } from 'routing-controllers';
 import { User } from '../entities/User';
 import { RoleName, UserDTO } from '../types';
+import { sanitizeUser } from '../utils';
 
 @JsonController('/users')
 export class UserController {
@@ -15,28 +16,9 @@ export class UserController {
     const user = await User.findOne(id, { relations: ['role'] });
     return user && sanitizeUser(user);
   }
-}
 
-/**
- * Returns the user without password information.
- */
-function sanitizeUser(user: User): UserDTO;
-function sanitizeUser(user: User[]): UserDTO[];
-function sanitizeUser(user: User | User[]): UserDTO | UserDTO[] {
-  if (Array.isArray(user)) {
-    const result: UserDTO[] = [];
-    for (const e of user) {
-      result.push(sanitizeUser(e));
-    }
-    return result;
-  } else {
-    return {
-      id: user.id,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
-      creationDate: user.creationDate,
-      role: user.role.name as RoleName,
-    };
+  @Get('/search')
+  async searchUser(@QueryParam('email') email: string) {
+    return User.findOne({ where: { email } });
   }
 }

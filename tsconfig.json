@@ -21,6 +21,7 @@
       "dom"
     ]
   },
+  "exclude": ["src/server"],
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,

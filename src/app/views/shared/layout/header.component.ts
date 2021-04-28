@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Role } from 'src/app/models/Role';
+import { RoleName } from 'src/app/models/RoleName';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
@@ -18,7 +18,7 @@ export class HeaderComponent implements OnInit {
   }
 
   get Roles() {
-    return Role;
+    return RoleName;
   }
 
   logout() {

@@ -14,18 +14,27 @@ import { NewUser, UpdateUser } from '../types/Users';
 import { Session } from '../types/Session';
 import { RoleName } from '../types/RoleName';
 import bcrypt from 'bcrypt';
-import { encryptPassword } from '../utils';
+import { encryptPassword, sanitizeUser } from '../utils';
+import { helper } from '../utils/ResponseHelper';
 
 @JsonController('/auth')
 export class AuthController {
   @Post('/signup')
-  async signup(@Body() user: NewUser) {
-    const newUser = await User.createWithRole({
+  async signup(@Body() user: NewUser, @Res() response: Response) {
+    const createdUser = await User.createWithRole({
       ...user,
       roleName: RoleName.Student,
     });
 
-    return User.save(newUser);
+    // prettier-ignore
+    const emailExists = (await User.count({ where: { email: user.email } })) > 0;
+
+    if (emailExists) {
+      return helper(response).emailExist();
+    }
+
+    const newUser = sanitizeUser(await User.save(createdUser));
+    return helper(response).success(newUser);
   }
 
   @Put('/update')
