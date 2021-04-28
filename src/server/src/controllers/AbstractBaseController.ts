@@ -1,6 +1,5 @@
 import {
   Body,
-  Controller,
   Delete,
   Get,
   Param,
@@ -8,9 +7,8 @@ import {
   Put,
   QueryParam,
 } from 'routing-controllers';
-import { DeepPartial, Repository } from 'typeorm';
-
-type Entity<T> = { id: number } & DeepPartial<T>;
+import { Repository } from 'typeorm';
+import { Entity } from '../types/Entity';
 
 export abstract class AbstractBaseController<T extends Entity<T>> {
   constructor(protected readonly repository: Repository<T>) {}
