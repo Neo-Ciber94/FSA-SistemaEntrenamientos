@@ -1,5 +1,5 @@
 # test
-rest.http
+rest/
 
 # config
 ormconfig.json

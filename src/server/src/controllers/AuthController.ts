@@ -2,8 +2,7 @@ import { Body, JsonController, Post, Put, Req, Res } from 'routing-controllers';
 import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { User } from '../entities/User';
-import bcrypt from 'bcrypt';
-import { Role } from '../entities/Rol';
+
 import {
   ACCESS_TOKEN_SECRET,
   JWT_ACCESS_EXPIRATION_MS,
@@ -14,26 +13,16 @@ import { Claims } from '../types/Claims';
 import { NewUser, UpdateUser } from '../types/Users';
 import { Session } from '../types/Session';
 import { RoleName } from '../types/RoleName';
+import bcrypt from 'bcrypt';
+import { encryptPassword } from '../utils';
 
 @JsonController('/auth')
 export class AuthController {
   @Post('/signup')
   async signup(@Body() user: NewUser) {
-    const role = await Role.findOne({
-      where: {
-        name: 'student',
-      },
-    });
-
-    const { salt, hash } = await encryptPassword({ password: user.password });
-
-    const newUser = User.create({
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
-      salt,
-      hash,
-      role,
+    const newUser = await User.createWithRole({
+      ...user,
+      roleName: RoleName.Student,
     });
 
     return User.save(newUser);
@@ -138,16 +127,6 @@ export class AuthController {
 
     return response.sendStatus(401);
   }
-}
-
-async function encryptPassword(data: {
-  password: string;
-  salt?: string;
-}): Promise<{ salt: string; hash: string }> {
-  const salt = data.salt || (await bcrypt.genSalt(10));
-  const hash = await bcrypt.hash(data.password, salt);
-
-  return { salt, hash };
 }
 
 // prettier-ignore

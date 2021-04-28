@@ -9,6 +9,8 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { NewUser, RoleName, UserDTO } from '../types';
+import { encryptPassword } from '../utils';
 import { Role } from './Rol';
 
 @Entity()
@@ -41,6 +43,19 @@ export class User extends BaseEntity {
   @ManyToOne(() => Role, (role) => role.user)
   @JoinColumn()
   role!: Role;
+
+  static async createWithRole(data: NewUser & { roleName: RoleName }) {
+    const role = await Role.findOne({ where: { name: data.roleName } });
+    const { salt, hash } = await encryptPassword({ password: data.password });
+    return User.create({
+      firstName: data.firstName,
+      lastName: data.lastName,
+      email: data.email,
+      salt,
+      hash,
+      role,
+    });
+  }
 
   static findByEmail(
     email: string,
