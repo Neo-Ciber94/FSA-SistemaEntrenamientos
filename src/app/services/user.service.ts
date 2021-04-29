@@ -1,4 +1,7 @@
+import { HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { map } from 'rxjs/operators';
+
 import { User } from '../models';
 import { ApiService } from './api.service';
 

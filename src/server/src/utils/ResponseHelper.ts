@@ -8,12 +8,12 @@ export function helper(response: Response) {
 export class ResponseHelper {
   constructor(private response: Response) {}
 
-  send<T, ResBody extends ResponseBody<T>>(code: number, body: ResBody) {
-    return this.response.status(code).json(body) as Response<ResBody>;
+  send<T, ResBody extends ResponseBody<T>>(body: ResBody) {
+    return this.response.status(200).json(body) as Response<ResBody>;
   }
 
   success<T>(data?: T) {
-    return this.send(200, {
+    return this.send({
       success: true,
       statusCode: StatusCode.Success,
       statusMessage: 'Success',
@@ -22,10 +22,18 @@ export class ResponseHelper {
   }
 
   emailExist() {
-    return this.send(409, {
+    return this.send({
       success: false,
       statusCode: StatusCode.EmailAlreadyExist,
       statusMessage: 'Email already exists',
+    });
+  }
+
+  invalidCredentials() {
+    return this.send({
+      success: false,
+      statusCode: StatusCode.InvalidCredentials,
+      statusMessage: 'invalid email or password',
     });
   }
 }

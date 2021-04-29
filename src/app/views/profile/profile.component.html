@@ -12,23 +12,24 @@
         <div class="card-content">
           <div>
             <strong>First Name</strong>
-            <div>Example</div>
+            <div>{{ user.firstName }}</div>
           </div>
 
           <div>
             <strong>Last Name</strong>
-            <div>Example</div>
+            <div>{{ user.lastName }}</div>
           </div>
 
           <div>
             <strong>Role</strong>
-            <div>Student</div>
+            <div>{{ user.role }}</div>
           </div>
 
           <div>
             <strong>Email</strong>
             <div>
-              <a href="mailto:example@example.com">example@example.com</a>
+              <a [attr.href]="'mailto:' + user.email">{{ user.email }}</a>
+              <!-- <a href="mailto:example@example.com">{{ user.email }}</a> -->
             </div>
           </div>
         </div>

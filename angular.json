@@ -76,7 +76,8 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "FSA-SistemaEntrenamientos:build"
+            "browserTarget": "FSA-SistemaEntrenamientos:build",
+            "proxyConfig": "src/proxy.conf.json"
           },
           "configurations": {
             "production": {

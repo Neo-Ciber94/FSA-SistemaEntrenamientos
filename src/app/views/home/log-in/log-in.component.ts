@@ -1,7 +1,7 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { RoleName } from 'src/app/models/RoleName';
+import { finalize } from 'rxjs/operators';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
@@ -9,7 +9,11 @@ import { AuthService } from 'src/app/services/auth.service';
   templateUrl: './log-in.component.html',
   styleUrls: ['./log-in.component.css'],
 })
-export class LogInComponent implements OnInit {
+export class LogInComponent {
+  wasValidate = false;
+  invalidCredentials = false;
+  private isSubmitting = false;
+
   readonly formGroup: FormGroup = new FormGroup({
     email: new FormControl(),
     password: new FormControl(),
@@ -17,26 +21,31 @@ export class LogInComponent implements OnInit {
 
   constructor(private authService: AuthService, private router: Router) {}
 
-  ngOnInit(): void {
-    setTimeout(() => {
-      alert(`Accounts:
-      admin@admin.com (password: 123)
-      teacher@teacher.com (password: 123)
-      student@student.com (password: 123)
-      `);
-    }, 200);
-  }
-
   login() {
-    const username = this.formGroup.get('email')?.value;
+    this.formGroup.markAllAsTouched();
+    this.wasValidate = true;
+
+    if (this.isSubmitting || this.formGroup.invalid) {
+      return;
+    }
+
+    this.isSubmitting = true;
+    const email = this.formGroup.get('email')?.value;
     const password = this.formGroup.get('password')?.value;
 
-    this.authService.login({ username, password }).subscribe((user) => {
-      if (user == null) {
-        alert('Invalid user or passwrod');
-      } else {
-        this.router.navigateByUrl('profile');
-      }
-    });
+    this.authService
+      .login({ email, password })
+      .pipe(finalize(() => (this.isSubmitting = false)))
+      .subscribe({
+        next: (user) => {
+          // FIXME: Remove log
+          console.log('User Login: ', user);
+          this.router.navigateByUrl('profile');
+        },
+        error: (err) => {
+          this.invalidCredentials = true;
+          console.error(err);
+        },
+      });
   }
 }

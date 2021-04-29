@@ -68,7 +68,7 @@ export class AuthController {
       relations: ['role'],
     });
 
-    if (user) {
+    if (user && credentials.email && credentials.password) {
       const isValid = await bcrypt.compare(credentials.password, user.hash);
 
       if (isValid) {
@@ -84,11 +84,11 @@ export class AuthController {
         // Save refresh token in database
         user.refreshToken = session.refreshToken;
         await User.save(user);
-        return session;
+        return helper(response).success(session);
       }
     }
 
-    return response.status(404).send('invalid email or password');
+    return helper(response).invalidCredentials();
   }
 
   @Post('/logout')
@@ -166,5 +166,6 @@ function revokeRefreshTokenCookie(response: Response) {
   response.cookie('refreshToken', '', {
     httpOnly: true,
     expires: new Date(0),
+    secure: false,
   });
 }

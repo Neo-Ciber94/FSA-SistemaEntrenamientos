@@ -11,7 +11,7 @@ export class UserController {
     return sanitizeUser(users);
   }
 
-  @Get('/:id')
+  @Get('/:id([0-9]+)')
   async getUser(@Param('id') id: number) {
     const user = await User.findOne(id, { relations: ['role'] });
     return user && sanitizeUser(user);
@@ -19,6 +19,6 @@ export class UserController {
 
   @Get('/search')
   async searchUser(@QueryParam('email') email: string) {
-    return User.findOne({ where: { email } });
+    return User.findByEmail(email);
   }
 }

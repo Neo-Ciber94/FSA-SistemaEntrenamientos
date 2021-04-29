@@ -7,7 +7,10 @@ export const adminCoursesUrlMatcher: UrlMatcher = (
   url: UrlSegment[]
 ): UrlMatchResult | null => {
   const authService = getAppInjector().get(AuthService);
-  if (authService.userRole === RoleName.Admin && url.length === 0) {
+  if (
+    authService.getCurrentUser()?.role === RoleName.Admin &&
+    url.length === 0
+  ) {
     return { consumed: url };
   }
 

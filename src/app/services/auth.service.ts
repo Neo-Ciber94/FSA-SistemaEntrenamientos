@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { RoleName } from '../models/RoleName';
 import { User } from '../models/User';
 import { UserSignup } from '../models/UserSignup';
@@ -8,8 +8,8 @@ import { UserUpdate } from '../models/UserUpdate';
 import { Session } from '../models/Session';
 import { ApiService } from './api.service';
 import { UserService } from './user.service';
-import { catchError, mergeMap, tap } from 'rxjs/operators';
-import { ResponseBody } from 'src/shared';
+import { catchError, map, mergeMap, tap } from 'rxjs/operators';
+import { ResponseBody, StatusCode } from 'src/shared';
 
 @Injectable({
   providedIn: 'root',
@@ -23,7 +23,16 @@ export class AuthService {
     undefined
   );
 
-  private refreshTokenTimeoutId?: number;
+  readonly currentUserObservable: Observable<
+    User | undefined
+  > = this.currentUserBehaviourSubject.asObservable();
+
+  readonly tokenObservable: Observable<
+    string | undefined
+  > = this.tokenBehaviourSubject.asObservable();
+
+  private tokenExpiration?: Date;
+  private refreshTokenTimeoutId?: any;
 
   constructor(
     private apiService: ApiService,
@@ -31,8 +40,17 @@ export class AuthService {
   ) {}
 
   signup(userSignup: UserSignup) {
-    // Would fail if the email exists
-    return this.apiService.post<UserSignup, User>('auth/signup', userSignup);
+    return this.apiService
+      .post<UserSignup, ResponseBody<User>>('auth/signup', userSignup)
+      .pipe(
+        map((response) => {
+          if (response.success) {
+            return response.data;
+          } else {
+            throw response;
+          }
+        })
+      );
   }
 
   update(userUpdate: UserUpdate) {
@@ -40,41 +58,69 @@ export class AuthService {
   }
 
   login(userLogin: UserLogin) {
-    this.apiService
-      .post<UserLogin, ResponseBody<User>>('auth/login', userLogin)
+    return this.apiService
+      .post<UserLogin, ResponseBody<Session>>('auth/login', userLogin)
       .pipe(
-        tap({
-          next: (session) => {},
-          error: (error) => {},
-        })
+        map((response) => {
+          if (response.success) {
+            this.setAuth(response.data!);
+            this.startRefreshTokenRoutine();
+            return response;
+          } else {
+            throw response;
+          }
+        }),
+        // Set current user
+        mergeMap(() => {
+          this.userSevice.getAllUsers().subscribe((data) => console.log(data));
+          return this.userSevice.getUserByEmail(userLogin.email);
+        }),
+        tap((user) => this.currentUserBehaviourSubject.next(user!))
       );
   }
 
   logout() {
-    clearTimeout(this.refreshTokenTimeoutId);
+    if (this.refreshTokenTimeoutId) {
+      clearTimeout(this.refreshTokenTimeoutId);
+    }
+
     return this.apiService.post<void, void>('auth/logout');
   }
 
-  private handleLoginError(error: any, next: Observable<Session>) {
-    console.error(error);
-    return next;
+  generateToken() {
+    if (this.refreshTokenTimeoutId) {
+      clearTimeout(this.refreshTokenTimeoutId);
+    }
+    return this.apiService.get<Session>('auth/token').pipe(
+      tap((session) => {
+        this.setAuth(session);
+        this.startRefreshTokenRoutine();
+      })
+    );
   }
 
-  private setAuth(session: Session) {
-    this.tokenBehaviourSubject.next(session.token);
-
-    this.refreshTokenTimeoutId = setTimeout(() => {
-      this.apiService.get<Session>('auth/token').subscribe((newSession) => {
-        this.setAuth(newSession);
-      });
-    });
-  }
-
-  getToken() {
+  getCurrentUserToken() {
     return this.tokenBehaviourSubject.value;
+  }
+
+  getTokenExpiration() {
+    return this.tokenExpiration;
   }
 
   getCurrentUser() {
     return this.currentUserBehaviourSubject.value;
+  }
+
+  private startRefreshTokenRoutine() {
+    this.refreshTokenTimeoutId = setTimeout(() => {
+      this.generateToken().subscribe((newSession) => {
+        this.setAuth(newSession);
+      });
+    }, new Date(this.tokenExpiration!).getTime());
+  }
+
+  private setAuth(session: Session) {
+    this.tokenExpiration = session.tokenExpiration;
+    this.tokenBehaviourSubject.next(session.token);
   }
 }

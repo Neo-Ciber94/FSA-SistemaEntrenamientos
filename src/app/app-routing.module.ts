@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { CurrentUserResolver } from './resolvers/current-user.resolver';
 import { NotFoundComponent } from './views/shared/not-found/not-found.component';
 
 const routes: Routes = [
@@ -15,6 +16,9 @@ const routes: Routes = [
   },
   {
     path: 'profile',
+    resolve: {
+      currentUser: CurrentUserResolver,
+    },
     loadChildren: () =>
       import('./views/profile/profile.module').then((m) => m.ProfileModule),
   },
