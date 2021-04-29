@@ -3,4 +3,5 @@ export enum StatusCode {
   EmailAlreadyExist = 2,
   InvalidCredentials = 3,
   UserNotFound = 4,
+  InvalidPassword = 5,
 }

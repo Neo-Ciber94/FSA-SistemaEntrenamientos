@@ -44,4 +44,12 @@ export class ResponseHelper {
       statusMessage: message || 'the user was not found',
     });
   }
+
+  invalidPassword(message?: string) {
+    return this.send({
+      success: false,
+      statusCode: StatusCode.InvalidPassword,
+      statusMessage: message || 'invalid password format',
+    });
+  }
 }

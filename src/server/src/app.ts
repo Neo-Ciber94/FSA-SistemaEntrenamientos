@@ -6,6 +6,8 @@ import { createConnection } from 'typeorm';
 import { useExpressServer } from 'routing-controllers';
 import { CorsOptions } from 'cors';
 import { BASE_URL } from './config';
+import { startDeleteExpiredSessionsRoutine } from './scripts/deleteExpiredSessions';
+import { LOGGER } from './utils/Logger';
 
 const PORT = process.env.PORT || 3000;
 
@@ -38,7 +40,8 @@ useExpressServer(app, {
 createConnection()
   .then(async (connection) => {
     await connection.runMigrations();
-    console.log(`Connected to database "${connection.driver.database}"`);
+    startDeleteExpiredSessionsRoutine();
+    LOGGER.info(`Connected to database "${connection.driver.database}"`);
   })
   .catch((err) => {
     console.error(err);
@@ -46,5 +49,5 @@ createConnection()
 
 // Start listening
 app.listen(PORT, () => {
-  console.log(`Server running at port ${PORT}...`);
+  LOGGER.info(`Server running at port ${PORT}`);
 });

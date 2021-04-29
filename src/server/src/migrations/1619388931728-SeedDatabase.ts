@@ -26,7 +26,7 @@ async function getDefaultUsers() {
     firstName: 'Admin',
     lastName: 'Admin',
     email: 'admin@admin.com',
-    password: '1234',
+    password: '123456',
     roleName: RoleName.Admin,
   });
 

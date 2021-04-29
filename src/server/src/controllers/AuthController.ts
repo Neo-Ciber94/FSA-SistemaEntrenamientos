@@ -16,6 +16,7 @@ import {
   ACCESS_TOKEN_SECRET,
   JWT_ACCESS_EXPIRATION_MS,
   JWT_REFRESH_EXPIRATION_MS,
+  MIN_PASSWORD_LENGTH,
 } from '../config/config';
 import { v4 as uuidv4 } from 'uuid';
 import { Claims } from '../types/Claims';
@@ -25,6 +26,7 @@ import { RoleName } from '../types/RoleName';
 import bcrypt from 'bcrypt';
 import { encryptPassword, sanitizeUser } from '../utils';
 import { helper } from '../utils/ResponseHelper';
+import { UserSession } from '../entities/UserSession';
 
 @JsonController('/auth')
 export class AuthController {
@@ -40,6 +42,11 @@ export class AuthController {
 
     if (emailExists) {
       return helper(response).emailExist();
+    }
+
+    const passwordValidation = validationPassword(user.password);
+    if (passwordValidation.type === 'invalid') {
+      return helper(response).invalidPassword(passwordValidation.error);
     }
 
     const newUser = sanitizeUser(await User.save(createdUser));
@@ -93,7 +100,6 @@ export class AuthController {
       relations: ['role'],
     });
 
-    // TODO: We don't check if the user is already logged and is logging from other device
     if (user && credentials.email && credentials.password) {
       const isValid = await bcrypt.compare(credentials.password, user.hash);
 
@@ -107,9 +113,14 @@ export class AuthController {
         const session = newSession(claims);
         setRefreshTokenCookie(response, session.refreshToken);
 
-        // Save refresh token in database
-        user.refreshToken = session.refreshToken;
-        await User.save(user);
+        // Create a new user session for this user
+        const userSession = UserSession.create({
+          user,
+          refreshToken: session.refreshToken,
+        });
+
+        userSession.user = user;
+        await UserSession.save(userSession);
         return helper(response).success(session);
       }
     }
@@ -122,14 +133,18 @@ export class AuthController {
     const refreshToken = getRefreshTokenCookie(request);
 
     if (refreshToken) {
-      const user = await User.findByRefreshToken(refreshToken);
+      const userSession = await UserSession.findOne({
+        where: { refreshToken },
+      });
+      if (userSession) {
+        const deleteResult = await UserSession.delete(userSession.id);
 
-      if (user) {
-        user.refreshToken = null;
-        await User.save(user);
-
-        revokeRefreshTokenCookie(response);
-        return response.sendStatus(200);
+        if (deleteResult.affected && deleteResult.affected > 0) {
+          revokeRefreshTokenCookie(response);
+          return response.sendStatus(200);
+        }
+      } else {
+        return response.sendStatus(404);
       }
     }
     return response.sendStatus(401);
@@ -140,11 +155,14 @@ export class AuthController {
     const refreshToken = getRefreshTokenCookie(request);
 
     if (refreshToken) {
-      const user = await User.findByRefreshToken(refreshToken, {
-        relations: ['role'],
+      const userSession = await UserSession.findOne({
+        where: { refreshToken },
+        relations: ['user'],
       });
 
-      if (user) {
+      const user = userSession?.user;
+
+      if (user && userSession) {
         const claims: Claims = {
           id: user.id,
           email: user.email,
@@ -154,8 +172,8 @@ export class AuthController {
         setRefreshTokenCookie(response, session.refreshToken);
 
         // Updates refresh token in the database
-        user.refreshToken = session.refreshToken;
-        await User.save(user);
+        userSession.refreshToken = session.refreshToken;
+        await UserSession.save(userSession);
         return session;
       }
     }
@@ -168,9 +186,13 @@ export class AuthController {
     const refreshToken = getRefreshTokenCookie(request);
 
     if (refreshToken) {
-      const user = await User.findByRefreshToken(refreshToken, {
-        relations: ['role'],
+      const userSession = await UserSession.findOne({
+        where: { refreshToken },
+        relations: ['user', 'user.role'],
       });
+
+      const user = userSession?.user;
+
       if (user) {
         const sanitizedUser = sanitizeUser(user);
         return helper(response).success(sanitizedUser);
@@ -211,4 +233,26 @@ function revokeRefreshTokenCookie(response: Response) {
     expires: new Date(0),
     secure: false,
   });
+}
+
+interface ValidPassword {
+  type: 'valid';
+}
+
+interface InvalidPassword {
+  error: string;
+  type: 'invalid';
+}
+
+type PasswordValidation = ValidPassword | InvalidPassword;
+
+function validationPassword(password: string): PasswordValidation {
+  if (password.length < MIN_PASSWORD_LENGTH) {
+    return {
+      error: `The password must be at least ${MIN_PASSWORD_LENGTH} characters long`,
+      type: 'invalid',
+    };
+  }
+
+  return { type: 'valid' };
 }

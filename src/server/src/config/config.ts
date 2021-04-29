@@ -6,3 +6,12 @@ export const BASE_URL = '/api';
 
 // Minimun number of assessments a course class must have
 export const MIN_NUMBER_OF_CLASS_ASSESSMENTS = 3;
+
+// Minimun length of the password
+export const MIN_PASSWORD_LENGTH = 6;
+
+// Each minute delete all the expired user sessions
+export const DELETE_USER_SESSION_TIME = 1000 * 60;
+
+// Maximun number of concurrent user sessions
+export const MAX_SESSIONS_PER_USER = 10;

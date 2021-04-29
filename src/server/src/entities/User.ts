@@ -1,20 +1,22 @@
 import {
   BaseEntity,
   Column,
+  CreateDateColumn,
   Entity,
   FindOneOptions,
   Index,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { NewUser, RoleName, UserDTO } from '../types';
 import { encryptPassword } from '../utils';
 import { Role } from './Rol';
+import { UserSession } from './UserSession';
 
 @Entity()
-@Index('idx_token', ['refreshToken'])
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
@@ -34,15 +36,19 @@ export class User extends BaseEntity {
   @Column()
   salt!: string;
 
-  @Column({ type: 'varchar', nullable: true, unique: true })
-  refreshToken!: string | null;
-
-  @Column({ default: () => 'NOW()' })
+  @CreateDateColumn()
   creationDate!: Date;
 
   @ManyToOne(() => Role, (role) => role.user)
   @JoinColumn()
   role!: Role;
+
+  @OneToMany(() => UserSession, (session) => session.user, {
+    onDelete: 'CASCADE',
+    cascade: ['insert', 'update'],
+  })
+  @JoinColumn()
+  sessions!: UserSession[];
 
   static async createWithRole(data: NewUser & { roleName: RoleName }) {
     const role = await Role.findOne({ where: { name: data.roleName } });
@@ -63,16 +69,6 @@ export class User extends BaseEntity {
   ): Promise<User | undefined> {
     return User.findOne({
       where: { email },
-      ...options,
-    });
-  }
-
-  static findByRefreshToken(
-    refreshToken: string,
-    options?: FindOneOptions<User>
-  ): Promise<User | undefined> {
-    return User.findOne({
-      where: { refreshToken },
       ...options,
     });
   }

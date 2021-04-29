@@ -30,7 +30,7 @@ export class AutenticateToken implements ExpressMiddlewareInterface {
 
         // Check if user still logged
         const claims = decoded as Claims;
-        const user = await User.findOne(claims.id);
+        const user = await User.findOne(claims.id, { relations: ['sessions'] });
 
         // If still logged allow request, otherwise `401 Unauthorized`
         if (await checkIsAuthorized(request, user)) {
@@ -46,15 +46,11 @@ export class AutenticateToken implements ExpressMiddlewareInterface {
 }
 
 async function checkIsAuthorized(request: Request, user?: User) {
-  if (user && user.refreshToken) {
-    // Check if the cookie exists and match the user refreshToken
+  if (user && user.sessions.length > 0) {
+    // Check if the cookie exists and match an user session
     const refreshToken = request.cookies['refreshToken'];
-    if (user.refreshToken === refreshToken) {
+    if (user.sessions.find((e) => e.refreshToken === refreshToken)) {
       return true;
-    } else {
-      // Otherwise remove the token from the user
-      user.refreshToken = null;
-      await User.save(user);
     }
   }
 

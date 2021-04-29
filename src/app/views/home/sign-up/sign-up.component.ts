@@ -34,7 +34,9 @@ export class SignUpComponent implements OnInit {
 
   constructor(private authService: AuthService, private router: Router) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    // TODO: Redirect user if is already login, maybe with a Guard 'CanActivate'
+  }
 
   async onSubmit() {
     this.formGroup.markAllAsTouched();
@@ -65,7 +67,7 @@ export class SignUpComponent implements OnInit {
       password: this.formGroup.get('password')?.value,
     };
 
-    /// Register the new account and login the user
+    /// Register the new account and login
     await this.authService.signup(newUser).toPromise();
     await this.authService.login(newUser).toPromise();
     await this.router.navigateByUrl('/profile');
