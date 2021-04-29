@@ -7,10 +7,14 @@ export interface NewUser {
   password: string;
 }
 
-export interface UpdateUser {
-  id?: number;
+export interface UserUpdate {
+  id: number;
   firstName: string;
   lastName: string;
-  email: string;
+}
+
+export interface UserPasswordUpdate {
+  id: number;
   password: string;
+  newPassword: string;
 }

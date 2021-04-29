@@ -73,6 +73,7 @@ function needsAutentication(request: Request) {
       case '/login':
       case '/logout':
       case '/token':
+      case '/user':
         return false;
     }
   }

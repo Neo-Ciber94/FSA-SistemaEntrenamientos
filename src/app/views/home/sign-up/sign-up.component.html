@@ -1,7 +1,7 @@
 <h1 class="text-center">Sign up</h1>
 
 <div class="container form-container pb-3">
-  <form>
+  <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
     <!-- First Name -->
     <div class="form-group row">
       <div class="col-sm-3">
@@ -9,6 +9,7 @@
       </div>
       <div class="col-sm-9">
         <input
+          formControlName="firstName"
           class="form-control"
           type="text"
           placeholder="Your first name"
@@ -24,6 +25,7 @@
       </div>
       <div class="col-sm-9">
         <input
+          formControlName="lastName"
           class="form-control"
           type="text"
           placeholder="Your last name"
@@ -39,6 +41,7 @@
       </div>
       <div class="col-sm-9">
         <input
+          formControlName="email"
           class="form-control"
           type="email"
           placeholder="Your email"
@@ -55,6 +58,7 @@
       </div>
       <div class="col-sm-9">
         <input
+          formControlName="password"
           class="form-control"
           type="email"
           placeholder="Your password"
@@ -71,6 +75,7 @@
       </div>
       <div class="col-sm-9">
         <input
+          formControlName="confirmPassword"
           class="form-control"
           type="email"
           placeholder="Confirm password"

@@ -1,5 +1,6 @@
 import {
   Body,
+  BodyParam,
   Get,
   JsonController,
   Post,
@@ -18,7 +19,7 @@ import {
 } from '../config/config';
 import { v4 as uuidv4 } from 'uuid';
 import { Claims } from '../types/Claims';
-import { NewUser, UpdateUser } from '../types/Users';
+import { NewUser, UserPasswordUpdate, UserUpdate } from '../types/Users';
 import { Session } from '../types/Session';
 import { RoleName } from '../types/RoleName';
 import bcrypt from 'bcrypt';
@@ -46,25 +47,40 @@ export class AuthController {
   }
 
   @Put('/update')
-  async update(@Body() newUser: UpdateUser, @Res() response: Response) {
+  async update(@Body() newUser: UserUpdate, @Res() response: Response) {
     const user = await User.findOne(newUser.id);
 
     if (user) {
-      const { salt, hash } = await encryptPassword({
-        salt: user.salt,
-        password: newUser.password,
-      });
-
       user.firstName = newUser.firstName;
       user.lastName = newUser.lastName;
-      user.email = newUser.email;
-      user.salt = salt;
-      user.hash = hash;
-
       const sanitizedUser = sanitizeUser(await User.save(user));
       return sanitizedUser;
     } else {
       return response.status(404).send('invalid user');
+    }
+  }
+
+  @Put('/changepassword')
+  async changePassword(
+    @Body() newUser: UserPasswordUpdate,
+    @Res() response: Response
+  ) {
+    const user = await User.findOne(newUser.id);
+    if (user) {
+      const isSame = await bcrypt.compare(newUser.password, user.hash);
+
+      if (isSame) {
+        const { salt, hash } = await encryptPassword({
+          password: newUser.newPassword,
+        });
+
+        user.hash = hash;
+        user.salt = salt;
+        await User.save(user);
+        return helper(response).success();
+      } else {
+        return helper(response).invalidCredentials('Password missmatch');
+      }
     }
   }
 

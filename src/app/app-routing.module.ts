@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { IsLoggedGuard } from './guards';
-import { CurrentUserResolver } from './resolvers/current-user.resolver';
 import { NotFoundComponent } from './views/shared/not-found/not-found.component';
 
 const routes: Routes = [

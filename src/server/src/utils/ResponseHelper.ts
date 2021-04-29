@@ -12,36 +12,36 @@ export class ResponseHelper {
     return this.response.status(200).json(body) as Response<ResBody>;
   }
 
-  success<T>(data?: T) {
+  success<T>(data?: T, message?: string) {
     return this.send({
       success: true,
       statusCode: StatusCode.Success,
-      statusMessage: 'Success',
+      statusMessage: message || 'Success',
       data,
     });
   }
 
-  emailExist() {
+  emailExist(message?: string) {
     return this.send({
       success: false,
       statusCode: StatusCode.EmailAlreadyExist,
-      statusMessage: 'Email already exists',
+      statusMessage: message || 'Email already exists',
     });
   }
 
-  invalidCredentials() {
+  invalidCredentials(message?: string) {
     return this.send({
       success: false,
       statusCode: StatusCode.InvalidCredentials,
-      statusMessage: 'invalid email or password',
+      statusMessage: message || 'invalid email or password',
     });
   }
 
-  userNotFound() {
+  userNotFound(message?: string) {
     return this.send({
       success: false,
       statusCode: StatusCode.UserNotFound,
-      statusMessage: 'the user was not found',
+      statusMessage: message || 'the user was not found',
     });
   }
 }
