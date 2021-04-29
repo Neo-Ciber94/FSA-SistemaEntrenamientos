@@ -18,6 +18,7 @@ import {
   tap,
 } from 'rxjs/operators';
 import { ResponseBody, StatusCode } from 'src/shared';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -36,20 +37,23 @@ export class AuthService {
 
   constructor(
     private apiService: ApiService,
-    private userSevice: UserService
+    private userSevice: UserService,
+    private router: Router
   ) {}
 
-  initialize() {
-    const user = this.getCurrentUser();
-    if (user) {
-      return of(user);
-    }
-
-    return this.apiService.get<User | undefined>('auth/user').pipe(
-      tap((user) => {
-        this.currentUserBehaviourSubject.next(user);
-      })
-    );
+  loadCurrentUser() {
+    console.log('Init');
+    this.apiService
+      .get<ResponseBody<User>>('auth/user')
+      .pipe(
+        tap((response) => {
+          if (response.success) {
+            this.currentUserBehaviourSubject.next(response.data);
+            this.generateToken();
+          }
+        })
+      )
+      .subscribe();
   }
 
   signup(userSignup: UserSignup) {
@@ -99,7 +103,9 @@ export class AuthService {
     this.tokenBehaviourSubject.next(undefined);
 
     return this.apiService.request((url, http) =>
-      http.get(`${url}/auth/user`, { responseType: 'text' }).pipe(map(() => {}))
+      http
+        .post(`${url}/auth/logout`, undefined, { responseType: 'text' })
+        .pipe(map(() => {}))
     );
   }
 
@@ -125,6 +131,10 @@ export class AuthService {
 
   getCurrentUser() {
     return this.currentUserBehaviourSubject.value;
+  }
+
+  isLogin() {
+    return this.getCurrentUser() != null;
   }
 
   private startRefreshTokenRoutine() {

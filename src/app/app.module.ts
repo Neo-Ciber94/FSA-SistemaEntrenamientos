@@ -1,4 +1,4 @@
-import { NgModule, SecurityContext } from '@angular/core';
+import { APP_INITIALIZER, NgModule, SecurityContext } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -9,6 +9,7 @@ import { MarkdownModule } from 'ngx-markdown';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpTokenInterceptor } from './interceptors/http-token.interceptor';
 import { environment } from 'src/environments/environment';
+import { AuthService } from './services/auth.service';
 
 @NgModule({
   declarations: [AppComponent],
@@ -24,7 +25,19 @@ import { environment } from 'src/environments/environment';
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: HttpTokenInterceptor, multi: true },
     { provide: 'API_URL', useValue: environment.apiUrl },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initApp,
+      deps: [AuthService],
+      multi: true,
+    },
   ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
+
+function initApp(authService: AuthService) {
+  return () => {
+    authService.loadCurrentUser();
+  };
+}
