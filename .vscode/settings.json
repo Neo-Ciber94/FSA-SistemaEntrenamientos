@@ -1,0 +1,7 @@
+{
+    "exportall.config.folderListener": [
+        "/src/app/models",
+        "/src/server/src/config"
+    ],
+    "js/ts.implicitProjectConfig.experimentalDecorators": true
+}

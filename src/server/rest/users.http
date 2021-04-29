@@ -1,0 +1,4 @@
+### Get Users
+GET http://localhost:3000/api/users
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhZG1pbkBhZG1pbi5jb20iLCJyb2xlIjoiYWRtaW4iLCJpYXQiOjE2MTk1ODA0MDksImV4cCI6MTYxOTU4NDAwOX0.Rt26AojYHTrPJG-K3yYOCACERDopaE5D8uLlgBDmBso
+Cookie: refreshToken=099c5c69-d368-4acd-8056-10f2a965d344; Max-Age=604800; Path=/; Expires=Wed, 05 May 2021 03:26:49 GMT; HttpOnly
