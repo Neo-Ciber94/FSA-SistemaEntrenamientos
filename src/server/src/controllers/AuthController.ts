@@ -77,6 +77,7 @@ export class AuthController {
       relations: ['role'],
     });
 
+    // TODO: We don't check if the user is already logged and is logging from other device
     if (user && credentials.email && credentials.password) {
       const isValid = await bcrypt.compare(credentials.password, user.hash);
 

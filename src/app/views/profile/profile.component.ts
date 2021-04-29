@@ -1,20 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { User } from 'src/app/models';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css'],
 })
-export class ProfileComponent implements OnInit {
-  user!: User;
+export class ProfileComponent {
+  readonly user: User;
 
-  constructor(private route: ActivatedRoute) {}
-
-  ngOnInit(): void {
-    this.route.data.subscribe((data) => {
-      this.user = data.currentUser;
-    });
+  constructor(authService: AuthService) {
+    this.user = authService.getCurrentUser()!;
   }
 }

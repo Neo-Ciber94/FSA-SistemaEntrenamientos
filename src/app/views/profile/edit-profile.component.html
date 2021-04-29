@@ -1,21 +1,21 @@
 <h1 class="text-danger text-center mt-4">Edit Profile</h1>
 
 <div class="container-responsive my-md-4">
-  <form>
+  <form [formGroup]="formGroup" (ngSubmit)="onEdit()">
     <!-- First Name -->
     <div class="form-group">
       <label class="form-label fw-bold">First Name</label>
-      <input class="form-control" value="Example" required />
+      <input class="form-control" formControlName="firstName" required />
     </div>
 
     <!-- Last Name -->
     <div class="form-group">
       <label class="form-label fw-bold">Last Name</label>
-      <input class="form-control" value="Example" required />
+      <input class="form-control" formControlName="lastName" required />
     </div>
 
     <!-- Role -->
-    <div class="form-group">
+    <div class="form-group" *ngIf="isAdmin">
       <label class="form-label fw-bold">Role</label>
       <div ngbDropdown>
         <button
@@ -41,6 +41,7 @@
         class="form-control"
         value="example@example.com"
         autocomplete="username"
+        formControlName="email"
         readonly
       />
     </div>
@@ -53,6 +54,7 @@
         class="form-control"
         value="Example"
         autocomplete="new-password"
+        formControlName="password"
         required
       />
     </div>
@@ -65,13 +67,20 @@
         class="form-control"
         value="Example"
         autocomplete="new-password"
+        formControlName="confirmPassword"
         required
       />
     </div>
 
     <!-- Buttons -->
     <div class="d-flex flex-row buttons">
-      <button class="btn btn-secondary me-1 w-50" type="button">Cancel</button>
+      <button
+        class="btn btn-secondary me-1 w-50"
+        (click)="back()"
+        type="button"
+      >
+        Cancel
+      </button>
       <button class="btn btn-danger ms-1 w-50" type="submit">Save</button>
     </div>
   </form>

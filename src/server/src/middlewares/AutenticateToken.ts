@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { ExpressMiddlewareInterface, Middleware } from 'routing-controllers';
 
-import { ACCESS_TOKEN_SECRET } from '../config/config';
+import { ACCESS_TOKEN_SECRET, BASE_URL } from '../config/config';
 import jwt from 'jsonwebtoken';
 import { Claims } from '../types/Claims';
 import { User } from '../entities/User';
@@ -9,8 +9,8 @@ import { User } from '../entities/User';
 @Middleware({ type: 'before' })
 export class AutenticateToken implements ExpressMiddlewareInterface {
   use(request: Request, response: Response, next: (err?: any) => any): void {
-    // Allow access to `/api/auth` without access token
-    if (request.url.startsWith('/api/auth')) {
+    // Check if the request url needs autentication
+    if (!needsAutentication(request)) {
       next();
       return;
     }
@@ -60,4 +60,22 @@ async function checkIsAuthorized(request: Request, user?: User) {
 
   // Fallback
   return false;
+}
+
+function needsAutentication(request: Request) {
+  const authUrl = `${BASE_URL}/auth`;
+  const url = request.url;
+
+  if (url.startsWith(authUrl)) {
+    const urlRest = url.slice(authUrl.length);
+    switch (urlRest) {
+      case '/signin':
+      case '/login':
+      case '/logout':
+      case '/token':
+        return false;
+    }
+  }
+
+  return true;
 }

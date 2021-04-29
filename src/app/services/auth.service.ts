@@ -37,12 +37,10 @@ export class AuthService {
 
   constructor(
     private apiService: ApiService,
-    private userSevice: UserService,
-    private router: Router
+    private userSevice: UserService
   ) {}
 
   loadCurrentUser() {
-    console.log('Init');
     this.apiService
       .get<ResponseBody<User>>('auth/user')
       .pipe(
@@ -80,7 +78,7 @@ export class AuthService {
       .pipe(
         map((response) => {
           if (response.success) {
-            this.setAuth(response.data!);
+            this.setSession(response.data!);
             this.startRefreshTokenRoutine();
             return response;
           } else {
@@ -113,9 +111,10 @@ export class AuthService {
     if (this.refreshTokenTimeoutId) {
       clearTimeout(this.refreshTokenTimeoutId);
     }
+
     return this.apiService.get<Session>('auth/token').pipe(
       tap((session) => {
-        this.setAuth(session);
+        this.setSession(session);
         this.startRefreshTokenRoutine();
       })
     );
@@ -133,19 +132,23 @@ export class AuthService {
     return this.currentUserBehaviourSubject.value;
   }
 
-  isLogin() {
+  isLogged() {
     return this.getCurrentUser() != null;
+  }
+
+  isAdmin() {
+    return this.getCurrentUser()?.role === RoleName.Admin;
   }
 
   private startRefreshTokenRoutine() {
     this.refreshTokenTimeoutId = setTimeout(() => {
       this.generateToken().subscribe((newSession) => {
-        this.setAuth(newSession);
+        this.setSession(newSession);
       });
     }, new Date(this.tokenExpiration!).getTime());
   }
 
-  private setAuth(session: Session) {
+  private setSession(session: Session) {
     this.tokenExpiration = session.tokenExpiration;
     this.tokenBehaviourSubject.next(session.token);
   }

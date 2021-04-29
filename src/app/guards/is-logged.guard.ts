@@ -13,7 +13,7 @@ export class IsLoggedGuard implements CanActivate {
   ) {}
 
   canActivate(): boolean {
-    if (this.authService.isLogin()) {
+    if (this.authService.isLogged()) {
       return true;
     }
 

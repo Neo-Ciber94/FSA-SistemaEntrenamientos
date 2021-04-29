@@ -4,7 +4,8 @@ import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
 import { createConnection } from 'typeorm';
 import { useExpressServer } from 'routing-controllers';
-import cors, { CorsOptions } from 'cors';
+import { CorsOptions } from 'cors';
+import { BASE_URL } from './config';
 
 const PORT = process.env.PORT || 3000;
 
@@ -24,7 +25,7 @@ const corsOptions: CorsOptions = {
 // Setup express controllers
 useExpressServer(app, {
   cors: corsOptions,
-  routePrefix: '/api',
+  routePrefix: BASE_URL,
   defaults: {
     nullResultCode: 404,
     undefinedResultCode: 404,

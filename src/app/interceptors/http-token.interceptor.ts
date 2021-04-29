@@ -19,26 +19,28 @@ export class HttpTokenInterceptor implements HttpInterceptor {
     request: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
+    const token = this.authService.getSessionToken();
+    const tokenExpiration = this.authService.getTokenExpiration();
+    const isExpired = tokenExpiration != null && tokenExpiration >= new Date();
+
+    // If the token is valid continue
+    if (token && !isExpired) {
+      const newRequest = this.setAutorizationToken(request, token);
+      return next.handle(newRequest).pipe(catchError(this.redirectOnError));
+    }
+
     // We ignore auth requests to avoid overflow
     if (this.isAuthRequest(request)) {
       return next.handle(request);
     }
 
-    const token = this.authService.getSessionToken();
-    const tokenExpiration = this.authService.getTokenExpiration();
-    const isExpired = tokenExpiration && tokenExpiration >= new Date();
-
-    if (token == null || isExpired) {
-      return this.authService.generateToken().pipe(
-        mergeMap((session) => {
-          const newRequest = this.setAutorizationToken(request, session.token);
-          return next.handle(newRequest).pipe(catchError(this.redirectOnError));
-        })
-      );
-    } else {
-      const newRequest = this.setAutorizationToken(request, token);
-      return next.handle(newRequest).pipe(catchError(this.redirectOnError));
-    }
+    // Generate a new token for the request
+    return this.authService.generateToken().pipe(
+      mergeMap((session) => {
+        const newRequest = this.setAutorizationToken(request, session.token);
+        return next.handle(newRequest).pipe(catchError(this.redirectOnError));
+      })
+    );
   }
 
   isAuthRequest(request: HttpRequest<any>) {
