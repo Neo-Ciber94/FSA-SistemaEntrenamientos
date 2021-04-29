@@ -36,4 +36,12 @@ export class ResponseHelper {
       statusMessage: 'invalid email or password',
     });
   }
+
+  userNotFound() {
+    return this.send({
+      success: false,
+      statusCode: StatusCode.UserNotFound,
+      statusMessage: 'the user was not found',
+    });
+  }
 }

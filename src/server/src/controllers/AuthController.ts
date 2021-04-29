@@ -1,4 +1,12 @@
-import { Body, JsonController, Post, Put, Req, Res } from 'routing-controllers';
+import {
+  Body,
+  Get,
+  JsonController,
+  Post,
+  Put,
+  Req,
+  Res,
+} from 'routing-controllers';
 import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { User } from '../entities/User';
@@ -53,7 +61,8 @@ export class AuthController {
       user.salt = salt;
       user.hash = hash;
 
-      return User.save(user);
+      const sanitizedUser = sanitizeUser(await User.save(user));
+      return sanitizedUser;
     } else {
       return response.status(404).send('invalid user');
     }
@@ -136,6 +145,23 @@ export class AuthController {
 
     return response.sendStatus(401);
   }
+
+  @Get('/user')
+  async getLoggedUser(@Req() request: Request, @Res() response: Response) {
+    const refreshToken = getRefreshTokenCookie(request);
+
+    if (refreshToken) {
+      const user = await User.findByRefreshToken(refreshToken, {
+        relations: ['role'],
+      });
+      if (user) {
+        const sanitizedUser = sanitizeUser(user);
+        return helper(response).success(sanitizedUser);
+      }
+    }
+
+    return helper(response).userNotFound();
+  }
 }
 
 // prettier-ignore
@@ -146,7 +172,7 @@ function newSession(claims: Claims): Session {
   return { token, tokenExpiration, refreshToken };
 }
 
-function getRefreshTokenCookie(request: Request): any | undefined {
+function getRefreshTokenCookie(request: Request): string | undefined {
   const cookies = request.cookies;
 
   if (cookies) {

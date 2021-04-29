@@ -8,7 +8,15 @@ import { UserUpdate } from '../models/UserUpdate';
 import { Session } from '../models/Session';
 import { ApiService } from './api.service';
 import { UserService } from './user.service';
-import { catchError, map, mergeMap, tap } from 'rxjs/operators';
+import {
+  catchError,
+  distinctUntilChanged,
+  map,
+  mergeMap,
+  shareReplay,
+  take,
+  tap,
+} from 'rxjs/operators';
 import { ResponseBody, StatusCode } from 'src/shared';
 
 @Injectable({
@@ -23,21 +31,26 @@ export class AuthService {
     undefined
   );
 
-  readonly currentUserObservable: Observable<
-    User | undefined
-  > = this.currentUserBehaviourSubject.asObservable();
-
-  readonly tokenObservable: Observable<
-    string | undefined
-  > = this.tokenBehaviourSubject.asObservable();
-
   private tokenExpiration?: Date;
-  private refreshTokenTimeoutId?: any;
+  private refreshTokenTimeoutId?: NodeJS.Timeout;
 
   constructor(
     private apiService: ApiService,
     private userSevice: UserService
   ) {}
+
+  initialize() {
+    const user = this.getCurrentUser();
+    if (user) {
+      return of(user);
+    }
+
+    return this.apiService.get<User | undefined>('auth/user').pipe(
+      tap((user) => {
+        this.currentUserBehaviourSubject.next(user);
+      })
+    );
+  }
 
   signup(userSignup: UserSignup) {
     return this.apiService
@@ -71,10 +84,7 @@ export class AuthService {
           }
         }),
         // Set current user
-        mergeMap(() => {
-          this.userSevice.getAllUsers().subscribe((data) => console.log(data));
-          return this.userSevice.getUserByEmail(userLogin.email);
-        }),
+        mergeMap(() => this.userSevice.getUserByEmail(userLogin.email)),
         tap((user) => this.currentUserBehaviourSubject.next(user!))
       );
   }
@@ -84,7 +94,13 @@ export class AuthService {
       clearTimeout(this.refreshTokenTimeoutId);
     }
 
-    return this.apiService.post<void, void>('auth/logout');
+    // Clearn data
+    this.currentUserBehaviourSubject.next(undefined);
+    this.tokenBehaviourSubject.next(undefined);
+
+    return this.apiService.request((url, http) =>
+      http.get(`${url}/auth/user`, { responseType: 'text' }).pipe(map(() => {}))
+    );
   }
 
   generateToken() {
@@ -99,7 +115,7 @@ export class AuthService {
     );
   }
 
-  getCurrentUserToken() {
+  getSessionToken() {
     return this.tokenBehaviourSubject.value;
   }
 

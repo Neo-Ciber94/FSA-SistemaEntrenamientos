@@ -5,14 +5,15 @@ import {
   HttpEvent,
   HttpInterceptor,
 } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, ObservableInput } from 'rxjs';
 import { AuthService } from '../services/auth.service';
-import { mergeMap } from 'rxjs/operators';
+import { catchError, mergeMap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class HttpTokenInterceptor implements HttpInterceptor {
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   intercept(
     request: HttpRequest<any>,
@@ -23,7 +24,7 @@ export class HttpTokenInterceptor implements HttpInterceptor {
       return next.handle(request);
     }
 
-    const token = this.authService.getCurrentUserToken();
+    const token = this.authService.getSessionToken();
     const tokenExpiration = this.authService.getTokenExpiration();
     const isExpired = tokenExpiration && tokenExpiration >= new Date();
 
@@ -31,13 +32,12 @@ export class HttpTokenInterceptor implements HttpInterceptor {
       return this.authService.generateToken().pipe(
         mergeMap((session) => {
           const newRequest = this.setAutorizationToken(request, session.token);
-          return next.handle(newRequest);
+          return next.handle(newRequest).pipe(catchError(this.redirectOnError));
         })
       );
     } else {
       const newRequest = this.setAutorizationToken(request, token);
-      console.log(newRequest.url, newRequest.headers);
-      return next.handle(newRequest);
+      return next.handle(newRequest).pipe(catchError(this.redirectOnError));
     }
   }
 
@@ -54,15 +54,21 @@ export class HttpTokenInterceptor implements HttpInterceptor {
     // tslint:disable: object-literal-key-quotes
     // prettier-ignore
     const headers = {
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      observe: 'response'
+      'Authorization': `Bearer ${token}`
     };
 
     return request.clone({
       setHeaders: headers,
       withCredentials: true,
     });
+  }
+
+  redirectOnError(
+    error: any,
+    caught: ObservableInput<any>
+  ): ObservableInput<any> {
+    console.error(error);
+    this.router.navigateByUrl('/login');
+    return caught;
   }
 }

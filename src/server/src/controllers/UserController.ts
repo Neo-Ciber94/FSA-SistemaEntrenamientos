@@ -19,6 +19,7 @@ export class UserController {
 
   @Get('/search')
   async searchUser(@QueryParam('email') email: string) {
-    return User.findByEmail(email);
+    const user = await User.findByEmail(email, { relations: ['role'] });
+    return user && sanitizeUser(user);
   }
 }

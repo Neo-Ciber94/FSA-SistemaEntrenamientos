@@ -10,7 +10,8 @@ import { AuthService } from '../services/auth.service';
 export class CurrentUserResolver implements Resolve<User | undefined> {
   constructor(private authService: AuthService) {}
 
-  resolve(): Observable<User | undefined> {
-    return this.authService.currentUserObservable;
+  resolve(): User | undefined {
+    // Redirect to login if undefined
+    return this.authService.getCurrentUser();
   }
 }

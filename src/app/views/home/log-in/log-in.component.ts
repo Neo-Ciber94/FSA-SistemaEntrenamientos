@@ -37,15 +37,8 @@ export class LogInComponent {
       .login({ email, password })
       .pipe(finalize(() => (this.isSubmitting = false)))
       .subscribe({
-        next: (user) => {
-          // FIXME: Remove log
-          console.log('User Login: ', user);
-          this.router.navigateByUrl('profile');
-        },
-        error: (err) => {
-          this.invalidCredentials = true;
-          console.error(err);
-        },
+        next: () => this.router.navigateByUrl('/profile'),
+        error: () => (this.invalidCredentials = true),
       });
   }
 }
