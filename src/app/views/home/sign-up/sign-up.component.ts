@@ -34,9 +34,7 @@ export class SignUpComponent implements OnInit {
 
   constructor(private authService: AuthService, private router: Router) {}
 
-  ngOnInit(): void {
-    // TODO: Redirect user if is already login, maybe with a Guard 'CanActivate'
-  }
+  ngOnInit(): void {}
 
   async onSubmit() {
     this.formGroup.markAllAsTouched();
