@@ -9,8 +9,12 @@ import {
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
-import { JWT_REFRESH_EXPIRATION_MS } from '../config/config';
+import {
+  JWT_REFRESH_EXPIRATION_MS,
+  MAX_SESSIONS_PER_USER,
+} from '../config/config';
 import { User } from './User';
 
 @Entity()
@@ -24,7 +28,10 @@ export class UserSession extends BaseEntity {
   user!: User;
 
   @CreateDateColumn()
-  firstLogin!: Date;
+  createdAt!: Date;
+
+  @UpdateDateColumn()
+  updatedAt!: Date;
 
   @Column({ type: 'varchar', unique: true })
   refreshToken!: string;
@@ -36,5 +43,19 @@ export class UserSession extends BaseEntity {
   @BeforeInsert()
   setTokenExpiration() {
     this.tokenExpiration = new Date(Date.now() + JWT_REFRESH_EXPIRATION_MS);
+  }
+
+  @BeforeInsert()
+  async checkMaxSessionPerUser() {
+    const user = await User.findOne(this.user, { relations: ['sessions'] });
+
+    if (user && user.sessions.length === MAX_SESSIONS_PER_USER) {
+      // We check the update date of the sessions and remove the oldest one.
+      const oldestSession = user.sessions.reduce((session, current) => {
+        return session.updatedAt < current.updatedAt ? session : current;
+      });
+
+      await UserSession.remove(oldestSession);
+    }
   }
 }

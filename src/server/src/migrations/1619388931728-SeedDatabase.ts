@@ -1,6 +1,6 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 import { User } from '../entities';
-import { Role } from '../entities/Rol';
+import { Role } from '../entities/Role';
 import { RoleName } from '../types/RoleName';
 
 export class SeedDatabase1619388931728 implements MigrationInterface {

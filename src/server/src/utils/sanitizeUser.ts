@@ -19,7 +19,7 @@ export function sanitizeUser(user: User | User[]): UserDTO | UserDTO[] {
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
-      creationDate: user.creationDate,
+      createdAt: user.createdAt,
       role: user.role.name as RoleName,
     };
   }

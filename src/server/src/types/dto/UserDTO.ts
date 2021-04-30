@@ -5,6 +5,6 @@ export interface UserDTO {
   firstName: string;
   lastName: string;
   email: string;
-  creationDate: Date;
+  createdAt: Date;
   role: RoleName;
 }

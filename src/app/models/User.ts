@@ -6,5 +6,5 @@ export interface User {
   lastName: string;
   email: string;
   role: RoleName;
-  creationDate: Date;
+  createdAt: Date;
 }

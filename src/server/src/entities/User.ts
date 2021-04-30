@@ -13,7 +13,7 @@ import {
 } from 'typeorm';
 import { NewUser, RoleName, UserDTO } from '../types';
 import { encryptPassword } from '../utils';
-import { Role } from './Rol';
+import { Role } from './Role';
 import { UserSession } from './UserSession';
 
 @Entity()
@@ -37,7 +37,7 @@ export class User extends BaseEntity {
   salt!: string;
 
   @CreateDateColumn()
-  creationDate!: Date;
+  createdAt!: Date;
 
   @ManyToOne(() => Role, (role) => role.user)
   @JoinColumn()
