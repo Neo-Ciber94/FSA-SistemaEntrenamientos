@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { User, UserSignup } from 'src/app/models';
 import { AuthService } from 'src/app/services/auth.service';
 import { CustomValidators } from 'src/app/utils/custom-validators';
+import { FormErrors } from 'src/app/utils/FormErrors';
+import { MIN_PASSWORD_LENGTH } from 'src/shared';
 
 @Component({
   selector: 'app-sign-up',
@@ -14,21 +16,28 @@ export class SignUpComponent implements OnInit {
   readonly formGroup = new FormGroup({
     firstName: new FormControl('', [
       Validators.required,
-      CustomValidators.noBlank,
+      CustomValidators.blank,
     ]),
     lastName: new FormControl('', [
       Validators.required,
-      CustomValidators.noBlank,
+      CustomValidators.blank,
     ]),
     email: new FormControl('', [
       Validators.email,
       Validators.required,
-      CustomValidators.noBlank,
+      CustomValidators.blank,
     ]),
-    password: new FormControl('', Validators.required),
-    confirmPassword: new FormControl('', Validators.required),
+    password: new FormControl('', [
+      Validators.required,
+      Validators.minLength(MIN_PASSWORD_LENGTH),
+    ]),
+    confirmPassword: new FormControl('', [
+      Validators.required,
+      Validators.minLength(MIN_PASSWORD_LENGTH),
+    ]),
   });
 
+  private formErrors = new FormErrors(this.formGroup);
   wasValidated = false;
   isSubmitting = false;
 
@@ -36,8 +45,21 @@ export class SignUpComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  getInvalidClass(controlName: string) {
+    if (this.wasValidated && this.formGroup.get(controlName)?.invalid) {
+      return 'is-invalid';
+    }
+
+    return '';
+  }
+
+  getError(controlName: string) {
+    return this.formErrors.get(controlName);
+  }
+
   async onSubmit() {
     this.formGroup.markAllAsTouched();
+    this.formErrors.setErrors();
     this.wasValidated = true;
 
     if (this.isSubmitting || this.formGroup.invalid) {

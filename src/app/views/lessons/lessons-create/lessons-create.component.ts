@@ -23,12 +23,9 @@ export class LessonsCreateComponent implements OnInit {
   readonly formGroup = new FormGroup({
     title: new FormControl('Lesson 1', [
       Validators.required,
-      CustomValidators.noBlank,
+      CustomValidators.blank,
     ]),
-    content: new FormControl('', [
-      Validators.required,
-      CustomValidators.noBlank,
-    ]),
+    content: new FormControl('', [Validators.required, CustomValidators.blank]),
   });
 
   editorKind: EditorKind = EditorKind.Text;

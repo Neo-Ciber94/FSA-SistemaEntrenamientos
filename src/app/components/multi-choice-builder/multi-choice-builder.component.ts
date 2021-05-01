@@ -183,7 +183,7 @@ export class MultiChoiceBuilderComponent implements OnInit {
     this.formGroup = new FormGroup({
       assessmentTitle: new FormControl(title, [
         Validators.required,
-        CustomValidators.noBlank,
+        CustomValidators.blank,
       ]),
       ...controls,
     });
@@ -197,7 +197,7 @@ export class MultiChoiceBuilderComponent implements OnInit {
       questionTitle: new FormControl(title, Validators.required),
       questionChoices: new FormControl(choices, [
         Validators.required,
-        CustomValidators.noEmpty,
+        CustomValidators.empty,
       ]),
     });
   }

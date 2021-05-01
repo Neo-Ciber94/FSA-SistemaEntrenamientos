@@ -1,19 +1,19 @@
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 export class CustomValidators {
-  static get noBlank(): ValidatorFn {
+  static get blank(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const value = control.value;
 
       if (isBlank(value)) {
-        return { empty: true };
+        return { blank: true };
       }
 
       return null;
     };
   }
 
-  static get noEmpty(): ValidatorFn {
+  static get empty(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const value = control.value;
 

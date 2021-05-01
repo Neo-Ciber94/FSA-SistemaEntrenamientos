@@ -16,7 +16,6 @@ import {
   ACCESS_TOKEN_SECRET,
   JWT_ACCESS_EXPIRATION_MS,
   JWT_REFRESH_EXPIRATION_MS,
-  MIN_PASSWORD_LENGTH,
 } from '../config/config';
 import { v4 as uuidv4 } from 'uuid';
 import { Claims } from '../types/Claims';
@@ -27,6 +26,8 @@ import bcrypt from 'bcrypt';
 import { encryptPassword, sanitizeUser } from '../utils';
 import { helper } from '../utils/ResponseHelper';
 import { UserSession } from '../entities/UserSession';
+import { PasswordValidation } from '../types';
+import { MIN_PASSWORD_LENGTH } from '../../../shared';
 
 @JsonController('/auth')
 export class AuthController {
@@ -234,17 +235,6 @@ function revokeRefreshTokenCookie(response: Response) {
     secure: false,
   });
 }
-
-interface ValidPassword {
-  type: 'valid';
-}
-
-interface InvalidPassword {
-  error: string;
-  type: 'invalid';
-}
-
-type PasswordValidation = ValidPassword | InvalidPassword;
 
 function validationPassword(password: string): PasswordValidation {
   if (password.length < MIN_PASSWORD_LENGTH) {
