@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 import { User } from '../entities';
 import { Role } from '../entities/Role';
-import { RoleName } from '../types/RoleName';
+import { RoleName } from '../types';
 
 export class SeedDatabase1619388931728 implements MigrationInterface {
   public async up(_: QueryRunner): Promise<void> {

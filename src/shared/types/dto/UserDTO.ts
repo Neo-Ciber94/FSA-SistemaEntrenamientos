@@ -1,10 +1,10 @@
-import { RoleName } from './RoleName';
+import { RoleName } from '..';
 
-export interface User {
+export interface UserDTO {
   id: number;
   firstName: string;
   lastName: string;
   email: string;
-  role: RoleName;
   createdAt: Date;
+  role: RoleName;
 }

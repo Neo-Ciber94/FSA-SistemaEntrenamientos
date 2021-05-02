@@ -6,8 +6,8 @@ import {
   RouterStateSnapshot,
   Router,
 } from '@angular/router';
-import { RoleName } from 'src/app/models/RoleName';
 import { AuthService } from 'src/app/services/auth.service';
+import { RoleName } from 'src/shared';
 
 @Injectable({
   providedIn: 'root',

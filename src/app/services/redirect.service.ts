@@ -1,7 +1,7 @@
 import { Location } from '@angular/common';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { RoleName } from '../models';
+import { RoleName } from 'src/shared';
 import { AuthService } from './auth.service';
 
 @Injectable({

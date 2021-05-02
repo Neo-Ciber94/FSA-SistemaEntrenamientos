@@ -1,7 +1,6 @@
 import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
-import { User } from 'src/app/models';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({

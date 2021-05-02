@@ -22,14 +22,13 @@
 
           <div>
             <strong>Role</strong>
-            <div>{{ user.role }}</div>
+            <div>{{ user.role | titlecase }}</div>
           </div>
 
           <div>
             <strong>Email</strong>
             <div>
               <a [attr.href]="'mailto:' + user.email">{{ user.email }}</a>
-              <!-- <a href="mailto:example@example.com">{{ user.email }}</a> -->
             </div>
           </div>
         </div>

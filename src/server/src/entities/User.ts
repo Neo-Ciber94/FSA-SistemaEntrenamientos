@@ -11,7 +11,7 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { NewUser, RoleName, UserDTO } from '../types';
+import { RoleName, UserDTO, UserSignup } from '../types';
 import { encryptPassword } from '../utils';
 import { Role } from './Role';
 import { UserSession } from './UserSession';
@@ -50,7 +50,7 @@ export class User extends BaseEntity {
   @JoinColumn()
   sessions!: UserSession[];
 
-  static async createWithRole(data: NewUser & { roleName: RoleName }) {
+  static async createWithRole(data: UserSignup & { roleName: RoleName }) {
     const role = await Role.findOne({ where: { name: data.roleName } });
     const { salt, hash } = await encryptPassword({ password: data.password });
     return User.create({

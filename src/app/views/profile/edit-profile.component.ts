@@ -1,8 +1,8 @@
 import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { User } from 'src/app/models';
 import { AuthService } from 'src/app/services/auth.service';
+import { RoleName, UserDTO } from 'src/shared';
 
 @Component({
   selector: 'app-edit-profile',
@@ -11,7 +11,7 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class EditProfileComponent implements OnInit {
   readonly formGroup: FormGroup;
-  readonly user: User;
+  readonly user: UserDTO;
 
   wasValidated = false;
   isSubmitting = false;
@@ -21,11 +21,15 @@ export class EditProfileComponent implements OnInit {
     this.formGroup = new FormGroup({
       firstName: new FormControl(this.user.firstName),
       lastName: new FormControl(this.user.lastName),
-      email: new FormControl(this.user.email),
+      role: new FormControl(this.user.role),
     });
   }
 
   ngOnInit(): void {}
+
+  get RoleName() {
+    return RoleName;
+  }
 
   get isAdmin() {
     return this.authService.isAdmin();

@@ -6,13 +6,13 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
-import { User, UserSignup } from 'src/app/models';
+
 import { AuthService } from 'src/app/services/auth.service';
 import { UserService } from 'src/app/services/user.service';
 import { CustomValidators } from 'src/app/utils/forms/CustomValidators';
 import { FormErrors } from 'src/app/utils/forms/FormErrors';
 import { FormGroupTyped } from 'src/app/utils/forms/FormGroupTyped';
-import { MIN_PASSWORD_LENGTH, validatePassword } from 'src/shared';
+import { MIN_PASSWORD_LENGTH, UserSignup, validatePassword } from 'src/shared';
 
 @Component({
   selector: 'app-sign-up',

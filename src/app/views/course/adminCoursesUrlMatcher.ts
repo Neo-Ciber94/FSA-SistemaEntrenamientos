@@ -1,7 +1,7 @@
 import { UrlMatcher, UrlMatchResult, UrlSegment } from '@angular/router';
-import { RoleName } from 'src/app/models/RoleName';
 import { AuthService } from 'src/app/services/auth.service';
 import { getAppInjector } from 'src/main';
+import { RoleName } from 'src/shared';
 
 export const adminCoursesUrlMatcher: UrlMatcher = (
   url: UrlSegment[]

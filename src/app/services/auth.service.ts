@@ -1,32 +1,25 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
-import { RoleName } from '../models/RoleName';
-import { User } from '../models/User';
-import { UserSignup } from '../models/UserSignup';
-import { UserLogin } from '../models/UserLogin';
-import { UserUpdate } from '../models/UserUpdate';
-import { Session } from '../models/Session';
+import { BehaviorSubject } from 'rxjs';
+import { UserLogin } from '../../shared/types/UserLogin';
 import { ApiService } from './api.service';
 import { UserService } from './user.service';
+import { map, mergeMap, tap } from 'rxjs/operators';
 import {
-  catchError,
-  distinctUntilChanged,
-  map,
-  mergeMap,
-  shareReplay,
-  take,
-  tap,
-} from 'rxjs/operators';
-import { ResponseBody, StatusCode } from 'src/shared';
-import { Router } from '@angular/router';
+  ResponseBody,
+  RoleName,
+  Session,
+  UserDTO,
+  UserSignup,
+  UserUpdate,
+} from 'src/shared';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private currentUserBehaviourSubject = new BehaviorSubject<User | undefined>(
-    undefined
-  );
+  private currentUserBehaviourSubject = new BehaviorSubject<
+    UserDTO | undefined
+  >(undefined);
 
   private tokenBehaviourSubject = new BehaviorSubject<string | undefined>(
     undefined
@@ -42,7 +35,7 @@ export class AuthService {
 
   loadCurrentUser() {
     this.apiService
-      .get<ResponseBody<User>>('auth/user')
+      .get<ResponseBody<UserDTO>>('auth/user')
       .pipe(
         tap((response) => {
           if (response.success) {
@@ -56,7 +49,7 @@ export class AuthService {
 
   signup(userSignup: UserSignup) {
     return this.apiService
-      .post<UserSignup, ResponseBody<User>>('auth/signup', userSignup)
+      .post<UserSignup, ResponseBody<UserDTO>>('auth/signup', userSignup)
       .pipe(
         map((response) => {
           if (response.success) {
@@ -69,7 +62,7 @@ export class AuthService {
   }
 
   update(userUpdate: UserUpdate) {
-    return this.apiService.put<UserUpdate, User>('auth/update', userUpdate);
+    return this.apiService.put<UserUpdate, UserDTO>('auth/update', userUpdate);
   }
 
   login(userLogin: UserLogin) {
@@ -100,6 +93,7 @@ export class AuthService {
     this.currentUserBehaviourSubject.next(undefined);
     this.tokenBehaviourSubject.next(undefined);
 
+    // TODO: change to `post`
     return this.apiService.request((url, http) =>
       http
         .post(`${url}/auth/logout`, undefined, { responseType: 'text' })

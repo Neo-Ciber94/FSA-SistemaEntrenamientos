@@ -20,19 +20,24 @@ import {
 } from '../config/config';
 import { v4 as uuidv4 } from 'uuid';
 import { Claims } from '../types/Claims';
-import { NewUser, UserPasswordUpdate, UserUpdate } from '../types/Users';
-import { Session } from '../types/Session';
-import { RoleName } from '../types/RoleName';
+import { RoleName } from '../../../shared/types/RoleName';
 import bcrypt from 'bcrypt';
 import { encryptPassword, sanitizeUser } from '../utils';
 import { helper } from '../utils/ResponseHelper';
 import { UserSession } from '../entities/UserSession';
-import { validatePassword } from '../../../shared';
+import {
+  Session,
+  UserLogin,
+  UserPasswordUpdate,
+  UserSignup,
+  UserUpdate,
+  validatePassword,
+} from '../types';
 
 @JsonController('/auth')
 export class AuthController {
   @Post('/signup')
-  async signup(@Body() user: NewUser, @Res() response: Response) {
+  async signup(@Body() user: UserSignup, @Res() response: Response) {
     const createdUser = await User.createWithRole({
       ...user,
       roleName: RoleName.Student,
@@ -93,10 +98,7 @@ export class AuthController {
   }
 
   @Post('/login')
-  async login(
-    @Body() credentials: { email: string; password: string },
-    @Res() response: Response
-  ) {
+  async login(@Body() credentials: UserLogin, @Res() response: Response) {
     const user = await User.findByEmail(credentials.email, {
       relations: ['role'],
     });

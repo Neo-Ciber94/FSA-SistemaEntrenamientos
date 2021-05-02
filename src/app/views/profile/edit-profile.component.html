@@ -15,22 +15,23 @@
     </div>
 
     <!-- Role -->
-    <div class="form-group" *ngIf="isAdmin">
+    <div>
       <label class="form-label fw-bold">Role</label>
-      <div ngbDropdown>
-        <button
-          class="btn btn-outline-danger w-100 text-left"
-          type="button"
-          ngbDropdownToggle
-        >
+      <select
+        *ngIf="isAdmin"
+        class="form-select btn btn-danger"
+        formControlName="role"
+      >
+        <option class="btn btn-light" value="{{ RoleName.Admin }}">
+          Admin
+        </option>
+        <option class="btn btn-light" value="{{ RoleName.Teacher }}">
+          Teacher
+        </option>
+        <option class="btn btn-light" value="{{ RoleName.Student }}">
           Student
-        </button>
-        <div ngbDropdownMenu>
-          <button ngbDropdownItem type="button">Student</button>
-          <button ngbDropdownItem type="button">Tutor</button>
-          <button ngbDropdownItem type="button">Admin</button>
-        </div>
-      </div>
+        </option>
+      </select>
     </div>
 
     <!-- Email -->
@@ -39,9 +40,8 @@
       <input
         type="email"
         class="form-control"
-        value="example@example.com"
         autocomplete="username"
-        formControlName="email"
+        value="{{ user.email }}"
         readonly
       />
     </div>

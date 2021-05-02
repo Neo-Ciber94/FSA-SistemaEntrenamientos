@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { User } from 'src/app/models';
 import { AuthService } from 'src/app/services/auth.service';
+import { UserDTO } from 'src/shared';
 
 @Component({
   selector: 'app-profile',
@@ -9,7 +9,7 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./profile.component.css'],
 })
 export class ProfileComponent {
-  readonly user: User;
+  readonly user: UserDTO;
 
   constructor(authService: AuthService) {
     this.user = authService.getCurrentUser()!;

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { RoleName } from 'src/app/models/RoleName';
 import { AuthService } from 'src/app/services/auth.service';
+import { RoleName } from 'src/shared';
 
 @Component({
   selector: 'app-header',

@@ -2,7 +2,8 @@ form input {
   font-size: 16px;
 }
 
-.form-group {
+.form-group,
+.form-select {
   margin-bottom: 20px;
 }
 

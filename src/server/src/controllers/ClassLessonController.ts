@@ -8,7 +8,7 @@ import {
   Put,
 } from 'routing-controllers';
 import { Course, CourseClass, Lesson } from '../entities';
-import { LessonDTO } from '../types/dto/LessonDTO';
+import { LessonDTO } from '../types';
 
 @JsonController('/courses/:courseId/classes/:classId/lessons')
 export class ClassLessonController {

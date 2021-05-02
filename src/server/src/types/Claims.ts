@@ -1,4 +1,4 @@
-import { RoleName } from './RoleName';
+import { RoleName } from '../../../shared/types/RoleName';
 
 export interface Claims {
   id: number;
