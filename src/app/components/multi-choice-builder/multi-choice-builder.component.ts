@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { CustomValidators } from 'src/app/utils/custom-validators';
+import { CustomValidators } from 'src/app/utils/forms/CustomValidators';
 import { getNextId } from 'src/app/utils/nextId';
 import { MultiChoiceQuestion } from '../multi-choice/MultiChoiceQuestion';
 

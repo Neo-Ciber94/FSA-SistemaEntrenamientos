@@ -32,6 +32,20 @@ export class CustomValidators {
       return null;
     };
   }
+
+  static get startOrEndWithspace(): ValidatorFn {
+    return (control) => {
+      const value = control.value;
+
+      if (typeof value === 'string') {
+        if (value.startsWith(' ') || value.endsWith(' ')) {
+          return { whitespace: true };
+        }
+      }
+
+      return null;
+    };
+  }
 }
 
 function isBlank(obj: any) {

@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { finalize } from 'rxjs/operators';
 import { AuthService } from 'src/app/services/auth.service';
+import { FormGroupTyped } from 'src/app/utils';
 
 @Component({
   selector: 'app-log-in',
@@ -14,14 +14,14 @@ export class LogInComponent {
   invalidCredentials = false;
   private isSubmitting = false;
 
-  readonly formGroup: FormGroup = new FormGroup({
+  readonly formGroup: FormGroup = new FormGroupTyped({
     email: new FormControl(),
     password: new FormControl(),
   });
 
   constructor(private authService: AuthService, private router: Router) {}
 
-  login() {
+  async login() {
     this.formGroup.markAllAsTouched();
     this.wasValidate = true;
 
@@ -33,12 +33,13 @@ export class LogInComponent {
     const email = this.formGroup.get('email')?.value;
     const password = this.formGroup.get('password')?.value;
 
-    this.authService
-      .login({ email, password })
-      .pipe(finalize(() => (this.isSubmitting = false)))
-      .subscribe({
-        next: () => this.router.navigateByUrl('/profile'),
-        error: () => (this.invalidCredentials = true),
-      });
+    try {
+      await this.authService.login({ email, password }).toPromise();
+      await this.router.navigateByUrl('/profile');
+    } catch {
+      this.invalidCredentials = true;
+    } finally {
+      this.isSubmitting = false;
+    }
   }
 }

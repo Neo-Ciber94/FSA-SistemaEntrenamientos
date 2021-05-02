@@ -83,15 +83,17 @@
       </div>
       <div class="col-sm-9">
         <input
-          [ngClass]="getInvalidClass('confirmPassword')"
-          formControlName="confirmPassword"
+          [ngClass]="getInvalidClass('passwordConfirm')"
+          formControlName="passwordConfirm"
           class="form-control"
           type="password"
           placeholder="Confirm password"
           autocomplete="new-password"
           required
         />
-        <div class="invalid-feedback">{{ getError("confirmPassword") }}</div>
+        <div class="invalid-feedback">
+          {{ getError("passwordConfirm") }}
+        </div>
       </div>
     </div>
 

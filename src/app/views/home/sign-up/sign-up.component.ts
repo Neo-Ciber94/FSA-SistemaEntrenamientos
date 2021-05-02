@@ -1,11 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
 import { Router } from '@angular/router';
 import { User, UserSignup } from 'src/app/models';
 import { AuthService } from 'src/app/services/auth.service';
-import { CustomValidators } from 'src/app/utils/custom-validators';
-import { FormErrors } from 'src/app/utils/FormErrors';
-import { MIN_PASSWORD_LENGTH } from 'src/shared';
+import { UserService } from 'src/app/services/user.service';
+import { CustomValidators } from 'src/app/utils/forms/CustomValidators';
+import { FormErrors } from 'src/app/utils/forms/FormErrors';
+import { FormGroupTyped } from 'src/app/utils/forms/FormGroupTyped';
+import { MIN_PASSWORD_LENGTH, validatePassword } from 'src/shared';
 
 @Component({
   selector: 'app-sign-up',
@@ -13,7 +20,7 @@ import { MIN_PASSWORD_LENGTH } from 'src/shared';
   styleUrls: ['./sign-up.component.css'],
 })
 export class SignUpComponent implements OnInit {
-  readonly formGroup = new FormGroup({
+  readonly formGroup = new FormGroupTyped({
     firstName: new FormControl('', [
       Validators.required,
       CustomValidators.blank,
@@ -31,13 +38,16 @@ export class SignUpComponent implements OnInit {
       Validators.required,
       Validators.minLength(MIN_PASSWORD_LENGTH),
     ]),
-    confirmPassword: new FormControl('', [
+    passwordConfirm: new FormControl('', [
       Validators.required,
       Validators.minLength(MIN_PASSWORD_LENGTH),
     ]),
   });
 
-  private formErrors = new FormErrors(this.formGroup);
+  private formErrors = new FormErrors(this.formGroup, {
+    missmatch: 'Password missmatch',
+    emailExists: 'Email already exists',
+  });
   wasValidated = false;
   isSubmitting = false;
 
@@ -46,21 +56,69 @@ export class SignUpComponent implements OnInit {
   ngOnInit(): void {}
 
   getInvalidClass(controlName: string) {
-    if (this.wasValidated && this.formGroup.get(controlName)?.invalid) {
+    if (
+      this.wasValidated &&
+      (this.formErrors.get(controlName) ||
+        this.formGroup.get(controlName)?.invalid)
+    ) {
       return 'is-invalid';
     }
 
     return '';
   }
 
-  getError(controlName: string) {
+  getError(controlName: string): string | null {
     return this.formErrors.get(controlName);
+  }
+
+  private checkPassword() {
+    const password = this.formGroup.controls.password;
+    const passwordConfirm = this.formGroup.controls.passwordConfirm;
+
+    if (password.value !== passwordConfirm.value) {
+      this.formErrors.setError(this.formGroup.controlNames.passwordConfirm, {
+        missmatch: true,
+      });
+    }
+
+    const validation = validatePassword(password.value);
+
+    if (validation.type === 'invalid') {
+      this.formErrors.setError(
+        this.formGroup.controlNames.password,
+        { password: true },
+        validation.error
+      );
+    }
+  }
+
+  private async checkEmailDontExist() {
+    const emailControl = this.formGroup.controls.email;
+    if (emailControl.valid) {
+      const emailExist = await this.authService
+        .checkEmail(emailControl.value)
+        .toPromise();
+
+      if (emailExist) {
+        this.formErrors.setError(this.formGroup.controlNames.email, {
+          emailExists: true,
+        });
+      }
+    }
   }
 
   async onSubmit() {
     this.formGroup.markAllAsTouched();
-    this.formErrors.setErrors();
     this.wasValidated = true;
+
+    // Check the passwords
+    this.checkPassword();
+
+    // Check the email don't exists
+    await this.checkEmailDontExist();
+
+    // Compute the errors of the form
+    this.formErrors.computeErrors();
 
     if (this.isSubmitting || this.formGroup.invalid) {
       return;
@@ -68,28 +126,20 @@ export class SignUpComponent implements OnInit {
 
     this.isSubmitting = true;
 
-    if (this.formGroup.invalid) {
-      return;
-    }
-
-    if (
-      this.formGroup.get('password')?.value !==
-      this.formGroup.get('confirmPassword')
-    ) {
-      console.error('Password missmatch');
-      return;
-    }
-
     const newUser: UserSignup = {
-      firstName: this.formGroup.get('firstName')?.value,
-      lastName: this.formGroup.get('lastName')?.value,
-      email: this.formGroup.get('email')?.value,
-      password: this.formGroup.get('password')?.value,
+      firstName: this.formGroup.controls.firstName.value,
+      lastName: this.formGroup.controls.lastName.value,
+      email: this.formGroup.controls.email.value,
+      password: this.formGroup.controls.password.value,
     };
 
-    /// Register the new account and login
-    await this.authService.signup(newUser).toPromise();
-    await this.authService.login(newUser).toPromise();
-    await this.router.navigateByUrl('/profile');
+    try {
+      /// Register the new account and login
+      await this.authService.signup(newUser).toPromise();
+      await this.authService.login(newUser).toPromise();
+      await this.router.navigateByUrl('/profile');
+    } finally {
+      this.isSubmitting = false;
+    }
   }
 }

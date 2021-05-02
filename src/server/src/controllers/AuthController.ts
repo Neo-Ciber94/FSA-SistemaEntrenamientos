@@ -5,6 +5,7 @@ import {
   JsonController,
   Post,
   Put,
+  QueryParam,
   Req,
   Res,
 } from 'routing-controllers';
@@ -26,8 +27,7 @@ import bcrypt from 'bcrypt';
 import { encryptPassword, sanitizeUser } from '../utils';
 import { helper } from '../utils/ResponseHelper';
 import { UserSession } from '../entities/UserSession';
-import { PasswordValidation } from '../types';
-import { MIN_PASSWORD_LENGTH } from '../../../shared';
+import { validatePassword } from '../../../shared';
 
 @JsonController('/auth')
 export class AuthController {
@@ -45,7 +45,7 @@ export class AuthController {
       return helper(response).emailExist();
     }
 
-    const passwordValidation = validationPassword(user.password);
+    const passwordValidation = validatePassword(user.password);
     if (passwordValidation.type === 'invalid') {
       return helper(response).invalidPassword(passwordValidation.error);
     }
@@ -202,6 +202,19 @@ export class AuthController {
 
     return helper(response).userNotFound();
   }
+
+  @Get('/checkemail')
+  async emailExist(
+    @QueryParam('email') email: string,
+    @Res() response: Response
+  ) {
+    const user = await User.findByEmail(email);
+    if (user) {
+      return helper(response).success();
+    } else {
+      return helper(response).emailExist();
+    }
+  }
 }
 
 // prettier-ignore
@@ -234,15 +247,4 @@ function revokeRefreshTokenCookie(response: Response) {
     expires: new Date(0),
     secure: false,
   });
-}
-
-function validationPassword(password: string): PasswordValidation {
-  if (password.length < MIN_PASSWORD_LENGTH) {
-    return {
-      error: `The password must be at least ${MIN_PASSWORD_LENGTH} characters long`,
-      type: 'invalid',
-    };
-  }
-
-  return { type: 'valid' };
 }

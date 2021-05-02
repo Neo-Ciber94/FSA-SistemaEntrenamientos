@@ -1,7 +1,14 @@
-import { Get, JsonController, Param, QueryParam } from 'routing-controllers';
+import { Response } from 'express';
+import {
+  Get,
+  JsonController,
+  Param,
+  QueryParam,
+  Res,
+} from 'routing-controllers';
 import { User } from '../entities/User';
 import { RoleName, UserDTO } from '../types';
-import { sanitizeUser } from '../utils';
+import { helper, sanitizeUser } from '../utils';
 
 @JsonController('/users')
 export class UserController {

@@ -63,13 +63,16 @@ function needsAutentication(request: Request) {
   const url = request.url;
 
   if (url.startsWith(authUrl)) {
-    const urlRest = url.slice(authUrl.length);
+    // Split the string removing any query params
+    const urlRest = url.slice(authUrl.length).split('?')[0];
+
     switch (urlRest) {
-      case '/signin':
+      case '/signup':
       case '/login':
-      case '/logout':
+      case '/logout': //TODO: User need autentification before logout
       case '/token':
       case '/user':
+      case '/checkemail':
         return false;
     }
   }

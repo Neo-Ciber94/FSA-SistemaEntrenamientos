@@ -107,6 +107,12 @@ export class AuthService {
     );
   }
 
+  checkEmail(email: string) {
+    return this.apiService
+      .get<ResponseBody>(`auth/checkemail?email=${email}`)
+      .pipe(map((result) => result.success));
+  }
+
   generateToken() {
     if (this.refreshTokenTimeoutId) {
       clearTimeout(this.refreshTokenTimeoutId);
