@@ -93,12 +93,9 @@ export class AuthService {
     this.currentUserBehaviourSubject.next(undefined);
     this.tokenBehaviourSubject.next(undefined);
 
-    // TODO: change to `post`
-    return this.apiService.request((url, http) =>
-      http
-        .post(`${url}/auth/logout`, undefined, { responseType: 'text' })
-        .pipe(map(() => {}))
-    );
+    return this.apiService.post('auth/logout', undefined, {
+      responseType: 'text',
+    });
   }
 
   checkEmail(email: string) {

@@ -11,91 +11,104 @@ export class ApiService {
     @Inject('API_URL') readonly apiUrl: string
   ) {}
 
-  request<T>(callback: (url: string, client: HttpClient) => T) {
-    return callback(this.apiUrl, this.client);
+  post<T, R>(
+    url: string,
+    body?: T,
+    options: HttpOptions = {
+      responseType: 'json',
+      contentType: 'json',
+      observe: 'body',
+    }
+  ): Observable<R> {
+    setHeaders(options);
+
+    // prettier-ignore
+    return this.client.post<R>(`${this.apiUrl}/${url}`, body, options as any) as unknown as Observable<R>;
   }
 
-  post<T, R>(url: string, body?: T, options?: PostOptions): Observable<R> {
-    return this.client.post<R>(`${this.apiUrl}/${url}`, body, options);
+  put<T, R>(
+    url: string,
+    body?: T,
+    options: HttpOptions = {
+      responseType: 'json',
+      contentType: 'json',
+      observe: 'body',
+    }
+  ): Observable<R> {
+    setHeaders(options);
+    // prettier-ignore
+    return this.client.put<R>(`${this.apiUrl}/${url}`, body, options as any) as unknown as Observable<R>;
   }
 
-  put<T, R>(url: string, body?: T, options?: PutOptions): Observable<R> {
-    return this.client.put<R>(`${this.apiUrl}/${url}`, body, options);
+  delete<T>(
+    url: string,
+    options: HttpOptions = {
+      responseType: 'json',
+      contentType: 'json',
+      observe: 'body',
+    }
+  ): Observable<T> {
+    setHeaders(options);
+    // prettier-ignore
+    return this.client.delete<T>(`${this.apiUrl}/${url}`, options as any)  as unknown as Observable<T>;
   }
 
-  delete<T>(url: string, options?: DeleteOptions): Observable<T> {
-    return this.client.delete<T>(`${this.apiUrl}/${url}`, options);
-  }
-
-  get<T>(url: string, options?: GetOptions): Observable<T> {
-    return this.client.get<T>(`${this.apiUrl}/${url}`, options);
+  get<T>(
+    url: string,
+    options: HttpOptions = {
+      responseType: 'json',
+      contentType: 'json',
+      observe: 'body',
+    }
+  ): Observable<T> {
+    setHeaders(options);
+    // prettier-ignore
+    return this.client.get<T>(`${this.apiUrl}/${url}`, options as any)  as unknown as Observable<T>;
   }
 }
 
-type PostOptions = {
+type ContentType = 'json' | 'text' | undefined;
+type Observe = 'body' | 'events' | 'response';
+type ResponseType = 'arraybuffer' | 'blob' | 'json' | 'text';
+
+type HttpOptions = {
   headers?:
     | HttpHeaders
     | {
         [header: string]: string | string[];
       };
-  observe?: 'body';
+  observe?: Observe;
   params?:
     | HttpParams
     | {
         [param: string]: string | string[];
       };
   reportProgress?: boolean;
-  responseType?: 'json';
+  responseType?: ResponseType;
+  contentType?: ContentType;
+  rawContentType?: string;
   withCredentials?: boolean;
 };
 
-type PutOptions = {
-  headers?:
-    | HttpHeaders
-    | {
-        [header: string]: string | string[];
-      };
-  observe?: 'body';
-  params?:
-    | HttpParams
-    | {
-        [param: string]: string | string[];
-      };
-  reportProgress?: boolean;
-  responseType?: 'json';
-  withCredentials?: boolean;
-};
+function setHeaders(options: HttpOptions) {
+  let contentType: string | undefined;
 
-type DeleteOptions = {
-  headers?:
-    | HttpHeaders
-    | {
-        [header: string]: string | string[];
-      };
-  observe?: 'body';
-  params?:
-    | HttpParams
-    | {
-        [param: string]: string | string[];
-      };
-  reportProgress?: boolean;
-  responseType?: 'json';
-  withCredentials?: boolean;
-};
+  switch (options.contentType || 'json') {
+    case 'json':
+      contentType = 'application/json';
+      break;
+    case 'text':
+      contentType = 'text/plain';
+      break;
+    default:
+      contentType = options.rawContentType;
+      break;
+  }
 
-type GetOptions = {
-  headers?:
-    | HttpHeaders
-    | {
-        [header: string]: string | string[];
-      };
-  observe?: 'body';
-  params?:
-    | HttpParams
-    | {
-        [param: string]: string | string[];
-      };
-  reportProgress?: boolean;
-  responseType?: 'json';
-  withCredentials?: boolean;
-};
+  if (contentType) {
+    options.headers = {
+      'content-type': contentType,
+      ...options.headers,
+    };
+  }
+}
