@@ -5,6 +5,7 @@ import { ACCESS_TOKEN_SECRET, BASE_URL } from '../config/config';
 import jwt from 'jsonwebtoken';
 import { Claims } from '../types/Claims';
 import { User } from '../entities/User';
+import { authenticateUser } from './authenticateUser';
 
 @Middleware({ type: 'before' })
 export class AutenticateToken implements ExpressMiddlewareInterface {
@@ -15,47 +16,14 @@ export class AutenticateToken implements ExpressMiddlewareInterface {
       return;
     }
 
-    const authorization = request.headers['authorization'];
-    const accessToken = authorization?.split(' ')[1];
-
-    if (accessToken) {
-      jwt.verify(accessToken, ACCESS_TOKEN_SECRET, async (err, decoded) => {
-        if (err) {
-          if (err.message === 'TokenExpiredError') {
-            return response.status(401).send('token expired');
-          }
-
-          return response.sendStatus(403);
-        }
-
-        // Check if user still logged
-        const claims = decoded as Claims;
-        const user = await User.findOne(claims.id, { relations: ['sessions'] });
-
-        // Check if the user have a session, otherwise `401 Unauthorized`
-        if (await checkUserSession(request, user)) {
-          next();
-        } else {
-          response.sendStatus(401);
-        }
-      });
-    } else {
-      response.sendStatus(401);
-    }
+    authenticateUser(request, []).then((authorized) => {
+      if (authorized) {
+        next();
+      } else {
+        response.sendStatus(401);
+      }
+    });
   }
-}
-
-async function checkUserSession(request: Request, user?: User) {
-  if (user && user.sessions.length > 0) {
-    // Check if the cookie exists and match an user session
-    const refreshToken = request.cookies['refreshToken'];
-    if (user.sessions.find((e) => e.refreshToken === refreshToken)) {
-      return true;
-    }
-  }
-
-  // Fallback
-  return false;
 }
 
 function needsAuthentication(request: Request) {

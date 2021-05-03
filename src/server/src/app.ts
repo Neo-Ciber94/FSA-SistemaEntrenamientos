@@ -6,7 +6,10 @@ import { createConnection } from 'typeorm';
 import { useExpressServer } from 'routing-controllers';
 import { CorsOptions } from 'cors';
 import { BASE_URL } from './config';
-import { startDeleteExpiredSessionsRoutine } from './scripts/deleteExpiredSessions';
+import {
+  startDeleteExpiredSessionsRoutine,
+  authorizationChecker,
+} from './scripts';
 import { LOGGER } from './utils/Logger';
 
 const PORT = process.env.PORT || 3000;
@@ -28,6 +31,7 @@ const corsOptions: CorsOptions = {
 useExpressServer(app, {
   cors: corsOptions,
   routePrefix: BASE_URL,
+  authorizationChecker,
   defaults: {
     nullResultCode: 404,
     undefinedResultCode: 404,

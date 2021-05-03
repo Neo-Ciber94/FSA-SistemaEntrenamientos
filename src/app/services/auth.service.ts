@@ -89,13 +89,17 @@ export class AuthService {
       clearTimeout(this.refreshTokenTimeoutId);
     }
 
-    // Clearn data
-    this.currentUserBehaviourSubject.next(undefined);
-    this.tokenBehaviourSubject.next(undefined);
-
-    return this.apiService.post('auth/logout', undefined, {
-      responseType: 'text',
-    });
+    return this.apiService
+      .post<void, void>('auth/logout', undefined, {
+        responseType: 'text',
+      })
+      .pipe(
+        tap(() => {
+          // Clearn data
+          this.currentUserBehaviourSubject.next(undefined);
+          this.tokenBehaviourSubject.next(undefined);
+        })
+      );
   }
 
   checkEmail(email: string) {

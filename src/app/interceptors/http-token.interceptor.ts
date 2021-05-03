@@ -25,31 +25,31 @@ export class HttpTokenInterceptor implements HttpInterceptor {
 
     // If the token is valid continue
     if (token && !isExpired) {
-      const newRequest = this.setAutorizationToken(request, token);
+      const newRequest = this.setAuthorizationToken(request, token);
       return next.handle(newRequest).pipe(catchError(this.redirectOnError));
     }
 
     // We ignore auth requests to avoid overflow
-    if (this.requiresAuthentication(request)) {
+    if (this.needsAuthentication(request)) {
       return next.handle(request);
     }
 
     // Generate a new token for the request
     return this.authService.generateToken().pipe(
       mergeMap((session) => {
-        const newRequest = this.setAutorizationToken(request, session.token);
+        const newRequest = this.setAuthorizationToken(request, session.token);
         return next.handle(newRequest).pipe(catchError(this.redirectOnError));
       })
     );
   }
 
-  requiresAuthentication(request: HttpRequest<any>) {
+  needsAuthentication(request: HttpRequest<any>) {
     const url = request.url;
     const authUrl = `${environment.apiUrl}/auth`;
     return url.startsWith(authUrl);
   }
 
-  setAutorizationToken(
+  setAuthorizationToken(
     request: HttpRequest<any>,
     token: string
   ): HttpRequest<any> {
