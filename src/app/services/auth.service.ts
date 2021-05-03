@@ -9,6 +9,7 @@ import {
   RoleName,
   Session,
   UserDTO,
+  UserPasswordUpdate,
   UserSignup,
   UserUpdate,
 } from 'src/shared';
@@ -63,6 +64,13 @@ export class AuthService {
 
   update(userUpdate: UserUpdate) {
     return this.apiService.put<UserUpdate, UserDTO>('auth/update', userUpdate);
+  }
+
+  changePassword(userPasswordUpdate: UserPasswordUpdate) {
+    return this.apiService.put<UserPasswordUpdate, ResponseBody>(
+      'auth/changepassword',
+      userPasswordUpdate
+    );
   }
 
   login(userLogin: UserLogin) {
@@ -137,8 +145,21 @@ export class AuthService {
     return this.getCurrentUser() != null;
   }
 
+  // TODO: This must be here or UserService?
   isAdmin() {
     return this.getCurrentUser()?.role === RoleName.Admin;
+  }
+
+  isCurrentUser(user: UserDTO) {
+    return user.id === this.getCurrentUser()?.id;
+  }
+
+  getProfileRoute(user: UserDTO) {
+    if (this.isCurrentUser(user)) {
+      return '/profile';
+    }
+
+    return `/profile/${user.id}`;
   }
 
   private startRefreshTokenRoutine() {

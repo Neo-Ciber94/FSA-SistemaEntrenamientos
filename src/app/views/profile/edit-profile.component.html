@@ -1,17 +1,26 @@
 <h1 class="text-danger text-center mt-4">Edit Profile</h1>
 
 <div class="container-responsive my-md-4">
-  <form [formGroup]="formGroup" (ngSubmit)="onEdit()">
+  <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
     <!-- First Name -->
     <div class="form-group">
       <label class="form-label fw-bold">First Name</label>
-      <input class="form-control" formControlName="firstName" required />
+      <input
+        [ngClass]="getInvalidClass('firstName')"
+        class="form-control"
+        formControlName="firstName"
+        required
+      />
+      <div class="invalid-feedback">{{ getError("firstName") }}</div>
     </div>
 
     <!-- Last Name -->
     <div class="form-group">
       <label class="form-label fw-bold">Last Name</label>
       <input class="form-control" formControlName="lastName" required />
+      <div [ngClass]="getInvalidClass('lastName')" class="invalid-feedback">
+        {{ getError("lastName") }}
+      </div>
     </div>
 
     <!-- Role -->
@@ -19,6 +28,7 @@
       <label class="form-label fw-bold">Role</label>
       <select
         *ngIf="isAdmin"
+        [ngClass]="getInvalidClass('role')"
         class="form-select btn btn-danger"
         formControlName="role"
       >
@@ -32,6 +42,7 @@
           Student
         </option>
       </select>
+      <div class="invalid-feedback">{{ getError("role") }}</div>
     </div>
 
     <!-- Email -->

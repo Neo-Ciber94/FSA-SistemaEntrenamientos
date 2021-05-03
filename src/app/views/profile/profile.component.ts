@@ -8,14 +8,29 @@ import { UserDTO } from 'src/shared';
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css'],
 })
-export class ProfileComponent {
-  readonly user: UserDTO;
+export class ProfileComponent implements OnInit {
+  user!: UserDTO;
 
-  constructor(authService: AuthService) {
-    this.user = authService.getCurrentUser()!;
+  constructor(
+    private authService: AuthService,
+    private route: ActivatedRoute
+  ) {}
+
+  ngOnInit(): void {
+    this.route.parent!.data.subscribe((data) => {
+      console.assert(data.user);
+      this.user = data.user;
+    });
   }
 
   canEdit() {
-    return false; // TODO: Check if the user can edit this profile
+    return (
+      this.authService.isCurrentUser(this.user) || this.authService.isAdmin()
+    );
+  }
+
+  editRoute() {
+    const profileRoute = this.authService.getProfileRoute(this.user);
+    return `${profileRoute}/edit`;
   }
 }

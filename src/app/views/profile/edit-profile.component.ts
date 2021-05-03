@@ -1,9 +1,9 @@
 import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
-import { FormGroupTyped } from 'src/app/utils';
+import { CustomValidators, FormErrors, FormGroupTyped } from 'src/app/utils';
 import { RoleName, UserDTO, UserUpdate } from 'src/shared';
 import Swal from 'sweetalert2';
 
@@ -23,6 +23,7 @@ export class EditProfileComponent implements OnInit {
   readonly user: UserDTO;
 
   private previousRole: RoleName;
+  private formErrors;
   wasValidated = false;
   isSubmitting = false;
 
@@ -34,10 +35,18 @@ export class EditProfileComponent implements OnInit {
     this.user = authService.getCurrentUser()!;
     this.previousRole = this.user.role;
     this.formGroup = new FormGroupTyped({
-      firstName: new FormControl(this.user.firstName),
-      lastName: new FormControl(this.user.lastName),
-      role: new FormControl(this.user.role),
+      firstName: new FormControl(this.user.firstName, [
+        Validators.required,
+        CustomValidators.blank,
+      ]),
+      lastName: new FormControl(this.user.lastName, [
+        Validators.required,
+        CustomValidators.blank,
+      ]),
+      role: new FormControl(this.user.role, [Validators.required]),
     });
+
+    this.formErrors = new FormErrors(this.formGroup);
   }
 
   ngOnInit(): void {
@@ -73,14 +82,26 @@ export class EditProfileComponent implements OnInit {
     return this.authService.isAdmin();
   }
 
+  getInvalidClass(controlName: string) {
+    if (this.formErrors.getError(controlName)) {
+      return 'is-invalid';
+    }
+
+    return '';
+  }
+
+  getError(controlName: string) {
+    return this.formErrors.getError(controlName);
+  }
+
   back() {
     this.location.back();
   }
 
-  async onEdit() {
+  async onSubmit() {
     this.wasValidated = true;
 
-    if (this.isSubmitting) {
+    if (this.isSubmitting || this.formGroup.invalid) {
       return;
     }
 
@@ -94,7 +115,9 @@ export class EditProfileComponent implements OnInit {
 
     try {
       await this.authService.update(userUpdate).toPromise();
-      await this.router.navigateByUrl('/profile');
+      await this.router.navigateByUrl(
+        this.authService.getProfileRoute(this.user)
+      );
     } finally {
       this.isSubmitting = false;
     }

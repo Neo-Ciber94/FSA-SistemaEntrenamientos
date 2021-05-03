@@ -58,7 +58,7 @@ export class SignUpComponent implements OnInit {
   getInvalidClass(controlName: string) {
     if (
       this.wasValidated &&
-      (this.formErrors.get(controlName) ||
+      (this.formErrors.getError(controlName) ||
         this.formGroup.get(controlName)?.invalid)
     ) {
       return 'is-invalid';
@@ -68,7 +68,7 @@ export class SignUpComponent implements OnInit {
   }
 
   getError(controlName: string): string | null {
-    return this.formErrors.get(controlName);
+    return this.formErrors.getError(controlName);
   }
 
   private checkPassword() {
@@ -76,7 +76,7 @@ export class SignUpComponent implements OnInit {
     const passwordConfirm = this.formGroup.controls.passwordConfirm;
 
     if (password.value !== passwordConfirm.value) {
-      this.formErrors.setError(this.formGroup.controlNames.passwordConfirm, {
+      this.formGroup.controls.passwordConfirm.setErrors({
         missmatch: true,
       });
     }
@@ -84,11 +84,9 @@ export class SignUpComponent implements OnInit {
     const validation = validatePassword(password.value);
 
     if (validation.type === 'invalid') {
-      this.formErrors.setError(
-        this.formGroup.controlNames.password,
-        { password: true },
-        validation.error
-      );
+      this.formErrors.setError(this.formGroup.controlNames.password, {
+        password: validation.error,
+      });
     }
   }
 
@@ -100,8 +98,8 @@ export class SignUpComponent implements OnInit {
         .toPromise();
 
       if (emailExist) {
-        this.formErrors.setError(this.formGroup.controlNames.email, {
-          emailExists: true,
+        this.formGroup.controls.email.setErrors({
+          emailExist: true,
         });
       }
     }

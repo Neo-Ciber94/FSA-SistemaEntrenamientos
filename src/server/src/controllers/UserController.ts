@@ -1,4 +1,10 @@
-import { Get, JsonController, Param, QueryParam } from 'routing-controllers';
+import {
+  Get,
+  JsonController,
+  OnUndefined,
+  Param,
+  QueryParam,
+} from 'routing-controllers';
 import { User } from '../entities/User';
 import { sanitizeUser } from '../utils';
 
@@ -11,12 +17,14 @@ export class UserController {
   }
 
   @Get('/:id([0-9]+)')
+  @OnUndefined(200) // We send 'undefined' instead of 404
   async getUser(@Param('id') id: number) {
     const user = await User.findOne(id, { relations: ['role'] });
     return user && sanitizeUser(user);
   }
 
   @Get('/search')
+  @OnUndefined(200) // We send 'undefined' instead of 404
   async searchUser(@QueryParam('email') email: string) {
     const user = await User.findByEmail(email, { relations: ['role'] });
     return user && sanitizeUser(user);

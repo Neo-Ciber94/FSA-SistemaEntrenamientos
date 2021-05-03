@@ -16,7 +16,8 @@ export interface ErrorMessages {
 }
 
 export class FormErrors {
-  private errors: FormValidationErrors = {};
+  // tslint:disable-next-line: variable-name
+  private _errors: FormValidationErrors = {};
 
   constructor(
     private formGroup: FormGroup,
@@ -30,51 +31,51 @@ export class FormErrors {
 
     // `Validators.required` and `Validators.requireTrue`
     if (control.errors?.required) {
-      this.errors[controlName] = this.getMessage(ValidationErrorKind.required);
+      this._errors[controlName] = this.getMessage(ValidationErrorKind.required);
     }
     // `CustomValidator.blank`
     else if (control.errors?.blank) {
-      this.errors[controlName] = this.getMessage(ValidationErrorKind.blank);
+      this._errors[controlName] = this.getMessage(ValidationErrorKind.blank);
     }
     // `CustomValidator.empty`
     else if (control.errors?.empty) {
-      this.errors[controlName] = this.getMessage(ValidationErrorKind.empty);
+      this._errors[controlName] = this.getMessage(ValidationErrorKind.empty);
     }
     // `Validators.email`
     else if (control.errors?.email) {
-      this.errors[controlName] = this.getMessage(ValidationErrorKind.email);
+      this._errors[controlName] = this.getMessage(ValidationErrorKind.email);
     }
     // `Validators.pattern`
     else if (control.errors?.pattern) {
-      this.errors[controlName] = this.getMessage(
+      this._errors[controlName] = this.getMessage(
         ValidationErrorKind.pattern,
         control.errors.pattern
       );
     }
     // `Validators.min`
     else if (control.errors?.min) {
-      this.errors[controlName] = this.getMessage(
+      this._errors[controlName] = this.getMessage(
         ValidationErrorKind.min,
         control.errors.min
       );
     }
     // `Validators.max`
     else if (control.errors?.max) {
-      this.errors[controlName] = this.getMessage(
+      this._errors[controlName] = this.getMessage(
         ValidationErrorKind.max,
         control.errors.max
       );
     }
     // `Validators.minlength`
     else if (control.errors?.minlength) {
-      this.errors[controlName] = this.getMessage(
+      this._errors[controlName] = this.getMessage(
         ValidationErrorKind.minLength,
         control.errors.minlength
       );
     }
     // `Validators.maxlength`
     else if (control.errors?.maxlength) {
-      this.errors[controlName] = this.getMessage(
+      this._errors[controlName] = this.getMessage(
         ValidationErrorKind.maxLength,
         control.errors.maxLength
       );
@@ -82,11 +83,11 @@ export class FormErrors {
     // Fallback
     else if (control.errors) {
       const key = Object.keys(control.errors)[0];
-      this.errors[controlName] = this.getMessage(key) || 'Invalid value';
+      this._errors[controlName] = this.getMessage(key) || 'Invalid value';
     }
     // No error
     else {
-      this.errors[controlName] = null;
+      this._errors[controlName] = null;
     }
   }
 
@@ -120,6 +121,8 @@ export class FormErrors {
   }
 
   computeErrors() {
+    this.formGroup.markAllAsTouched();
+
     for (const control in this.formGroup.controls) {
       if (control in this.formGroup.controls) {
         this.setControlError(control);
@@ -127,9 +130,13 @@ export class FormErrors {
     }
   }
 
+  get errors() {
+    return Object.assign({}, this._errors);
+  }
+
   hasErrors() {
-    for (const key in this.errors) {
-      if (key in this.errors && this.errors[key]) {
+    for (const key in this._errors) {
+      if (key in this._errors && this._errors[key]) {
         return true;
       }
     }
@@ -137,25 +144,30 @@ export class FormErrors {
     return false;
   }
 
-  getErrors() {
-    return Object.assign({}, this.errors);
-  }
-
-  setError(controlName: string, error: ValidationErrors, message?: string) {
-    if (message) {
-      this.errorMessages[controlName] = message;
-    }
+  setError(controlName: string, errors: ErrorMessages) {
+    // Sets the new errors
+    this.errorMessages = {
+      ...this.errorMessages,
+      ...errors,
+    };
 
     const control = this.formGroup.get(controlName)!;
-    control.setErrors({ ...control.errors, ...error });
+
+    // sets the new errors
+    const controlErrors = {
+      ...control.errors,
+      ...errors,
+    };
+
+    control.setErrors(controlErrors);
     this.setControlError(controlName);
   }
 
-  clear() {
-    this.errors = {};
+  getError(controlName: string) {
+    return this._errors[controlName];
   }
 
-  get(controlName: string) {
-    return this.errors[controlName];
+  clear() {
+    this._errors = {};
   }
 }
