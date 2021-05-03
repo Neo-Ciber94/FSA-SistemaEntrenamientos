@@ -69,7 +69,6 @@ function needsAuthentication(request: Request) {
     switch (urlRest) {
       case '/signup':
       case '/login':
-      case '/logout': //TODO: User need autentification before logout?
       case '/token':
       case '/user':
       case '/checkemail':
