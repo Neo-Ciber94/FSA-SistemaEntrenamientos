@@ -1,7 +1,7 @@
 import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { CustomValidators, FormErrors, FormGroupTyped } from 'src/app/utils';
 import { RoleName, UserDTO, UserUpdate } from 'src/shared';
@@ -19,37 +19,44 @@ type EditFormGroup = {
   styleUrls: ['./edit-profile.component.css'],
 })
 export class EditProfileComponent implements OnInit {
-  readonly formGroup: FormGroupTyped<EditFormGroup>;
-  readonly user: UserDTO;
+  formGroup!: FormGroupTyped<EditFormGroup>;
+  user!: UserDTO;
 
-  private previousRole: RoleName;
-  private formErrors;
+  private previousRole!: RoleName;
+  private formErrors!: FormErrors;
   wasValidated = false;
   isSubmitting = false;
 
   constructor(
     private authService: AuthService,
     private location: Location,
-    private router: Router
-  ) {
-    this.user = authService.getCurrentUser()!;
-    this.previousRole = this.user.role;
-    this.formGroup = new FormGroupTyped({
-      firstName: new FormControl(this.user.firstName, [
-        Validators.required,
-        CustomValidators.blank,
-      ]),
-      lastName: new FormControl(this.user.lastName, [
-        Validators.required,
-        CustomValidators.blank,
-      ]),
-      role: new FormControl(this.user.role, [Validators.required]),
-    });
-
-    this.formErrors = new FormErrors(this.formGroup);
-  }
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
+    this.route.data.subscribe((data) => {
+      console.assert(data.user);
+
+      this.user = data.user;
+      this.previousRole = this.user.role;
+      this.formGroup = new FormGroupTyped({
+        firstName: new FormControl(this.user.firstName, [
+          Validators.required,
+          CustomValidators.blank,
+        ]),
+        lastName: new FormControl(this.user.lastName, [
+          Validators.required,
+          CustomValidators.blank,
+        ]),
+        role: new FormControl(this.user.role, [Validators.required]),
+      });
+
+      this.formErrors = new FormErrors(this.formGroup);
+    });
+  }
+
+  startRoleChangeModal() {
     this.formGroup.controls.role.valueChanges.subscribe((newRole) => {
       if (this.previousRole !== newRole) {
         Swal.fire({

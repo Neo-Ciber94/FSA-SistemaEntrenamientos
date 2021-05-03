@@ -1,10 +1,12 @@
 <h1 class="text-center">Courses</h1>
 
-<div class="container p-4">
+<div class="container p-4" id="table-container">
   <table
-    datatable
+    datatable="ng"
+    style="width: 100%"
     [dtOptions]="dtOptions"
-    class="row-border hover stripe compact text-center"
+    [dtTrigger]="dtTrigger"
+    class="row-border hover stripe compact text-center nowrap"
   >
     <thead>
       <tr>
@@ -15,13 +17,23 @@
       </tr>
     </thead>
     <tbody>
-      <tr *repeat="10">
-        <td>1</td>
-        <td>Web Design</td>
-        <td>Alex Alexander</td>
+      <tr *ngFor="let course of courses">
+        <td>{{ course.id }}</td>
+        <td>{{ course.name }}</td>
+        <td>{{ course.teacher }}</td>
         <td>
-          <button class="btn btn-danger mx-1" routerLink="1">View</button>
-          <button class="btn btn-danger mx-1">Edit</button>
+          <a
+            class="btn btn-danger mx-1"
+            routerLink="{{ '/courses/' + course.id }}"
+          >
+            View
+          </a>
+          <button
+            class="btn btn-danger mx-1"
+            routerLink="{{ '/courses/edit/' + course.id }}"
+          >
+            Edit
+          </button>
           <button class="btn btn-danger mx-1">Delete</button>
         </td>
       </tr>

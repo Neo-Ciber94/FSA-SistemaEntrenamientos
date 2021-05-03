@@ -28,9 +28,4 @@ export class ProfileComponent implements OnInit {
       this.authService.isCurrentUser(this.user) || this.authService.isAdmin()
     );
   }
-
-  editRoute() {
-    const profileRoute = this.authService.getProfileRoute(this.user);
-    return `${profileRoute}/edit`;
-  }
 }

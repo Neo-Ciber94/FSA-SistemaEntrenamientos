@@ -1,10 +1,12 @@
 <h1 class="text-center">Users</h1>
 
-<div class="container p-4">
+<div class="container p-4" id="table-container">
   <table
-    datatable
+    datatable="ng"
+    style="width: 100%"
     [dtOptions]="dtOptions"
-    class="row-border hover stripe compact text-center"
+    [dtTrigger]="dtTrigger"
+    class="row-border hover stripe compact text-center nowrap"
   >
     <thead>
       <tr>
@@ -16,14 +18,21 @@
       </tr>
     </thead>
     <tbody>
-      <tr *repeat="10">
-        <td>1</td>
-        <td>Alex</td>
-        <td>Alexander</td>
-        <td>Teacher</td>
+      <tr *ngFor="let user of users">
+        <td>{{ user.id }}</td>
+        <td>{{ user.firstName }}</td>
+        <td>{{ user.lastName }}</td>
+        <td>{{ user.role | titlecase }}</td>
         <td>
-          <button class="btn btn-danger mx-1" routerLink="1">View</button>
-          <button class="btn btn-danger mx-1">Edit</button>
+          <a class="btn btn-danger mx-1" [routerLink]="['/profile', user.id]">
+            View
+          </a>
+          <a
+            class="btn btn-danger mx-1"
+            [routerLink]="['/profile', user.id, 'edit']"
+          >
+            Edit
+          </a>
           <button class="btn btn-danger mx-1">Delete</button>
         </td>
       </tr>
