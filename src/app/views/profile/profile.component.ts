@@ -14,4 +14,8 @@ export class ProfileComponent {
   constructor(authService: AuthService) {
     this.user = authService.getCurrentUser()!;
   }
+
+  canEdit() {
+    return false; // TODO: Check if the user can edit this profile
+  }
 }

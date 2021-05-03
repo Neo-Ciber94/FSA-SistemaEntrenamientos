@@ -30,7 +30,7 @@ export class HttpTokenInterceptor implements HttpInterceptor {
     }
 
     // We ignore auth requests to avoid overflow
-    if (this.isAuthRequest(request)) {
+    if (this.requiresAuthentication(request)) {
       return next.handle(request);
     }
 
@@ -43,7 +43,7 @@ export class HttpTokenInterceptor implements HttpInterceptor {
     );
   }
 
-  isAuthRequest(request: HttpRequest<any>) {
+  requiresAuthentication(request: HttpRequest<any>) {
     const url = request.url;
     const authUrl = `${environment.apiUrl}/auth`;
     return url.startsWith(authUrl);

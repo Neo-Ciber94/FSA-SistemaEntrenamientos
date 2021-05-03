@@ -7,9 +7,20 @@ import { EditProfileComponent } from './edit-profile.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ChangePasswordComponent } from './change-password.component';
+import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 
 @NgModule({
-  declarations: [ProfileComponent, EditProfileComponent, ChangePasswordComponent],
-  imports: [CommonModule, ProfileRoutingModule, NgbModule, ReactiveFormsModule],
+  declarations: [
+    ProfileComponent,
+    EditProfileComponent,
+    ChangePasswordComponent,
+  ],
+  imports: [
+    CommonModule,
+    ProfileRoutingModule,
+    NgbModule,
+    ReactiveFormsModule,
+    SweetAlert2Module.forChild(),
+  ],
 })
 export class ProfileModule {}

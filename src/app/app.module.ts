@@ -10,6 +10,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpTokenInterceptor } from './interceptors/http-token.interceptor';
 import { environment } from 'src/environments/environment';
 import { AuthService } from './services/auth.service';
+import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 
 @NgModule({
   declarations: [AppComponent],
@@ -21,6 +22,7 @@ import { AuthService } from './services/auth.service';
     HttpClientModule,
     // FIXME: Is secure sanitize
     MarkdownModule.forRoot({ sanitize: SecurityContext.NONE }),
+    SweetAlert2Module.forRoot(),
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: HttpTokenInterceptor, multi: true },

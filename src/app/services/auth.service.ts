@@ -40,7 +40,7 @@ export class AuthService {
         tap((response) => {
           if (response.success) {
             this.currentUserBehaviourSubject.next(response.data);
-            this.generateToken();
+            this.generateToken().subscribe();
           }
         })
       )

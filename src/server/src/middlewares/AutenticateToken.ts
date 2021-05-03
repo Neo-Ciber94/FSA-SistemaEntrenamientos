@@ -9,8 +9,8 @@ import { User } from '../entities/User';
 @Middleware({ type: 'before' })
 export class AutenticateToken implements ExpressMiddlewareInterface {
   use(request: Request, response: Response, next: (err?: any) => any): void {
-    // Check if the request url needs autentication
-    if (!needsAutentication(request)) {
+    // Check if the request url needs authentication
+    if (!needsAuthentication(request)) {
       next();
       return;
     }
@@ -32,8 +32,8 @@ export class AutenticateToken implements ExpressMiddlewareInterface {
         const claims = decoded as Claims;
         const user = await User.findOne(claims.id, { relations: ['sessions'] });
 
-        // If still logged allow request, otherwise `401 Unauthorized`
-        if (await checkIsAuthorized(request, user)) {
+        // Check if the user have a session, otherwise `401 Unauthorized`
+        if (await checkUserSession(request, user)) {
           next();
         } else {
           response.sendStatus(401);
@@ -45,7 +45,7 @@ export class AutenticateToken implements ExpressMiddlewareInterface {
   }
 }
 
-async function checkIsAuthorized(request: Request, user?: User) {
+async function checkUserSession(request: Request, user?: User) {
   if (user && user.sessions.length > 0) {
     // Check if the cookie exists and match an user session
     const refreshToken = request.cookies['refreshToken'];
@@ -58,7 +58,7 @@ async function checkIsAuthorized(request: Request, user?: User) {
   return false;
 }
 
-function needsAutentication(request: Request) {
+function needsAuthentication(request: Request) {
   const authUrl = `${BASE_URL}/auth`;
   const url = request.url;
 
@@ -69,7 +69,7 @@ function needsAutentication(request: Request) {
     switch (urlRest) {
       case '/signup':
       case '/login':
-      case '/logout': //TODO: User need autentification before logout
+      case '/logout': //TODO: User need autentification before logout?
       case '/token':
       case '/user':
       case '/checkemail':

@@ -33,6 +33,7 @@ import {
   UserUpdate,
   validatePassword,
 } from '../types';
+import { Role } from '../entities/Role';
 
 @JsonController('/auth')
 export class AuthController {
@@ -64,8 +65,12 @@ export class AuthController {
     const user = await User.findOne(newUser.id);
 
     if (user) {
+      const role = await Role.findOne({ where: { name: newUser.role } });
+
       user.firstName = newUser.firstName;
       user.lastName = newUser.lastName;
+      user.role = role!;
+
       const sanitizedUser = sanitizeUser(await User.save(user));
       return sanitizedUser;
     } else {
@@ -153,14 +158,14 @@ export class AuthController {
     return response.sendStatus(401);
   }
 
-  @Post('/token')
+  @Get('/token')
   async getToken(@Req() request: Request, @Res() response: Response) {
     const refreshToken = getRefreshTokenCookie(request);
 
     if (refreshToken) {
       const userSession = await UserSession.findOne({
         where: { refreshToken },
-        relations: ['user'],
+        relations: ['user', 'user.role'],
       });
 
       const user = userSession?.user;
