@@ -110,6 +110,10 @@ export class AuthService {
       );
   }
 
+  delete(id: number) {
+    return this.apiService.delete<void>(`auth/delete/${id}`);
+  }
+
   checkEmail(email: string) {
     return this.apiService
       .get<ResponseBody>(`auth/checkemail?email=${email}`)

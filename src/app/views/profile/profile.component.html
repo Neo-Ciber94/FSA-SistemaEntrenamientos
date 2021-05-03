@@ -10,22 +10,22 @@
         <div class="fs-5 fw-light mb-3">User details</div>
 
         <div class="card-content">
-          <div>
+          <div class="my-3">
             <strong>First Name</strong>
             <div>{{ user.firstName }}</div>
           </div>
 
-          <div>
+          <div class="my-3">
             <strong>Last Name</strong>
             <div>{{ user.lastName }}</div>
           </div>
 
-          <div>
+          <div class="my-3">
             <strong>Role</strong>
             <div>{{ user.role | titlecase }}</div>
           </div>
 
-          <div>
+          <div class="my-3">
             <strong>Email</strong>
             <div>
               <a [attr.href]="'mailto:' + user.email">{{ user.email }}</a>

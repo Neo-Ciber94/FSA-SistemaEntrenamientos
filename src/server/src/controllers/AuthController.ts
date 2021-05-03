@@ -1,8 +1,10 @@
 import {
   Body,
   BodyParam,
+  Delete,
   Get,
   JsonController,
+  Param,
   Post,
   Put,
   QueryParam,
@@ -15,6 +17,7 @@ import { User } from '../entities/User';
 
 import {
   ACCESS_TOKEN_SECRET,
+  DELETE_USER_AFTER_TIME,
   JWT_ACCESS_EXPIRATION_MS,
   JWT_REFRESH_EXPIRATION_MS,
 } from '../config/config';
@@ -118,6 +121,13 @@ export class AuthController {
           role: user.role.name as RoleName,
         };
 
+        // If deleted remove the mark
+        if (user.isDeleted) {
+          user.isDeleted = false;
+          user.deleteAt = null;
+          await User.save(user);
+        }
+
         const session = newSession(claims);
         setRefreshTokenCookie(response, session.refreshToken);
 
@@ -208,6 +218,44 @@ export class AuthController {
     }
 
     return helper(response).userNotFound();
+  }
+
+  @Post('/forcelogout')
+  async forceLogout(@Req() request: Request, @Res() response: Response) {
+    const refreshToken = getRefreshTokenCookie(request);
+
+    if (refreshToken) {
+      const userSession = await UserSession.findOne({
+        where: { refreshToken },
+        relations: ['user', 'user.sessions'],
+      });
+
+      const user = userSession?.user;
+      if (user) {
+        await UserSession.remove(user.sessions);
+        return helper(response).success();
+      }
+    }
+
+    return helper(response).userNotFound();
+  }
+
+  @Delete('/delete/:id')
+  async deleteUser(@Param('id') id: number) {
+    const user = await User.findOne(id, { relations: ['sessions'] });
+    if (user && !user.isDeleted) {
+      const sanitizedUser = sanitizeUser(user);
+
+      // Mark user as deleted
+      user.isDeleted = true;
+      user.deleteAt = new Date(Date.now() + DELETE_USER_AFTER_TIME);
+      await User.save(user);
+
+      // Delete all the user sessions
+      await UserSession.remove(user.sessions);
+
+      return sanitizedUser;
+    }
   }
 
   @Get('/checkemail')

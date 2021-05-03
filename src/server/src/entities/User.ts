@@ -30,6 +30,9 @@ export class User extends BaseEntity {
   @Column({ unique: true })
   email!: string;
 
+  @Column({ default: false })
+  isDeleted!: boolean;
+
   @Column()
   hash!: string;
 
@@ -38,6 +41,9 @@ export class User extends BaseEntity {
 
   @CreateDateColumn()
   createdAt!: Date;
+
+  @Column({ type: 'datetime', nullable: true })
+  deleteAt!: Date | null;
 
   @ManyToOne(() => Role, (role) => role.user)
   @JoinColumn()
@@ -68,8 +74,8 @@ export class User extends BaseEntity {
     options?: FindOneOptions<User>
   ): Promise<User | undefined> {
     return User.findOne({
-      where: { email },
       ...options,
+      where: { email },
     });
   }
 }

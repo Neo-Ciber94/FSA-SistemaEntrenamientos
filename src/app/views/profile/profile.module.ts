@@ -9,12 +9,14 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { ChangePasswordComponent } from './change-password.component';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { ComponentsModule } from 'src/app/components/components.module';
+import { DeleteProfileComponent } from './delete-profile.component';
 
 @NgModule({
   declarations: [
     ProfileComponent,
     EditProfileComponent,
     ChangePasswordComponent,
+    DeleteProfileComponent,
   ],
   imports: [
     CommonModule,

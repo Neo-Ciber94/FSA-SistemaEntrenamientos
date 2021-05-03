@@ -1,11 +1,5 @@
 import { Injectable } from '@angular/core';
-import {
-  Router,
-  Resolve,
-  RouterStateSnapshot,
-  ActivatedRouteSnapshot,
-  ActivatedRoute,
-} from '@angular/router';
+import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
 import { UserDTO } from 'src/shared';
 import { AuthService } from '../services/auth.service';
 import { RedirectService } from '../services/redirect.service';

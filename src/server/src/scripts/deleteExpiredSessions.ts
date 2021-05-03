@@ -1,4 +1,4 @@
-import { DELETE_USER_SESSION_TIME } from '../config/config';
+import { ROUTINE_INTERVAL } from '../config';
 import { UserSession } from '../entities/UserSession';
 import { LOGGER } from '../utils/Logger';
 
@@ -15,5 +15,5 @@ export async function deleteExpiredSessions() {
 
 export function startDeleteExpiredSessionsRoutine() {
   LOGGER.info('Starting routine to delete expired user sessions');
-  setInterval(deleteExpiredSessions, DELETE_USER_SESSION_TIME);
+  setInterval(deleteExpiredSessions, ROUTINE_INTERVAL);
 }

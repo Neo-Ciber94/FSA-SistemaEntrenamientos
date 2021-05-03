@@ -8,6 +8,7 @@ import { CorsOptions } from 'cors';
 import { BASE_URL } from './config';
 import {
   startDeleteExpiredSessionsRoutine,
+  startPurgueDeletedUsers,
   authorizationChecker,
 } from './scripts';
 import { LOGGER } from './utils/Logger';
@@ -45,6 +46,7 @@ createConnection()
   .then(async (connection) => {
     await connection.runMigrations();
     startDeleteExpiredSessionsRoutine();
+    startPurgueDeletedUsers();
     LOGGER.info(`Connected to database "${connection.driver.database}"`);
   })
   .catch((err) => {
