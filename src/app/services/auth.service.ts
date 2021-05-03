@@ -101,17 +101,13 @@ export class AuthService {
       .post<void, void>('auth/logout', undefined, {
         responseType: 'text',
       })
-      .pipe(
-        tap(() => {
-          // Clearn data
-          this.currentUserBehaviourSubject.next(undefined);
-          this.tokenBehaviourSubject.next(undefined);
-        })
-      );
+      .pipe(tap(() => this.clearUserData()));
   }
 
   delete(id: number) {
-    return this.apiService.delete<void>(`auth/delete/${id}`);
+    return this.apiService
+      .delete<void>(`auth/delete/${id}`)
+      .pipe(tap(() => this.clearUserData()));
   }
 
   checkEmail(email: string) {
@@ -172,6 +168,11 @@ export class AuthService {
         this.setSession(newSession);
       });
     }, new Date(this.tokenExpiration!).getTime());
+  }
+
+  private clearUserData() {
+    this.currentUserBehaviourSubject.next(undefined);
+    this.tokenBehaviourSubject.next(undefined);
   }
 
   private setSession(session: Session) {

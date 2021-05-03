@@ -242,7 +242,7 @@ export class AuthController {
 
   @Delete('/delete/:id')
   async deleteUser(@Param('id') id: number) {
-    const user = await User.findOne(id, { relations: ['sessions'] });
+    const user = await User.findOne(id, { relations: ['sessions', 'role'] });
     if (user && !user.isDeleted) {
       const sanitizedUser = sanitizeUser(user);
 

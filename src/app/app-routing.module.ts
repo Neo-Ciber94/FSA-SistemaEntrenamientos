@@ -20,6 +20,7 @@ const routes: Routes = [
     path: 'profile',
     resolve: { user: UserResolver },
     canActivate: [IsLoggedGuard],
+    runGuardsAndResolvers: 'always',
     loadChildren: () =>
       import('./views/profile/profile.module').then((m) => m.ProfileModule),
   },

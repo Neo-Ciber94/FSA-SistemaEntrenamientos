@@ -53,10 +53,11 @@ export class EditProfileComponent implements OnInit {
       });
 
       this.formErrors = new FormErrors(this.formGroup);
+      this.startModalChangeWarning();
     });
   }
 
-  startRoleChangeModal() {
+  startModalChangeWarning() {
     this.formGroup.controls.role.valueChanges.subscribe((newRole) => {
       if (this.previousRole !== newRole) {
         Swal.fire({
