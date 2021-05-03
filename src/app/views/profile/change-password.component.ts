@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
-import { FormErrors, FormGroupTyped } from 'src/app/utils';
+import { FormErrors, FormGroupTyped, Promises } from 'src/app/utils';
 import {
   MIN_PASSWORD_LENGTH,
   UserDTO,

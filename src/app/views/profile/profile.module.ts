@@ -8,6 +8,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ChangePasswordComponent } from './change-password.component';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
+import { ComponentsModule } from 'src/app/components/components.module';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
     ProfileRoutingModule,
     NgbModule,
     ReactiveFormsModule,
+    ComponentsModule,
     SweetAlert2Module.forChild(),
   ],
 })

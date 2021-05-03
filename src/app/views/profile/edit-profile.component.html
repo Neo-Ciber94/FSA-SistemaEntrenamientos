@@ -24,10 +24,9 @@
     </div>
 
     <!-- Role -->
-    <div>
+    <div *ngIf="isAdmin">
       <label class="form-label fw-bold">Role</label>
       <select
-        *ngIf="isAdmin"
         [ngClass]="getInvalidClass('role')"
         class="form-select btn btn-danger"
         formControlName="role"
@@ -76,3 +75,5 @@
     </div>
   </form>
 </div>
+
+<app-loading *ngIf="isSubmitting"></app-loading>
