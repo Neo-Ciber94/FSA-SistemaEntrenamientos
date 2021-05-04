@@ -6,8 +6,8 @@ export interface CourseDTO {
   id: number;
   name: string;
   description?: string;
-  isAvailable: boolean;
   teacher: UserDTO;
+  isAvailable: boolean;
   classes: CourseClassDTO[];
   students: StudentCourseDTO[];
 }

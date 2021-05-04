@@ -5,7 +5,7 @@ import { LOGGER } from '../utils';
 export async function purgueDeletedUsers() {
   const deleteResult = await User.createQueryBuilder()
     .delete()
-    .where('isDeleted AND :now > deleteAt', { now: new Date() })
+    .where('canDelete AND isDeleted AND :now > deleteAt', { now: new Date() })
     .execute();
 
   if (deleteResult && deleteResult.affected && deleteResult.affected > 0) {

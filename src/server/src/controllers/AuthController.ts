@@ -123,8 +123,7 @@ export class AuthController {
 
         // If deleted remove the mark
         if (user.isDeleted) {
-          user.isDeleted = false;
-          user.deleteAt = null;
+          user.markAsDeleted(false);
           await User.save(user);
         }
 
@@ -247,8 +246,7 @@ export class AuthController {
       const sanitizedUser = sanitizeUser(user);
 
       // Mark user as deleted
-      user.isDeleted = true;
-      user.deleteAt = new Date(Date.now() + DELETE_USER_AFTER_TIME);
+      user.markAsDeleted(true);
       await User.save(user);
 
       // Delete all the user sessions

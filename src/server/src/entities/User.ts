@@ -11,6 +11,7 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { DELETE_USER_AFTER_TIME } from '../config/config';
 import { RoleName, UserDTO, UserSignup } from '../types';
 import { encryptPassword } from '../utils';
 import { Role } from './Role';
@@ -32,6 +33,9 @@ export class User extends BaseEntity {
 
   @Column({ default: false })
   isDeleted!: boolean;
+
+  @Column({ default: true })
+  canDelete!: boolean;
 
   @Column()
   hash!: string;
@@ -55,6 +59,16 @@ export class User extends BaseEntity {
   })
   @JoinColumn()
   sessions!: UserSession[];
+
+  markAsDeleted(deleteUser: boolean) {
+    if (deleteUser) {
+      this.isDeleted = true;
+      this.deleteAt = new Date(Date.now() + DELETE_USER_AFTER_TIME);
+    } else {
+      this.isDeleted = false;
+      this.deleteAt = null;
+    }
+  }
 
   static async createWithRole(data: UserSignup & { roleName: RoleName }) {
     const role = await Role.findOne({ where: { name: data.roleName } });

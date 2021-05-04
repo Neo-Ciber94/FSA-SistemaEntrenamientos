@@ -1,3 +1,4 @@
+export * from './CourseNew';
 export * from './dto';
 export * from './ResponseBody';
 export * from './RoleName';

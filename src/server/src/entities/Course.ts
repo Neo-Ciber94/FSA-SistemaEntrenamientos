@@ -1,5 +1,7 @@
 import {
+  AfterInsert,
   BaseEntity,
+  BeforeRemove,
   Column,
   Entity,
   JoinColumn,
@@ -36,4 +38,36 @@ export class Course extends BaseEntity {
   @OneToMany(() => CourseStudent, (student) => student.course)
   @JoinColumn()
   students!: CourseStudent[];
+
+  @AfterInsert()
+  async markTeacherCanDeleteToFalse() {
+    const teacher = await this.getTeacher();
+    teacher.canDelete = false;
+    await User.save(teacher);
+  }
+
+  @BeforeRemove()
+  async checkIfCanDeleteTeacher() {
+    let teacher = await this.getTeacher();
+
+    if (teacher.isDeleted && teacher.canDelete === false) {
+      const numberOfCourses = await Course.count({ where: { teacher } });
+      if (numberOfCourses === 0) {
+        teacher.markAsDeleted(true);
+        await User.save(teacher);
+      }
+    }
+  }
+
+  private async getTeacher() {
+    let teacher: User = this.teacher;
+
+    if (!teacher) {
+      teacher = await Course.findOne(this.id, { relations: ['teacher'] }).then(
+        (e) => e!.teacher
+      );
+    }
+
+    return teacher;
+  }
 }

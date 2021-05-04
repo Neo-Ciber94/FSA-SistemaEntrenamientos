@@ -4,6 +4,8 @@ import {
   Component,
   OnInit,
 } from '@angular/core';
+import { CourseService } from 'src/app/services';
+import { CourseDTO } from 'src/shared';
 
 @Component({
   selector: 'app-courses',
@@ -11,9 +13,14 @@ import {
   styleUrls: ['./courses.component.css'],
 })
 export class CoursesComponent implements OnInit {
-  constructor() {}
+  courses: CourseDTO[] = [];
+  constructor(private courseService: CourseService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.courseService.getAllCourses().subscribe((data) => {
+      this.courses = data;
+    });
+  }
 
   edit() {
     console.log('EDIT COURSE');
