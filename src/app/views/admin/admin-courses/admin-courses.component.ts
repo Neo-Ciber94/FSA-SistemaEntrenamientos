@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
-import { CoursesService } from 'src/app/services/courses.service';
+import { CourseService } from 'src/app/services/course.service';
 import { CourseDTO } from 'src/shared';
 
 @Component({
@@ -13,7 +13,7 @@ export class AdminCoursesComponent implements OnInit, OnDestroy {
   dtOptions: DataTables.Settings = {};
   dtTrigger = new Subject<any>();
 
-  constructor(private courseServices: CoursesService) {}
+  constructor(private courseServices: CourseService) {}
 
   ngOnInit(): void {
     this.courseServices.getAllCourses().subscribe((data) => {
