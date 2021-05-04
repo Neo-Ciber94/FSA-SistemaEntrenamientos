@@ -10,7 +10,7 @@ import { CourseCreateComponent } from './course-create/course-create.component';
 import { ClassesModule } from '../classes/classes.module';
 import { RouterModule } from '@angular/router';
 import { DirectivesModule } from 'src/app/directives/directives.module';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -26,6 +26,7 @@ import { FormsModule } from '@angular/forms';
     DirectivesModule,
     NgbModule,
     FormsModule,
+    ReactiveFormsModule,
   ],
 })
 export class CourseModule {}

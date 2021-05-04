@@ -29,14 +29,18 @@ export class CourseService {
   }
 
   getCourseById(id: number) {
-    return this.apiService.get<CourseDTO | undefined>(`courses/${id}`);
+    return this.apiService.get<CourseDTO>(`courses/${id}`);
   }
 
-  createCourse(course: Omit<CourseDTO, 'id'>): Observable<CourseDTO> {
+  createCourse(
+    course: Pick<CourseDTO, 'name' | 'description'>
+  ): Observable<CourseDTO> {
     return this.apiService.post('courses', course);
   }
 
-  updateCourses(course: CourseDTO): Observable<CourseDTO> {
+  updateCourse(
+    course: Pick<CourseDTO, 'id' | 'name' | 'description'>
+  ): Observable<CourseDTO> {
     return this.apiService.put('courses', course);
   }
 
