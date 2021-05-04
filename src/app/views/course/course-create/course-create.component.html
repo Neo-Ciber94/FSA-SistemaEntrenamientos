@@ -30,12 +30,35 @@
       </div>
       <div>
         <input
+          [ngClass]="getInvalidClass(formGroup.controlNames.name)"
           [formControl]="formGroup.controls.name"
           class="form-control"
           type="text"
           placeholder="Course name"
           required
         />
+      </div>
+      <div class="invalid-feedback">
+        {{ getError(formGroup.controlNames.name) }}
+      </div>
+    </div>
+
+    <!-- Course teacher -->
+    <div class="form-group mb-4">
+      <div>
+        <label class="form-label fs-5 mb-0">Teacher</label>
+      </div>
+      <div>
+        <select
+          class="form-select"
+          [formControl]="formGroup.controls.teacherId"
+          required
+        >
+          <option hidden>Select a teacher...</option>
+          <option *ngFor="let user of teacherList" value="{{ user.id }}">
+            {{ user.firstName + " " + user.lastName }}
+          </option>
+        </select>
       </div>
     </div>
 

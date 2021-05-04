@@ -20,7 +20,13 @@
       <!-- Only for tutor -->
       <div class="course-actions">
         <!-- Create course -->
-        <a class="btn btn-danger me-3 fs-5" routerLink="new"> Create Course </a>
+        <a
+          class="btn btn-danger me-3 fs-5"
+          routerLink="new"
+          *ngIf="showCourses === ShowCourses.MyCourses && canWrite()"
+        >
+          Create Course
+        </a>
 
         <!-- Search -->
         <input
@@ -55,6 +61,7 @@
         <!-- Courses card -->
         <app-card
           *ngFor="let course of getCourses()"
+          [isReadonly]="!canWrite()"
           theme="light"
           iconClass="fs-5"
           [editRoute]="[course.id, 'edit']"

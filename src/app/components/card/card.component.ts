@@ -23,4 +23,5 @@ export class CardComponent {
 
   @Input() iconClass = '';
   @Input() theme: 'red' | 'light' = 'red';
+  @Input() isReadonly = false;
 }

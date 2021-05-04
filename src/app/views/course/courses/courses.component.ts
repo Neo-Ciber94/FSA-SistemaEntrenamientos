@@ -32,6 +32,17 @@ export class CoursesComponent implements OnInit {
     return this._showCourses;
   }
 
+  canWrite() {
+    if (this.user.role === RoleName.Admin) {
+      return true;
+    }
+
+    return (
+      this.showCourses === ShowCourses.MyCourses &&
+      this.user.role === RoleName.Teacher
+    );
+  }
+
   constructor(
     private courseService: CourseService,
     private authService: AuthService

@@ -1,7 +1,9 @@
 import {
   AfterInsert,
   BaseEntity,
+  BeforeInsert,
   BeforeRemove,
+  BeforeUpdate,
   Column,
   Entity,
   JoinColumn,
@@ -9,10 +11,13 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { RoleName } from '../types';
 import { CourseClass } from './CourseClass';
 import { CourseStudent } from './CourseStudent';
 import { User } from './User';
 
+// TODO: Cannot add classes, assessments or lessons in a course with students,
+// while a course have students must be `readonly`
 @Entity()
 export class Course extends BaseEntity {
   @PrimaryGeneratedColumn()
@@ -27,6 +32,9 @@ export class Course extends BaseEntity {
   @Column({ default: false })
   isAvailable!: boolean;
 
+  @Column()
+  teacherId!: number;
+
   @OneToOne(() => User)
   @JoinColumn()
   teacher!: User;
@@ -39,11 +47,28 @@ export class Course extends BaseEntity {
   @JoinColumn()
   students!: CourseStudent[];
 
+  @BeforeInsert()
+  @BeforeUpdate()
+  async checkUserIsTeacher() {
+    const teacher = await this.getTeacher(['role']);
+
+    if (teacher == null) {
+      throw new Error('Teacher is null');
+    }
+
+    // FIXME: This should be enforced in the database
+    if (teacher.role.name !== RoleName.Teacher) {
+      throw new Error(
+        'Invalid role, a course can only be assignned to a teacher'
+      );
+    }
+  }
+
   @AfterInsert()
   async markTeacherCanDeleteToFalse() {
     const teacher = await this.getTeacher();
     teacher.canDelete = false;
-    await User.save(teacher);
+    return User.save(teacher);
   }
 
   @BeforeRemove()
@@ -59,13 +84,11 @@ export class Course extends BaseEntity {
     }
   }
 
-  private async getTeacher() {
-    let teacher: User = this.teacher;
+  private async getTeacher(relations: string[] = []) {
+    const teacher = await User.findOne(this.teacherId, { relations });
 
-    if (!teacher) {
-      teacher = await Course.findOne(this.id, { relations: ['teacher'] }).then(
-        (e) => e!.teacher
-      );
+    if (teacher == null) {
+      throw new Error(`teacher user with id '${this.teacherId}' not found`);
     }
 
     return teacher;

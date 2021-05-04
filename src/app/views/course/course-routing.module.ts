@@ -1,10 +1,16 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { IsTeacherGuard } from 'src/app/guards/is-teacher.guard';
+import { CourseResolver } from 'src/app/resolvers/course.resolver';
 import { AdminCoursesComponent } from '../admin/admin-courses/admin-courses.component';
 import { adminCoursesUrlMatcher } from './adminCoursesUrlMatcher';
 import { CourseCreateComponent } from './course-create/course-create.component';
 import { CourseDetailsComponent } from './course-details/course-details.component';
 import { CoursesComponent } from './courses/courses.component';
+
+const courseResolver = {
+  course: CourseResolver,
+};
 
 const routes: Routes = [
   {
@@ -21,6 +27,7 @@ const routes: Routes = [
   },
   {
     path: ':course_id/edit',
+    resolve: courseResolver,
     component: CourseCreateComponent,
   },
   {
@@ -30,6 +37,7 @@ const routes: Routes = [
   },
   {
     path: ':course_id',
+    resolve: courseResolver,
     component: CourseDetailsComponent,
   },
 ];

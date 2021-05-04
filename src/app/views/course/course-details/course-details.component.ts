@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
+import { CourseService } from 'src/app/services/course.service';
+import { CourseDTO } from 'src/shared';
 
 @Component({
   selector: 'app-course-details',
@@ -7,15 +10,31 @@ import { Router } from '@angular/router';
   styleUrls: ['./course-details.component.css'],
 })
 export class CourseDetailsComponent implements OnInit {
-  constructor(private router: Router) {}
+  canEdit = false;
+  course!: CourseDTO;
 
-  ngOnInit(): void {}
+  constructor(
+    private courseService: CourseService,
+    private authService: AuthService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
 
-  edit() {
-    console.log('EDIT COURSE');
+  ngOnInit(): void {
+    this.route.data.subscribe((data) => {
+      console.assert(data.course);
+      this.course = data.course;
+      this.canEdit =
+        this.course.teacher.id === this.authService.getCurrentUser()?.id ||
+        this.authService.isAdmin();
+    });
   }
 
-  delete() {
-    console.log('DELETE COURSE');
+  isAdmin() {
+    return this.authService.isAdmin();
+  }
+
+  deleteClass(classId: number) {
+    console.log('DELETE CLASS', classId);
   }
 }

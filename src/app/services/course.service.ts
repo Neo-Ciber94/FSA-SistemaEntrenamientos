@@ -1,17 +1,18 @@
+import { HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { AssessmentDTO, CourseClassDTO, CourseDTO } from 'src/shared';
+import {
+  AssessmentDTO,
+  CourseClassDTO,
+  CourseDTO,
+  CourseNew,
+} from 'src/shared';
 import { ApiService } from './api.service';
 
-// type CourseInclude = 'classes' | 'students';
-
-// function getIncludes(include: CourseInclude[]) {
-//   if (include.length === 0) {
-//     return '';
-//   }
-
-//   return `?include=${include.join(',')}`;
-// }
+type CourseOptions = {
+  includeClasses?: boolean;
+  includeStudents?: boolean;
+};
 
 @Injectable({
   providedIn: 'root',
@@ -19,32 +20,56 @@ import { ApiService } from './api.service';
 export class CourseService {
   constructor(private apiService: ApiService) {}
 
-  getAllCourses(userId?: number) {
+  getAllCourses(userId?: number, options: CourseOptions = {}) {
+    const params = courseQueryParams({ ...options, userId });
+
     if (userId) {
-      return this.apiService.get<CourseDTO[]>(
-        `courses?user=${userId}&include=teacher`
-      );
+      return this.apiService.get<CourseDTO[]>(`courses?user=${userId}`, {
+        params,
+      });
     }
-    return this.apiService.get<CourseDTO[]>('courses?include=teacher');
+
+    return this.apiService.get<CourseDTO[]>('courses', { params });
   }
 
-  getCourseById(id: number) {
-    return this.apiService.get<CourseDTO>(`courses/${id}`);
+  getCourseById(id: number, options: CourseOptions = {}) {
+    const params = courseQueryParams(options);
+    return this.apiService.get<CourseDTO>(`courses/${id}`, { params });
   }
 
-  createCourse(
-    course: Pick<CourseDTO, 'name' | 'description'>
-  ): Observable<CourseDTO> {
+  createCourse(course: CourseNew): Observable<CourseDTO> {
     return this.apiService.post('courses', course);
   }
 
-  updateCourse(
-    course: Pick<CourseDTO, 'id' | 'name' | 'description'>
-  ): Observable<CourseDTO> {
+  updateCourse(course: CourseNew): Observable<CourseDTO> {
     return this.apiService.put('courses', course);
   }
 
   deleteCourse(id: number): Observable<CourseDTO> {
     return this.apiService.delete(`courses/${id}`);
   }
+}
+
+function courseQueryParams(options: CourseOptions & { userId?: number }) {
+  let params = new HttpParams();
+
+  if (options.userId) {
+    params = params.append('user', options.userId.toString());
+  }
+
+  const includes: string[] = ['teacher'];
+
+  if (options.includeClasses) {
+    includes.push('classes');
+  }
+
+  if (options.includeStudents) {
+    includes.push('students');
+  }
+
+  if (includes.length > 0) {
+    params = params.append('include', includes.join(','));
+  }
+
+  return params;
 }

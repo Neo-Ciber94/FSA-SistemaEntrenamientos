@@ -1,48 +1,49 @@
 <ol class="breadcrumb">
   <li class="breadcrumb-item"><a routerLink="/courses">Courses</a></li>
-  <li class="breadcrumb-item active" aria-current="page">Web Design</li>
+  <li class="breadcrumb-item active" aria-current="page">{{ course.name }}</li>
 </ol>
 
 <div class="container p-4 text-left">
   <div>
-    <div class="mb-4 fs-5">
+    <div class="mb-4 fs-5" *ngIf="isAdmin()">
       <strong>ID</strong>
-      <div>1</div>
+      <div>{{ course.id }}</div>
     </div>
 
     <div class="mb-4 fs-5">
       <strong>Teacher</strong>
-      <div>Alex Alexander</div>
+      <div>{{ course.teacher.firstName + " " + course.teacher.lastName }}</div>
     </div>
 
     <div class="mb-4 fs-5">
       <strong>Course</strong>
-      <div>Web Design</div>
+      <div>{{ course.name }}</div>
     </div>
 
-    <div class="mb-4 fs-5">
+    <div class="mb-4 fs-5" *ngIf="course.description">
       <strong>Description</strong>
       <p class="text-justify">
-        Web design encompasses many different skills and disciplines in the
-        production and maintenance of websites. The different areas of web
-        design include web graphic design; user interface design (UI design);
-        authoring, including standardised code and proprietary software; user
-        experience design (UX design); and search engine optimization. Often
-        many individuals will work in teams covering different aspects of the
-        design process, although some designers will cover them all.
+        {{ course.description }}
       </p>
     </div>
 
     <div class="mb-4 fs-5">
       <strong>Classes</strong>
       <div>
-        <a class="btn btn-danger fs-5 mt-2" routerLink="classes/new"
+        <a
+          class="btn btn-danger fs-5 mt-2"
+          routerLink="classes/new"
+          *ngIf="canEdit"
           >Create Class</a
         >
 
-        <div class="my-2 course-card" *repeat="5">
-          <app-card editRoute="classes/1/edit" (onDelete)="delete()">
-            <a routerLink="classes/1"> Basic HTML </a>
+        <div class="my-2 course-card" *ngFor="let class of course.classes">
+          <app-card
+            [isReadonly]="!canEdit"
+            [editRoute]="['classes', class.id, 'edit']"
+            (onDelete)="deleteClass(class.id)"
+          >
+            <a [routerLink]="['classes', class.id]"> {{ class.name }} </a>
           </app-card>
         </div>
       </div>

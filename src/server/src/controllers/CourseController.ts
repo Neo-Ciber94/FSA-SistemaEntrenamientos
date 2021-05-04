@@ -32,6 +32,8 @@ export class CourseController {
       return includes.error;
     }
 
+    let courses: Course[] | null = null;
+
     if (userId) {
       const user = await User.findOne(userId, {
         relations: ['role', ...includes.relations],
@@ -41,29 +43,36 @@ export class CourseController {
       }
 
       switch (user.role.name) {
-        case RoleName.Student: {
-          const result = CourseStudent.createQueryBuilder()
-            .where('userId = :id', { id: userId })
-            .loadAllRelationIds({ relations: ['user', ...includes.relations] })
-            .getMany()
-            .then((e) => e.map((e) => e.user));
-
-          return result;
-        }
-        case RoleName.Teacher: {
-          const result = Course.createQueryBuilder()
-            .loadAllRelationIds({ relations: includes.relations })
-            .where('teacherId = :id', { id: userId })
-            .getMany();
-
-          return result;
-        }
+        case RoleName.Student:
+          {
+            courses = await CourseStudent.createQueryBuilder()
+              .where('userId = :id', { id: userId })
+              // .loadAllRelationIds({
+              //   relations: ['user', ...includes.relations],
+              // })
+              .getMany()
+              .then((e) => e.map((e) => e.course));
+          }
+          break;
+        case RoleName.Teacher:
+          {
+            courses = await Course.createQueryBuilder()
+              .loadAllRelationIds({ relations: includes.relations })
+              .leftJoinAndSelect('course', '')
+              .where('teacherId = :id', { id: userId })
+              .getMany();
+          }
+          break;
         default:
           break;
       }
     }
 
-    return Course.find({ relations: includes.relations });
+    if (courses == null) {
+      courses = await Course.find({ relations: includes.relations });
+    }
+
+    return courses;
   }
 
   @Get('/:id')
@@ -90,7 +99,9 @@ export class CourseController {
 
     const course = Course.create(newCourse);
     course.teacher = teacher;
-    return await Course.save(course);
+
+    console.log(course);
+    return Course.save(course);
   }
 
   @Put()
@@ -107,14 +118,19 @@ export class CourseController {
       return response.status(404).send('course not found');
     }
 
-    return Course.save(course);
+    const courseToUpdate = Course.create(newCourse);
+    return Course.save(courseToUpdate);
   }
 
   @Delete('/:id')
-  async deleteCourse(@Param('id') id: number) {
-    const course = await Course.findOne(id);
+  async deleteCourse(@Param('id') id: number, @Res() response: Response) {
+    const course = await Course.findOne(id, { relations: ['students'] });
     if (!course) {
       return null;
+    }
+
+    if (course.students.length > 0) {
+      return response.status(400).send('Cannot delete a course with students');
     }
 
     await Course.delete(course);
