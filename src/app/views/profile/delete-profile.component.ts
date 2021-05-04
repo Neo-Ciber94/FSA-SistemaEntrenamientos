@@ -37,6 +37,10 @@ export class DeleteProfileComponent implements OnInit {
 
   async delete() {
     await this.authService.delete(this.user.id).toPromise();
-    await this.router.navigateByUrl('/');
+    if (this.authService.isCurrentUser(this.user)) {
+      await this.router.navigateByUrl('/');
+    } else {
+      this.back();
+    }
   }
 }

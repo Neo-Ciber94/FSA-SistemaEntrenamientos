@@ -14,6 +14,7 @@
         <th>First Name</th>
         <th>Last Name</th>
         <th>Role</th>
+        <th>Status</th>
         <th>Actions</th>
       </tr>
     </thead>
@@ -23,6 +24,9 @@
         <td>{{ user.firstName }}</td>
         <td>{{ user.lastName }}</td>
         <td>{{ user.role | titlecase }}</td>
+        <td [ngClass]="user.isDeleted ? 'text-danger' : 'text-success'">
+          {{ user.isDeleted ? "Deleted" : "Active" }}
+        </td>
         <td>
           <a class="btn btn-danger mx-1" [routerLink]="['/profile', user.id]">
             View
@@ -33,7 +37,13 @@
           >
             Edit
           </a>
-          <button class="btn btn-danger mx-1">Delete</button>
+          <a
+            [ngClass]="user.isDeleted ? 'btn-secondary disabled' : 'btn-danger'"
+            class="btn mx-1"
+            [routerLink]="['/profile', user.id, 'delete']"
+          >
+            Delete
+          </a>
         </td>
       </tr>
     </tbody>

@@ -20,9 +20,14 @@ export class UserResolver implements Resolve<UserDTO> {
 
     if (id) {
       const user = await this.userService.getUserById(id).toPromise();
-      if (user) {
+      if (user && !user.isDeleted) {
         return user;
       } else {
+        if (user) {
+          const invalidRoute = this.authService.getProfileRoute(user);
+          return this.redirectService.navigateTo404(invalidRoute) as never;
+        }
+
         return this.redirectService.navigateTo404() as never;
       }
     }

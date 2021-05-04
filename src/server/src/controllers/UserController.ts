@@ -14,9 +14,6 @@ export class UserController {
   async getAllUsers() {
     const users = await User.find({
       relations: ['role'],
-      where: {
-        isDeleted: false,
-      },
     });
 
     return sanitizeUser(users);
@@ -27,9 +24,6 @@ export class UserController {
   async getUser(@Param('id') id: number) {
     const user = await User.findOne(id, {
       relations: ['role'],
-      where: {
-        isDeleted: false,
-      },
     });
     return user && sanitizeUser(user);
   }
@@ -39,9 +33,6 @@ export class UserController {
   async searchUser(@QueryParam('email') email: string) {
     const user = await User.findByEmail(email, {
       relations: ['role'],
-      where: {
-        isDeleted: false,
-      },
     });
 
     return user && sanitizeUser(user);

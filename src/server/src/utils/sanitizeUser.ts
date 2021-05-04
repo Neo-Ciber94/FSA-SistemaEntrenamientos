@@ -21,6 +21,7 @@ export function sanitizeUser(user: User | User[]): UserDTO | UserDTO[] {
       email: user.email,
       createdAt: user.createdAt,
       role: user.role.name as RoleName,
+      isDeleted: user.isDeleted,
     };
   }
 }

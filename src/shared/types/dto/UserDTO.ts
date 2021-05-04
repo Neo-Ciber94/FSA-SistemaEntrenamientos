@@ -7,4 +7,5 @@ export interface UserDTO {
   email: string;
   createdAt: Date;
   role: RoleName;
+  isDeleted: boolean;
 }

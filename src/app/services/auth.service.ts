@@ -101,13 +101,13 @@ export class AuthService {
       .post<void, void>('auth/logout', undefined, {
         responseType: 'text',
       })
-      .pipe(tap(() => this.clearUserData()));
+      .pipe(tap(() => this.clearUserData(this.getCurrentUser()!.id)));
   }
 
   delete(id: number) {
     return this.apiService
       .delete<void>(`auth/delete/${id}`)
-      .pipe(tap(() => this.clearUserData()));
+      .pipe(tap(() => this.clearUserData(id)));
   }
 
   checkEmail(email: string) {
@@ -170,9 +170,11 @@ export class AuthService {
     }, new Date(this.tokenExpiration!).getTime());
   }
 
-  private clearUserData() {
-    this.currentUserBehaviourSubject.next(undefined);
-    this.tokenBehaviourSubject.next(undefined);
+  private clearUserData(userId: number) {
+    if (this.getCurrentUser()?.id === userId) {
+      this.currentUserBehaviourSubject.next(undefined);
+      this.tokenBehaviourSubject.next(undefined);
+    }
   }
 
   private setSession(session: Session) {

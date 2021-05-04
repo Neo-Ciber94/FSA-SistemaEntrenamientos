@@ -26,8 +26,8 @@ export class RedirectService {
     }
   }
 
-  async navigateTo404() {
-    const currentUrl = this.location.path();
+  async navigateTo404(invalidUrl?: string) {
+    const currentUrl = invalidUrl || this.location.path();
     return this.router
       .navigateByUrl('/404', {
         skipLocationChange: true,
