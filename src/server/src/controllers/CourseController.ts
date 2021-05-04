@@ -5,6 +5,6 @@ import { AbstractBaseController } from './AbstractBaseController';
 @JsonController('/courses')
 export class CourseController extends AbstractBaseController<Course> {
   constructor() {
-    super(Course.getRepository());
+    super(Course.getRepository(), ['classes', 'students']);
   }
 }

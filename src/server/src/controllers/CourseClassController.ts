@@ -48,7 +48,7 @@ export class CourseClassController {
   @Post('/:id/classes')
   async addClass(
     @Param('id') courseId: number,
-    @Body() courseClassDTO: CourseClassDTO,
+    @Body() courseClassDTO: Pick<CourseClassDTO, 'name' | 'description'>,
     @Res() response: Response
   ) {
     const course = await Course.findOne(courseId, { relations: ['students'] });
@@ -69,7 +69,7 @@ export class CourseClassController {
   @Post('/:id/classes')
   async updateClass(
     @Param('id') courseId: number,
-    @Body() courseClassDTO: CourseClassDTO
+    @Body() courseClassDTO: Pick<CourseClassDTO, 'name' | 'description'>
   ) {
     const course = await Course.findOne(courseId);
 
