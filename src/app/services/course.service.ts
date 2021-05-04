@@ -19,8 +19,13 @@ import { ApiService } from './api.service';
 export class CourseService {
   constructor(private apiService: ApiService) {}
 
-  getAllCourses() {
-    return this.apiService.get<CourseDTO[]>('courses');
+  getAllCourses(userId?: number) {
+    if (userId) {
+      return this.apiService.get<CourseDTO[]>(
+        `courses?user=${userId}&include=teacher`
+      );
+    }
+    return this.apiService.get<CourseDTO[]>('courses?include=teacher');
   }
 
   getCourseById(id: number) {

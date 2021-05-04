@@ -63,7 +63,9 @@ export class AuthService {
   }
 
   update(userUpdate: UserUpdate) {
-    return this.apiService.put<UserUpdate, UserDTO>('auth/update', userUpdate);
+    return this.apiService
+      .put<UserUpdate, UserDTO>('auth/update', userUpdate)
+      .pipe(tap(this.setUserData));
   }
 
   changePassword(userPasswordUpdate: UserPasswordUpdate) {
@@ -168,6 +170,12 @@ export class AuthService {
         this.setSession(newSession);
       });
     }, new Date(this.tokenExpiration!).getTime());
+  }
+
+  private setUserData(user: UserDTO) {
+    if (this.getCurrentUser()?.id === user.id) {
+      this.currentUserBehaviourSubject.next(user);
+    }
   }
 
   private clearUserData(userId: number) {

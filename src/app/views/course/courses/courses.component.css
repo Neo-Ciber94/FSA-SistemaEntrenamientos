@@ -90,3 +90,13 @@ app-card:hover * {
 .course-select a.active {
   color: var(--primary-color);
 }
+
+.center-vertical {
+  height: 100px;
+  transform: translateY(50%);
+}
+
+.empty-courses-text {
+  opacity: 0.6;
+  font-weight: 200;
+}
