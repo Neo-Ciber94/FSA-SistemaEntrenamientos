@@ -65,7 +65,7 @@
           theme="light"
           iconClass="fs-5"
           [editRoute]="[course.id, 'edit']"
-          [deleteRoute]="[course.id, 'delete']"
+          (onDelete)="onDelete(course)"
         >
           <a [routerLink]="[course.id]">
             <h5>{{ course.name }}</h5>

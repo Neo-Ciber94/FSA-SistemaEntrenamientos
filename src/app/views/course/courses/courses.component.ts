@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 import { CourseService } from 'src/app/services/course.service';
 import { CourseDTO, RoleName, UserDTO } from 'src/shared';
+import Swal from 'sweetalert2';
 
 enum ShowCourses {
   MyCourses,
@@ -56,6 +57,23 @@ export class CoursesComponent implements OnInit {
 
   get ShowCourses() {
     return ShowCourses;
+  }
+
+  onDelete(course: CourseDTO) {
+    Swal.fire({
+      title: 'Delete course',
+      showCancelButton: true,
+      confirmButtonColor: 'var(--danger)',
+      html: `
+      Are you sure you want to delete the course <strong>${course.name}</strong>?
+      `,
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        await this.courseService.deleteCourse(course.id).toPromise();
+        const index = this.courses.findIndex((e) => e.id === course.id);
+        this.courses.splice(index, 1);
+      }
+    });
   }
 
   getCourses() {
