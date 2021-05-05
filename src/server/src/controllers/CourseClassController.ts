@@ -10,25 +10,36 @@ import {
 import { Response } from 'express';
 import { Course, CourseClass } from '../entities';
 import { CourseClassDTO, CourseClassNew } from '../types';
+import { Includes } from './Includes';
+import { loadRelationsAndQuery } from '../utils';
 
 @JsonController('/courses')
 export class CourseClassController {
+  private readonly includes = new Includes([
+    'course',
+    'assessments',
+    'lessons',
+  ]);
+
   @Get('/:id/classes')
   async getAllClasses(
     @Param('id') courseId: number,
+    @Res() response: Response,
     @QueryParam('include') include?: string
   ) {
+    const result = this.includes.getRelations(response, include);
+    if (result.type === 'invalid') {
+      return result.error;
+    }
+
     const course = await Course.findOne(courseId);
     if (!course) {
       return undefined;
     }
 
-    const relations = include ? include.split(',') : [];
     const courseClasses = await CourseClass.find({
-      relations,
-      where: {
-        course,
-      },
+      relations: result.relations,
+      where: { course },
     });
 
     return courseClasses;
@@ -37,12 +48,27 @@ export class CourseClassController {
   @Get('/:id/classes/:classId')
   async getClassById(
     @Param('id') courseId: number,
-    @Param('classId') classId: number
+    @Param('classId') classId: number,
+    @Res() response: Response,
+    @QueryParam('include') include?: string
   ) {
-    const course = await Course.findOne(courseId);
-    if (course) {
-      return course.classes.find((c) => c.id === classId);
+    const result = this.includes.getRelations(response, include);
+    if (result.type === 'invalid') {
+      return result.error;
     }
+
+    const courseClass = await loadRelationsAndQuery(
+      CourseClass.getRepository(),
+      'courseClass',
+      result.relations
+    )
+      .where('courseClass.courseId = :courseId AND courseClass.id = :classId', {
+        courseId,
+        classId,
+      })
+      .getOne();
+
+    return courseClass;
   }
 
   @Post('/:id/classes')

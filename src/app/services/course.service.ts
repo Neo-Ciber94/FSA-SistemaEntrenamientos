@@ -1,15 +1,10 @@
 import { HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import {
-  AssessmentDTO,
-  CourseClassDTO,
-  CourseDTO,
-  CourseNew,
-} from 'src/shared';
+import { CourseDTO, CourseNew } from 'src/shared';
 import { ApiService } from './api.service';
 
-type CourseOptions = {
+type CourseQueryOptions = {
   includeClasses?: boolean;
   includeStudents?: boolean;
 };
@@ -20,8 +15,8 @@ type CourseOptions = {
 export class CourseService {
   constructor(private apiService: ApiService) {}
 
-  getAllCourses(userId?: number, options: CourseOptions = {}) {
-    const params = courseQueryParams({ ...options, userId });
+  getAllCourses(userId?: number, options: CourseQueryOptions = {}) {
+    const params = getCourseQueryParams({ ...options, userId });
 
     if (userId) {
       return this.apiService.get<CourseDTO[]>(`courses?user=${userId}`, {
@@ -32,8 +27,8 @@ export class CourseService {
     return this.apiService.get<CourseDTO[]>('courses', { params });
   }
 
-  getCourseById(id: number, options: CourseOptions = {}) {
-    const params = courseQueryParams(options);
+  getCourseById(id: number, options: CourseQueryOptions = {}) {
+    const params = getCourseQueryParams(options);
     return this.apiService.get<CourseDTO>(`courses/${id}`, { params });
   }
 
@@ -50,7 +45,9 @@ export class CourseService {
   }
 }
 
-function courseQueryParams(options: CourseOptions & { userId?: number }) {
+function getCourseQueryParams(
+  options: CourseQueryOptions & { userId?: number }
+) {
   let params = new HttpParams();
 
   if (options.userId) {

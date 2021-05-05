@@ -16,6 +16,7 @@ import { Response } from 'express';
 import { CourseNew, RoleName } from '../types';
 import { CourseStudent } from '../entities/CourseStudent';
 import { Includes } from './Includes';
+import { loadRelationsAndQuery } from '../utils';
 
 @JsonController('/courses')
 export class CourseController {
@@ -27,16 +28,16 @@ export class CourseController {
     @QueryParam('userId') userId?: number,
     @QueryParam('include') include?: string
   ) {
-    const includes = this.includes.getRelations(response, include);
-    if (includes.type === 'invalid') {
-      return includes.error;
+    const result = this.includes.getRelations(response, include);
+    if (result.type === 'invalid') {
+      return result.error;
     }
 
     let courses: Course[] | null = null;
 
     if (userId) {
       const user = await User.findOne(userId, {
-        relations: ['role', ...includes.relations],
+        relations: ['role', ...result.relations],
       });
       if (user == null) {
         return null;
@@ -45,20 +46,23 @@ export class CourseController {
       switch (user.role.name) {
         case RoleName.Student:
           {
-            courses = await CourseStudent.createQueryBuilder()
-              .where('userId = :id', { id: userId })
-              // .loadAllRelationIds({
-              //   relations: ['user', ...includes.relations],
-              // })
+            courses = await loadRelationsAndQuery(
+              CourseStudent.getRepository(),
+              'courseStudent',
+              ['user', ...result.relations]
+            )
+              .where('courseStudent.userId = :id', { id: userId })
               .getMany()
               .then((e) => e.map((e) => e.course));
           }
           break;
         case RoleName.Teacher:
           {
-            courses = await Course.createQueryBuilder()
-              .loadAllRelationIds({ relations: includes.relations })
-              .leftJoinAndSelect('course', '')
+            courses = await loadRelationsAndQuery(
+              Course.getRepository(),
+              'course',
+              result.relations
+            )
               .where('teacherId = :id', { id: userId })
               .getMany();
           }
@@ -69,7 +73,7 @@ export class CourseController {
     }
 
     if (courses == null) {
-      courses = await Course.find({ relations: includes.relations });
+      courses = await Course.find({ relations: result.relations });
     }
 
     return courses;

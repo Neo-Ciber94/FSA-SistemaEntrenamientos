@@ -46,6 +46,10 @@ export class ClassCreateComponent implements OnInit {
 
       if (this.isEditing) {
         this.courseClass = data.courseClass;
+        this.formGroup.controls.name.setValue(this.courseClass?.name);
+        this.formGroup.controls.description.setValue(
+          this.courseClass?.description
+        );
       }
     });
   }

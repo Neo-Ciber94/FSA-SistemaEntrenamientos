@@ -1,8 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { CanNotLoadGuard } from 'src/app/guards/can-not-load.guard';
+import { ClassResolver } from 'src/app/resolvers/class.resolver';
 import { ClassCreateComponent } from './class-create/class-create.component';
 import { ClassDetailsComponent } from './class-details/class-details.component';
+
+const classResolver = {
+  courseClass: ClassResolver,
+};
 
 const routes: Routes = [
   {
@@ -15,20 +20,24 @@ const routes: Routes = [
     component: ClassCreateComponent,
   },
   {
-    path: ':class_id',
+    path: ':classId',
+    resolve: classResolver,
     component: ClassDetailsComponent,
   },
   {
-    path: ':class_id/edit',
+    path: ':classId/edit',
+    resolve: classResolver,
     component: ClassCreateComponent,
   },
   {
-    path: ':class_id/lessons',
+    path: ':classId/lessons',
+    resolve: classResolver,
     loadChildren: () =>
       import('../lessons/lessons.module').then((m) => m.LessonsModule),
   },
   {
-    path: ':class_id/assessments',
+    path: ':classId/assessments',
+    resolve: classResolver,
     loadChildren: () =>
       import('../assessments/assessments.module').then(
         (m) => m.AssessmentsModule

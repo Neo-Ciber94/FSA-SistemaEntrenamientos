@@ -1,19 +1,17 @@
 <ol class="breadcrumb">
   <li class="breadcrumb-item"><a routerLink="/courses">Courses</a></li>
-  <li class="breadcrumb-item"><a routerLink="/courses/1">Web Design</a></li>
-  <li class="breadcrumb-item active">Basic HTML</li>
+  <li class="breadcrumb-item">
+    <a [routerLink]="['/courses', courseClass.courseId]">{{
+      courseClass.course.name
+    }}</a>
+  </li>
+  <li class="breadcrumb-item active">{{ courseClass.name }}</li>
 </ol>
 
 <div class="container p-3 d-flex flex-column justify-content-center">
-  <h4>Basic HTML</h4>
+  <h4>{{ courseClass.name }}</h4>
   <p>
-    The HyperText Markup Language, or HTML is the standard markup language for
-    documents designed to be displayed in a web browser. It can be assisted by
-    technologies such as Cascading Style Sheets (CSS) and scripting languages
-    such as JavaScript. Web browsers receive HTML documents from a web server or
-    from local storage and render the documents into multimedia web pages. HTML
-    describes the structure of a web page semantically and originally included
-    cues for the appearance of the document.
+    {{ courseClass.description }}
   </p>
 
   <h3 class="text-center">Tasks</h3>
@@ -30,9 +28,13 @@
     </div>
   </div>
 
-  <div class="class-card my-1" *repeat="2">
-    <app-card theme="light" iconClass="fs-5" editRoute="lessons/2/edit">
-      <a routerLink="lessons/2">
+  <div class="class-card my-1" *ngFor="let task of classTasks">
+    <app-card
+      theme="light"
+      iconClass="fs-5"
+      [editRoute]="[task.type, task.id, 'edit']"
+    >
+      <a [routerLink]="[task.type, task.id]">
         <div class="d-flex flex-row align-items-center card-title">
           <div class="me-3">
             <!-- Checkmark only for students -->
@@ -40,25 +42,24 @@
             <!-- <i class="far fa-check-circle fs-4"></i> -->
             <!-- <i class="far fa-circle fs-4"></i> -->
           </div>
-          <div class="fs-5">HTML and HTML5</div>
+          <div class="fs-5">{{ task.id }}</div>
         </div>
       </a>
     </app-card>
   </div>
 
-  <div class="class-card my-1" *repeat="2">
-    <app-card theme="light" iconClass="fs-5" editRoute="assessments/2/edit">
-      <a routerLink="assessments/2">
+  <!-- <div class="class-card my-1" *repeat="2">
+    <app-card theme="light" iconClass="fs-5" editRoute="lessons/2/edit">
+      <a routerLink="lessons/2">
         <div class="d-flex flex-row align-items-center card-title">
           <div class="me-3">
-            <!-- Checkmark only for students -->
-            <!-- <i class="far fa-file-alt"></i> -->
-            <!-- <i class="far fa-check-circle fs-4"></i> -->
+            <i class="far fa-file-alt"></i>
+            <i class="far fa-check-circle fs-4"></i>
             <i class="far fa-circle fs-4"></i>
           </div>
-          <div class="fs-5">HTML and Headers</div>
+          <div class="fs-5">HTML and HTML5</div>
         </div>
       </a>
     </app-card>
-  </div>
+  </div> -->
 </div>

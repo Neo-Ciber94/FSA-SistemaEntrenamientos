@@ -1,7 +1,13 @@
+import { HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CourseClassDTO, AssessmentDTO, CourseClassNew } from 'src/shared';
+import { CourseClassDTO, CourseClassNew } from 'src/shared';
 import { ApiService } from './api.service';
+
+interface ClassQueryOptions {
+  includeAssessmentss?: boolean;
+  includeLessons?: boolean;
+}
 
 @Injectable({
   providedIn: 'root',
@@ -9,13 +15,23 @@ import { ApiService } from './api.service';
 export class CourseClassService {
   constructor(private apiService: ApiService) {}
 
-  getClasses(courseId: number) {
-    return this.apiService.get<CourseClassDTO[]>(`courses/${courseId}/classes`);
+  getClasses(courseId: number, options: ClassQueryOptions = {}) {
+    const params = getClassQueryParams(options);
+    return this.apiService.get<CourseClassDTO[]>(
+      `courses/${courseId}/classes`,
+      { params }
+    );
   }
 
-  getClassById(courseId: number, classId: number) {
+  getClassById(
+    courseId: number,
+    classId: number,
+    options: ClassQueryOptions = {}
+  ) {
+    const params = getClassQueryParams(options);
     return this.apiService.get<CourseClassDTO>(
-      `courses/${courseId}/classes/${classId}`
+      `courses/${courseId}/classes/${classId}`,
+      { params }
     );
   }
 
@@ -36,4 +52,22 @@ export class CourseClassService {
   deleteClass(courseId: number, classId: number): Observable<CourseClassDTO> {
     return this.apiService.delete(`courses/${courseId}/classes/${classId}`);
   }
+}
+
+function getClassQueryParams(options: ClassQueryOptions) {
+  const include: string[] = ['course'];
+
+  if (options.includeAssessmentss) {
+    include.push('assessments');
+  }
+
+  if (options.includeLessons) {
+    include.push('lessons');
+  }
+
+  return new HttpParams({
+    fromObject: {
+      include: include.join(','),
+    },
+  });
 }

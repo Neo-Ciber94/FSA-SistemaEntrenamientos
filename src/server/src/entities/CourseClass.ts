@@ -22,6 +22,9 @@ export class CourseClass extends BaseEntity {
   @Column({ type: 'text', nullable: true })
   description!: string | null;
 
+  @Column()
+  courseId!: number;
+
   @ManyToOne(() => Course, (course) => course.classes)
   @JoinColumn()
   course!: Course;
