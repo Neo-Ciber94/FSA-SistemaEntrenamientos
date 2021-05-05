@@ -1,6 +1,8 @@
 <ol class="breadcrumb">
   <li class="breadcrumb-item"><a routerLink="/courses">Courses</a></li>
-  <li class="breadcrumb-item"><a routerLink="/courses/1">Web Design</a></li>
+  <li class="breadcrumb-item">
+    <a [routerLink]="['/courses', course.id]">{{ course.name }}</a>
+  </li>
   <li
     class="breadcrumb-item active"
     [innerText]="isEditing ? 'Edit Class' : 'Create Class'"
@@ -8,14 +10,19 @@
 </ol>
 
 <div class="container form-container p-4">
-  <form>
+  <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
     <!-- Course id -->
-    <div class="form-group mb-4">
+    <div class="form-group mb-4" *ngIf="isAdmin()">
       <div>
         <label class="form-label fs-5 mb-0">ID</label>
       </div>
       <div>
-        <input class="form-control" type="text" value="1" readonly />
+        <input
+          class="form-control"
+          type="text"
+          value="{{ courseClass?.id }}"
+          readonly
+        />
       </div>
     </div>
 
@@ -26,11 +33,16 @@
       </div>
       <div>
         <input
+          [ngClass]="getInvalidClass(formGroup.controlNames.name)"
+          [formControl]="formGroup.controls.name"
           class="form-control"
           type="text"
           placeholder="Class name"
           required
         />
+        <div class="invalid-feedback">
+          {{ getError(formGroup.controlNames.name) }}
+        </div>
       </div>
     </div>
 
@@ -40,7 +52,11 @@
         <label class="form-label fs-5 mb-0">Description</label>
       </div>
       <div>
-        <textarea class="form-control" rows="4"></textarea>
+        <textarea
+          [formControl]="formGroup.controls.description"
+          class="form-control"
+          rows="4"
+        ></textarea>
       </div>
     </div>
 

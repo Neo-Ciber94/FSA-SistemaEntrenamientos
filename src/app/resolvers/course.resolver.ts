@@ -15,7 +15,7 @@ export class CourseResolver implements Resolve<CourseDTO> {
   ) {}
 
   resolve(route: ActivatedRouteSnapshot): Observable<CourseDTO> {
-    const id = route.params.course_id;
+    const id = route.params.courseId;
     if (id) {
       return this.courseService.getCourseById(id, { includeClasses: true });
     } else {

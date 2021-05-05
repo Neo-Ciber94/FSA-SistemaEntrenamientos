@@ -26,17 +26,18 @@ const routes: Routes = [
     component: CourseCreateComponent,
   },
   {
-    path: ':course_id/edit',
+    path: ':courseId/edit',
     resolve: courseResolver,
     component: CourseCreateComponent,
   },
   {
-    path: ':course_id/classes',
+    path: ':courseId/classes',
+    resolve: courseResolver,
     loadChildren: () =>
       import('../classes/classes.module').then((m) => m.ClassesModule),
   },
   {
-    path: ':course_id',
+    path: ':courseId',
     resolve: courseResolver,
     component: CourseDetailsComponent,
   },

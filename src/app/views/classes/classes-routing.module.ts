@@ -15,20 +15,20 @@ const routes: Routes = [
     component: ClassCreateComponent,
   },
   {
-    path: ':id',
+    path: ':class_id',
     component: ClassDetailsComponent,
   },
   {
-    path: ':id/edit',
+    path: ':class_id/edit',
     component: ClassCreateComponent,
   },
   {
-    path: ':id/lessons',
+    path: ':class_id/lessons',
     loadChildren: () =>
       import('../lessons/lessons.module').then((m) => m.LessonsModule),
   },
   {
-    path: ':id/assessments',
+    path: ':class_id/assessments',
     loadChildren: () =>
       import('../assessments/assessments.module').then(
         (m) => m.AssessmentsModule

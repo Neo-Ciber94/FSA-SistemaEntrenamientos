@@ -9,7 +9,7 @@ import {
 } from 'routing-controllers';
 import { Response } from 'express';
 import { Course, CourseClass } from '../entities';
-import { CourseClassDTO } from '../types';
+import { CourseClassDTO, CourseClassNew } from '../types';
 
 @JsonController('/courses')
 export class CourseClassController {
@@ -48,10 +48,14 @@ export class CourseClassController {
   @Post('/:id/classes')
   async addClass(
     @Param('id') courseId: number,
-    @Body() courseClassDTO: Pick<CourseClassDTO, 'name' | 'description'>,
+    @Body() courseClassDTO: CourseClassNew,
     @Res() response: Response
   ) {
     const course = await Course.findOne(courseId, { relations: ['students'] });
+
+    if (course?.id !== courseClassDTO.courseId) {
+      throw new Error('Course id missmatch');
+    }
 
     if (course && course.students.length > 0) {
       return response
@@ -69,10 +73,13 @@ export class CourseClassController {
   @Post('/:id/classes')
   async updateClass(
     @Param('id') courseId: number,
-    @Body() courseClassDTO: Pick<CourseClassDTO, 'name' | 'description'>
+    @Body() courseClassDTO: CourseClassNew
   ) {
     const course = await Course.findOne(courseId);
 
+    if (course?.id !== courseClassDTO.courseId) {
+      throw new Error('Course id missmatch');
+    }
     if (course) {
       const courseClass = CourseClass.create(courseClassDTO);
       courseClass.course = course;

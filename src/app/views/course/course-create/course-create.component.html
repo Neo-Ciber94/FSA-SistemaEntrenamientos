@@ -7,9 +7,9 @@
 </ol>
 
 <div class="container form-container p-4">
-  <form (ngSubmit)="onSubmit()">
+  <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
     <!-- Course id -->
-    <div class="form-group mb-4" *ngIf="isEditing">
+    <div class="form-group mb-4" *ngIf="isAdmin()">
       <div>
         <label class="form-label fs-5 mb-0">ID</label>
       </div>
@@ -37,9 +37,9 @@
           placeholder="Course name"
           required
         />
-      </div>
-      <div class="invalid-feedback">
-        {{ getError(formGroup.controlNames.name) }}
+        <div class="invalid-feedback">
+          {{ getError(formGroup.controlNames.name) }}
+        </div>
       </div>
     </div>
 

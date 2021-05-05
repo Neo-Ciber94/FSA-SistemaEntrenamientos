@@ -69,7 +69,7 @@
         >
           <a [routerLink]="[course.id]">
             <h5>{{ course.name }}</h5>
-            <div>
+            <div *ngIf="isAdmin()">
               ID:<span class="ms-2 fw-lighter">{{ course.id }}</span>
             </div>
             <div>

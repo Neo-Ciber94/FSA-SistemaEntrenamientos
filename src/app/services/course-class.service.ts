@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CourseClassDTO, AssessmentDTO } from 'src/shared';
+import { CourseClassDTO, AssessmentDTO, CourseClassNew } from 'src/shared';
 import { ApiService } from './api.service';
 
 @Injectable({
@@ -19,18 +19,18 @@ export class CourseClassService {
     );
   }
 
-  createClass(
-    courseId: number,
-    newClass: Omit<CourseClassDTO, 'id'>
-  ): Observable<CourseClassDTO> {
-    return this.apiService.post(`courses/${courseId}/classes`, newClass);
+  createClass(newClass: CourseClassNew): Observable<CourseClassDTO> {
+    return this.apiService.post(
+      `courses/${newClass.courseId}/classes`,
+      newClass
+    );
   }
 
-  updateClass(
-    courseId: number,
-    newClass: CourseClassDTO
-  ): Observable<CourseClassDTO> {
-    return this.apiService.put(`courses/${courseId}/classes`, newClass);
+  updateClass(newClass: CourseClassNew): Observable<CourseClassDTO> {
+    return this.apiService.put(
+      `courses/${newClass.courseId}/classes`,
+      newClass
+    );
   }
 
   deleteClass(courseId: number, classId: number): Observable<CourseClassDTO> {

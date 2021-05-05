@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 import { ClassCreateComponent } from './class-create/class-create.component';
 import { ClassesRoutingModule } from './classes-routing.module';
 import { DirectivesModule } from 'src/app/directives/directives.module';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [ClassDetailsComponent, ClassCreateComponent],
@@ -15,6 +16,7 @@ import { DirectivesModule } from 'src/app/directives/directives.module';
     RouterModule,
     ClassesRoutingModule,
     DirectivesModule,
+    ReactiveFormsModule,
   ],
   exports: [ClassDetailsComponent, ClassCreateComponent],
 })

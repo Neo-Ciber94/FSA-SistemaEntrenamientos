@@ -71,7 +71,9 @@ export class CourseCreateComponent implements OnInit {
   }
 
   getInvalidClass(controlName: string) {
-    return this.formErrors.getError(controlName) ? 'is-invalid' : '';
+    return this.wasValidated && this.formErrors.getError(controlName)
+      ? 'is-invalid'
+      : '';
   }
 
   getError(controlName: string) {

@@ -44,6 +44,10 @@ export class CoursesComponent implements OnInit {
     );
   }
 
+  isAdmin() {
+    return this.authService.isAdmin();
+  }
+
   constructor(
     private courseService: CourseService,
     private authService: AuthService
