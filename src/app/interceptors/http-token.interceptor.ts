@@ -69,8 +69,7 @@ export class HttpTokenInterceptor implements HttpInterceptor {
     error: any,
     caught: ObservableInput<any>
   ): ObservableInput<any> {
-    console.error(error);
     this.router.navigateByUrl('/login');
-    return caught;
+    throw error;
   }
 }
