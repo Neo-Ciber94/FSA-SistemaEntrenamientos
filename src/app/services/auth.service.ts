@@ -65,7 +65,7 @@ export class AuthService {
   update(userUpdate: UserUpdate) {
     return this.apiService
       .put<UserUpdate, UserDTO>('auth/update', userUpdate)
-      .pipe(tap(this.setUserData));
+      .pipe(tap((user) => this.setUserData(user)));
   }
 
   changePassword(userPasswordUpdate: UserPasswordUpdate) {

@@ -7,8 +7,9 @@ import {
   Post,
   Put,
 } from 'routing-controllers';
-import { Course, CourseClass, Lesson } from '../entities';
-import { LessonDTO } from '../types';
+
+import { ClassTask, Course, CourseClass, Lesson } from '../entities';
+import { LessonDTO, TaskType } from '../types';
 
 @JsonController('/courses/:courseId/classes/:classId/lessons')
 export class ClassLessonController {
@@ -17,14 +18,27 @@ export class ClassLessonController {
     @Param('courseId') courseId: number,
     @Param('classId') classId: number
   ) {
-    const course = await Course.findOne(courseId);
-    const courseClass = await CourseClass.findOne(classId, {
-      relations: ['lessons'],
-    });
+    // const course = await Course.findOne(courseId);
+    // const courseClass = await CourseClass.findOne(classId, {
+    //   relations: ['lessons'],
+    // });
 
-    if (course && courseClass) {
-      return courseClass.lessons;
-    }
+    // if (course && courseClass) {
+    //   return courseClass.lessons;
+    // }
+
+    const lessons = await Lesson.createQueryBuilder('lesson')
+      .leftJoinAndSelect('lesson.classTask', 'classTask')
+      .leftJoinAndSelect('classTask.courseClass', 'courseClass')
+      .leftJoinAndSelect('courseClass.course', 'course')
+      .andWhere('courseClass.courseId = course.id')
+      .where('course.id = :courseId AND courseClass.id = :classId', {
+        courseId,
+        classId,
+      })
+      .getMany();
+
+    return lessons;
   }
 
   @Get('/:id')
@@ -33,14 +47,31 @@ export class ClassLessonController {
     @Param('classId') classId: number,
     @Param('id') lessonId: number
   ) {
-    const course = await Course.findOne(courseId);
-    const courseClass = await CourseClass.findOne(classId, {
-      relations: ['lessons'],
-    });
+    // const course = await Course.findOne(courseId);
+    // const courseClass = await CourseClass.findOne(classId, {
+    //   relations: ['lessons'],
+    // });
 
-    if (course && courseClass) {
-      return courseClass.lessons.find((e) => e.id === lessonId);
-    }
+    // if (course && courseClass) {
+    //   return courseClass.lessons.find((e) => e.id === lessonId);
+    // }
+
+    const lesson = await Lesson.createQueryBuilder('lesson')
+      .leftJoinAndSelect('lesson.classTask', 'classTask')
+      .leftJoinAndSelect('classTask.courseClass', 'courseClass')
+      .leftJoinAndSelect('courseClass.course', 'course')
+      .andWhere('courseClass.courseId = course.id')
+      .where(
+        'course.id = :courseId AND courseClass.id = :classId AND lesson.id = :lessonId',
+        {
+          courseId,
+          classId,
+          lessonId,
+        }
+      )
+      .getOne();
+
+    return lesson;
   }
 
   @Post()
@@ -50,11 +81,23 @@ export class ClassLessonController {
     @Body() lessonDTO: LessonDTO
   ) {
     const course = await Course.findOne(courseId);
-    const courseClass = await CourseClass.findOne(classId);
+    const courseClass = await CourseClass.findOne(classId, {
+      relations: ['course'],
+    });
 
-    if (course && courseClass) {
+    if (course && courseClass && course.id === courseClass.courseId) {
       const newLesson = Lesson.create(lessonDTO);
-      newLesson.lessonClass = courseClass;
+
+      const order = await ClassTask.nextOrder(classId);
+      const newTask = ClassTask.create({
+        taskType: TaskType.Lesson,
+        courseClass,
+        order,
+      });
+
+      newLesson.classTask = newTask;
+
+      await ClassTask.save(newTask);
       return Lesson.save(newLesson);
     }
   }
@@ -90,7 +133,12 @@ export class ClassLessonController {
     const courseClass = await CourseClass.findOne(classId);
     const lessonToDelete = await Lesson.findOne(lessonId);
 
-    if (course && courseClass && lessonToDelete) {
+    if (
+      course &&
+      courseClass &&
+      course.id === courseClass.courseId &&
+      lessonToDelete
+    ) {
       await Lesson.delete(lessonToDelete);
       return lessonToDelete;
     }

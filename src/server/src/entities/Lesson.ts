@@ -3,21 +3,16 @@ import {
   Column,
   Entity,
   JoinColumn,
-  ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
   Unique,
 } from 'typeorm';
-import { CourseClass } from './CourseClass';
+import { ClassTask } from './ClassTask';
 
 @Entity()
-@Unique(['title', 'lessonClass'])
 export class Lesson extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
-
-  @ManyToOne(() => CourseClass, (courseClass) => courseClass.lessons)
-  @JoinColumn()
-  lessonClass!: CourseClass;
 
   @Column()
   title!: string;
@@ -27,4 +22,11 @@ export class Lesson extends BaseEntity {
 
   @Column()
   isMarkdown!: boolean;
+
+  @Column()
+  classTaskId!: number;
+
+  @OneToOne(() => ClassTask, { onDelete: 'CASCADE' })
+  @JoinColumn()
+  classTask!: ClassTask;
 }

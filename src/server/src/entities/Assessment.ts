@@ -5,14 +5,15 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   Unique,
 } from 'typeorm';
+import { ClassTask } from './ClassTask';
 import { CourseClass } from './CourseClass';
 import { Question } from './Question';
 
 @Entity()
-@Unique(['title', 'courseClass'])
 export class Assessment extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
@@ -20,11 +21,14 @@ export class Assessment extends BaseEntity {
   @Column()
   title!: string;
 
-  @ManyToOne(() => CourseClass, (courseClass) => courseClass.assessments)
-  @JoinColumn()
-  courseClass!: CourseClass;
-
   @OneToMany(() => Question, (question) => question.assessment)
   @JoinColumn()
   questions!: Question[];
+
+  @Column()
+  classTaskId!: number;
+
+  @OneToOne(() => ClassTask, { onDelete: 'CASCADE' })
+  @JoinColumn()
+  classTask!: ClassTask;
 }

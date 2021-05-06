@@ -54,7 +54,7 @@
           [formControl]="formGroup.controls.teacherId"
           required
         >
-          <option hidden>Select a teacher...</option>
+          <option value="" hidden selected>Select a teacher...</option>
           <option *ngFor="let user of teacherList" value="{{ user.id }}">
             {{ user.firstName + " " + user.lastName }}
           </option>

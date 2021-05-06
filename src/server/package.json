@@ -2,6 +2,7 @@
   "name": "sistema-entrenamientos-api",
   "version": "1.0.0",
   "description": "Backend de Sistema Entrenamientos",
+  "private": true,
   "repository": {
     "url": "https://github.com/Neo-Ciber94/FSA-SistemaEntrenamientos/tree/main/src/server"
   },
@@ -10,7 +11,7 @@
     "start": "nodemon --watch ./src --ext ts --exec ts-node ./src/app.ts"
   },
   "keywords": [],
-  "author": "",
+  "author": "Freddy L. Paredes",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.0.1",

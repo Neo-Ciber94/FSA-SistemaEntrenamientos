@@ -1,12 +1,16 @@
 import { HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CourseClassDTO, CourseClassNew } from 'src/shared';
+import {
+  ClassTaskDTO,
+  CourseClassDTO,
+  CourseClassNew,
+  TaskType,
+} from 'src/shared';
 import { ApiService } from './api.service';
 
 interface ClassQueryOptions {
-  includeAssessmentss?: boolean;
-  includeLessons?: boolean;
+  includeTasks?: boolean;
 }
 
 @Injectable({
@@ -35,6 +39,18 @@ export class CourseClassService {
     );
   }
 
+  getTasks(courseId: number, classId: number, taskType?: TaskType) {
+    if (taskType) {
+      return this.apiService.get<ClassTaskDTO[]>(
+        `courses/${courseId}/classes/${classId}/tasks?type=${taskType}`
+      );
+    }
+
+    return this.apiService.get<ClassTaskDTO[]>(
+      `courses/${courseId}/classes/${classId}/tasks`
+    );
+  }
+
   createClass(newClass: CourseClassNew): Observable<CourseClassDTO> {
     return this.apiService.post(
       `courses/${newClass.courseId}/classes`,
@@ -57,12 +73,8 @@ export class CourseClassService {
 function getClassQueryParams(options: ClassQueryOptions) {
   const include: string[] = ['course'];
 
-  if (options.includeAssessmentss) {
-    include.push('assessments');
-  }
-
-  if (options.includeLessons) {
-    include.push('lessons');
+  if (options.includeTasks) {
+    include.push('tasks');
   }
 
   return new HttpParams({

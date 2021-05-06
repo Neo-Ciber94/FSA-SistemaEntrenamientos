@@ -32,9 +32,9 @@
     <app-card
       theme="light"
       iconClass="fs-5"
-      [editRoute]="[task.type, task.id, 'edit']"
+      [editRoute]="[getRoute(task), 'edit']"
     >
-      <a [routerLink]="[task.type, task.id]">
+      <a [routerLink]="getRoute(task)">
         <div class="d-flex flex-row align-items-center card-title">
           <div class="me-3">
             <!-- Checkmark only for students -->
@@ -42,7 +42,7 @@
             <!-- <i class="far fa-check-circle fs-4"></i> -->
             <!-- <i class="far fa-circle fs-4"></i> -->
           </div>
-          <div class="fs-5">{{ task.id }}</div>
+          <div class="fs-5">{{ task.classTask.id }}</div>
         </div>
       </a>
     </app-card>

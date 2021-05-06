@@ -3,4 +3,5 @@ export interface LessonDTO {
   title: string;
   content: string;
   isMarkdown: boolean;
+  classTaskId: number;
 }

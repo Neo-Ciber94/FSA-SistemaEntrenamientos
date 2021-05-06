@@ -1,13 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CourseClassService } from 'src/app/services/course-class.service';
-import { CourseClassDTO } from 'src/shared';
-
-interface ClassTask {
-  id: number;
-  name: string;
-  type: 'assessments' | 'lessons';
-}
+import { ClassTaskDTO, CourseClassDTO, TaskType } from 'src/shared';
 
 @Component({
   selector: 'app-class-details',
@@ -16,7 +10,7 @@ interface ClassTask {
 })
 export class ClassDetailsComponent implements OnInit {
   courseClass!: CourseClassDTO;
-  classTasks: ClassTask[] = [];
+  classTasks: ClassTaskDTO[] = [];
 
   constructor(
     private classService: CourseClassService,
@@ -27,6 +21,23 @@ export class ClassDetailsComponent implements OnInit {
     this.route.data.subscribe((data) => {
       console.assert(data.courseClass, data);
       this.courseClass = data.courseClass;
+
+      this.classService
+        .getTasks(this.courseClass.courseId, this.courseClass.id)
+        .subscribe((tasks) => {
+          this.classTasks = tasks;
+        });
     });
+  }
+
+  getRoute(classTask: ClassTaskDTO) {
+    switch (classTask.taskType) {
+      case TaskType.Assessment:
+        return `assessments/${classTask.classTask.id}`;
+      case TaskType.Lesson:
+        return `lessons/${classTask.classTask.id}`;
+      default:
+        throw new Error(`Invalid task type: ${classTask}`);
+    }
   }
 }

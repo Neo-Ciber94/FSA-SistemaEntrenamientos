@@ -8,7 +8,7 @@ import {
 } from 'routing-controllers';
 import { Response } from 'express';
 import { Course, User, CourseStudent } from '../entities';
-import { RoleName } from '../types';
+import { RoleName, TaskType } from '../types';
 import { MIN_NUMBER_OF_CLASS_ASSESSMENTS } from '../config';
 
 @JsonController('/courses')
@@ -41,7 +41,7 @@ export class CourseStudentController {
     @Res() response: Response
   ) {
     const course = await Course.findOne(courseId, {
-      relations: ['assessments'],
+      relations: ['classes', 'classes.tasks'],
     });
 
     if (course && !canAcceptStudents(course)) {
@@ -72,7 +72,7 @@ export class CourseStudentController {
     @Res() response: Response
   ) {
     const course = await Course.findOne(courseId, {
-      relations: ['classes', 'classes.assessments'],
+      relations: ['classes', 'classes.tasks'],
     });
     const student = await CourseStudent.findOne(studentId, {
       relations: ['assessmentAnswers'],
@@ -88,7 +88,9 @@ export class CourseStudentController {
       // a course is considered complete if all the assessments were taken
       let numberOfCourseAssessments = 0;
       for (const c of course.classes) {
-        numberOfCourseAssessments += c.assessments.length;
+        numberOfCourseAssessments += c.tasks.filter(
+          (e) => e.taskType === TaskType.Assessment
+        ).length;
       }
 
       if (numberOfCourseAssessments !== student.assessmentAnswers.length) {
@@ -112,7 +114,9 @@ function canAcceptStudents(course: Course) {
   console.assert(classes, 'classes courses are not loaded');
 
   for (const classCourse of classes) {
-    const assessments = classCourse.assessments;
+    const assessments = classCourse.tasks.filter(
+      (e) => e.taskType === TaskType.Assessment
+    );
     if (assessments.length < MIN_NUMBER_OF_CLASS_ASSESSMENTS) {
       return false;
     }

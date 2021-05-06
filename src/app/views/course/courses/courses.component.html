@@ -57,7 +57,7 @@
       </div>
 
       <!-- Courses -->
-      <div class="courses-list">
+      <div class="courses-list" *ngIf="!isLoading">
         <!-- Courses card -->
         <app-card
           *ngFor="let course of getCourses()"

@@ -5,6 +5,7 @@ export * from './ResponseBody';
 export * from './RoleName';
 export * from './Session';
 export * from './StatusCode';
+export * from './TaskType';
 export * from './UserLogin';
 export * from './UserPasswordUpdate';
 export * from './UserSignup';

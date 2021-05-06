@@ -53,7 +53,7 @@ export class CourseCreateComponent implements OnInit {
 
     if (!this.isAdmin()) {
       this.teacher = this.authService.getCurrentUser()!;
-      console.assert(this.teacher.role === RoleName.Teacher);
+      this.formGroup.controls.teacherId.setValue(this.teacher.id);
     }
 
     this.userService

@@ -15,11 +15,7 @@ import { loadRelationsAndQuery } from '../utils';
 
 @JsonController('/courses')
 export class CourseClassController {
-  private readonly includes = new Includes([
-    'course',
-    'assessments',
-    'lessons',
-  ]);
+  private readonly includes = new Includes(['course', 'tasks']);
 
   @Get('/:id/classes')
   async getAllClasses(

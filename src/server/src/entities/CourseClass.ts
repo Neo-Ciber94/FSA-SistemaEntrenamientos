@@ -6,12 +6,15 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  Unique,
 } from 'typeorm';
 import { Assessment } from './Assessment';
+import { ClassTask } from './ClassTask';
 import { Course } from './Course';
 import { Lesson } from './Lesson';
 
 @Entity()
+@Unique('unique_class_name', ['name', 'courseId'])
 export class CourseClass extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
@@ -29,11 +32,7 @@ export class CourseClass extends BaseEntity {
   @JoinColumn()
   course!: Course;
 
-  @OneToMany(() => Lesson, (lesson) => lesson.lessonClass)
+  @OneToMany(() => ClassTask, (classTask) => classTask.courseClass)
   @JoinColumn()
-  lessons!: Lesson[];
-
-  @OneToMany(() => Assessment, (assessment) => assessment.courseClass)
-  @JoinColumn()
-  assessments!: Assessment[];
+  tasks!: ClassTask[];
 }

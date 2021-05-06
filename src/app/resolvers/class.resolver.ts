@@ -24,12 +24,7 @@ export class ClassResolver implements Resolve<CourseClassDTO> {
     const classId = route.params.classId;
 
     if (courseId && classId) {
-      return this.classService
-        .getClassById(courseId, classId, {
-          includeAssessmentss: true,
-          includeLessons: true,
-        })
-        .toPromise();
+      return this.classService.getClassById(courseId, classId).toPromise();
     } else {
       return this.redirectService.navigateTo404() as never;
     }

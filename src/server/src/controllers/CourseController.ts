@@ -104,7 +104,6 @@ export class CourseController {
     const course = Course.create(newCourse);
     course.teacher = teacher;
 
-    console.log(course);
     return Course.save(course);
   }
 
@@ -128,7 +127,10 @@ export class CourseController {
 
   @Delete('/:id')
   async deleteCourse(@Param('id') id: number, @Res() response: Response) {
-    const course = await Course.findOne(id, { relations: ['students'] });
+    const course = await Course.findOne(id, {
+      relations: ['teacher', 'students'],
+    });
+
     if (!course) {
       return null;
     }
@@ -137,7 +139,7 @@ export class CourseController {
       return response.status(400).send('Cannot delete a course with students');
     }
 
-    await Course.delete(course);
+    await Course.remove(course);
     return course;
   }
 }

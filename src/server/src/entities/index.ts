@@ -1,6 +1,7 @@
 export * from './Answer';
 export * from './Assessment';
 export * from './AssessmentAnswers';
+export * from './ClassTask';
 export * from './Course';
 export * from './CourseClass';
 export * from './CourseStudent';

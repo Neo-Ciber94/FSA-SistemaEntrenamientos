@@ -7,6 +7,7 @@ import {
   Column,
   Entity,
   JoinColumn,
+  ManyToOne,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -35,15 +36,19 @@ export class Course extends BaseEntity {
   @Column()
   teacherId!: number;
 
-  @OneToOne(() => User)
+  @ManyToOne(() => User)
   @JoinColumn()
   teacher!: User;
 
-  @OneToMany(() => CourseClass, (courseClass) => courseClass.course)
+  @OneToMany(() => CourseClass, (courseClass) => courseClass.course, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn()
   classes!: CourseClass[];
 
-  @OneToMany(() => CourseStudent, (student) => student.course)
+  @OneToMany(() => CourseStudent, (student) => student.course, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn()
   students!: CourseStudent[];
 
@@ -64,11 +69,11 @@ export class Course extends BaseEntity {
     }
   }
 
-  @AfterInsert()
+  @BeforeInsert()
   async markTeacherCanDeleteToFalse() {
     const teacher = await this.getTeacher();
     teacher.canDelete = false;
-    return User.save(teacher);
+    await User.save(teacher);
   }
 
   @BeforeRemove()

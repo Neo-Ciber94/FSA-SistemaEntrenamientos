@@ -1,4 +1,5 @@
 export * from './AssessmentDTO';
+export * from './ClassTaskDTO';
 export * from './CourseClassDTO';
 export * from './CourseDTO';
 export * from './CourseStudentDTO';
