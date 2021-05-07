@@ -7,5 +7,8 @@ export interface AssessmentDTO {
   title: string;
   description?: string;
   questions: QuestionDTO[];
+  courseClassId: number;
+  courseClass: CourseClassDTO;
+  classTaskId: number;
   classTask: ClassTaskDTO;
 }

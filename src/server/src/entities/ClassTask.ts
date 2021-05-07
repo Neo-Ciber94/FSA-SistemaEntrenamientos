@@ -1,5 +1,7 @@
 import {
+  AfterRemove,
   BaseEntity,
+  BeforeRemove,
   Check,
   Column,
   Entity,
@@ -37,5 +39,24 @@ export class ClassTask extends BaseEntity {
     return ClassTask.count({
       where: { courseClassId },
     });
+  }
+
+  @AfterRemove()
+  async checkOrder() {
+    const courseClass = await CourseClass.findOne(this.courseClassId, {
+      relations: ['tasks'],
+    });
+
+    if (courseClass == null) {
+      throw new Error(`Cannot find course with id ${this.courseClassId}`);
+    }
+
+    // We change the order of the tasks
+    const tasks = courseClass.tasks.sort((t1, t2) => t2.order - t1.order);
+    for (let i = this.order; i < tasks.length; i++) {
+      tasks[i].order = i;
+    }
+
+    await ClassTask.save(tasks);
   }
 }

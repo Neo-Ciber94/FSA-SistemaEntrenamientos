@@ -9,7 +9,7 @@ import {
 } from 'routing-controllers';
 
 import { ClassTask, Course, CourseClass, Lesson } from '../entities';
-import { LessonDTO, TaskType } from '../types';
+import { LessonDTO, LessonNew, TaskType } from '../types';
 
 @JsonController('/courses/:courseId/classes/:classId/lessons')
 export class ClassLessonController {
@@ -78,7 +78,7 @@ export class ClassLessonController {
   async createLesson(
     @Param('courseId') courseId: number,
     @Param('classId') classId: number,
-    @Body() lessonDTO: LessonDTO
+    @Body() lessonDTO: LessonNew
   ) {
     const course = await Course.findOne(courseId);
     const courseClass = await CourseClass.findOne(classId, {
@@ -106,7 +106,7 @@ export class ClassLessonController {
   async updateLesson(
     @Param('courseId') courseId: number,
     @Param('classId') classId: number,
-    @Body() lessonDTO: LessonDTO
+    @Body() lessonDTO: LessonNew
   ) {
     const course = await Course.findOne(courseId);
     const courseClass = await CourseClass.findOne(classId);

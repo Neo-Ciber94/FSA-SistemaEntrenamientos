@@ -1,4 +1,12 @@
-import { Get, JsonController, Param, QueryParam } from 'routing-controllers';
+import {
+  Body,
+  Get,
+  JsonController,
+  Param,
+  Put,
+  QueryParam,
+  Res,
+} from 'routing-controllers';
 import {
   Course,
   CourseClass,
@@ -6,7 +14,14 @@ import {
   Lesson,
   Assessment,
 } from '../entities';
-import { AssessmentDTO, ClassTaskDTO, LessonDTO, TaskType } from '../types';
+import {
+  AssessmentDTO,
+  ClassTaskDTO,
+  ClassTaskMove,
+  LessonDTO,
+  TaskType,
+} from '../types';
+import { Response } from 'express';
 
 @JsonController('/courses/:courseId/classes/:classId/tasks')
 export class ClassTaskController {
@@ -27,6 +42,55 @@ export class ClassTaskController {
         const result = await ClassTask.find();
         return mapToClassTaskDTO(result);
       }
+    }
+  }
+
+  @Put('/move')
+  async moveTask(
+    @Param('courseId') courseId: number,
+    @Param('classId') classId: number,
+    @Body() taskMove: ClassTaskMove,
+    @Res() response: Response
+  ) {
+    const task = await ClassTask.findOne(taskMove.classTaskId);
+    const course = await Course.findOne(courseId);
+    const courseClass = await CourseClass.findOne(classId, {
+      relations: ['tasks'],
+    });
+
+    if (
+      task &&
+      course &&
+      courseClass &&
+      task.courseClassId === courseClass.id &&
+      course.id === courseClass.courseId
+    ) {
+      const courseTasks = courseClass.tasks;
+
+      if (taskMove.order > courseTasks.length || taskMove.order < 0) {
+        return response
+          .status(400)
+          .send(
+            `Invalid task order, expected order between 0 and ${courseTasks.length}`
+          );
+      }
+
+      // Nothing to do
+      if (taskMove.order === task.order) {
+        return response.sendStatus(200);
+      }
+
+      // Swapping orders
+      const oldTask = courseTasks.find((e) => e.order === taskMove.order)!;
+      const tempOrder = task.order;
+      task.order = oldTask.order;
+      oldTask.order = -1;
+
+      await ClassTask.save(oldTask);
+      await ClassTask.save(task);
+
+      oldTask.order = tempOrder;
+      await ClassTask.save(oldTask);
     }
   }
 }

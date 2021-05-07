@@ -13,7 +13,7 @@ export async function purgueDeletedUsers() {
   }
 }
 
-export function startPurgueDeletedUsers() {
+export function startPurgueDeletedUsersRoutine() {
   LOGGER.info('Starting routine to purgue deleted users');
   setInterval(purgueDeletedUsers, ROUTINE_INTERVAL);
 }

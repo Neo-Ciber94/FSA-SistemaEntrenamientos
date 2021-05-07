@@ -14,6 +14,7 @@ import { CourseClass } from './CourseClass';
 import { Question } from './Question';
 
 @Entity()
+@Unique('unique_lesson_name', ['title', 'courseClassId'])
 export class Assessment extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
@@ -24,6 +25,13 @@ export class Assessment extends BaseEntity {
   @OneToMany(() => Question, (question) => question.assessment)
   @JoinColumn()
   questions!: Question[];
+
+  @Column()
+  courseClassId!: number;
+
+  @ManyToOne(() => CourseClass)
+  @JoinColumn()
+  courseClass!: CourseClass;
 
   @Column()
   classTaskId!: number;

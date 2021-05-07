@@ -1,13 +1,28 @@
-import { Delete, JsonController, Param, Post, Put } from 'routing-controllers';
+import { AssessmentNew } from '@shared/types';
+import {
+  Body,
+  Delete,
+  JsonController,
+  Param,
+  Post,
+  Put,
+} from 'routing-controllers';
+import { Assessment, Course, CourseClass } from '../entities';
 
 @JsonController('/courses/:courseId/classes/:classId/assessments')
 export class ClassAssessmentController {
   @Post()
   async createAssessment(
     @Param('courseId') courseId: number,
-    @Param('classId') classId: number
+    @Param('classId') classId: number,
+    @Body() assessmentDTO: AssessmentNew
   ) {
-    // Change course to available if have more than '3' assessments
+    const course = await Course.findOne(courseId);
+    const courseClass = await CourseClass.findOne(classId);
+
+    if (course && courseClass && course.id === courseClass.courseId) {
+      const assessment = Assessment.create(assessmentDTO);
+    }
   }
 
   @Put()

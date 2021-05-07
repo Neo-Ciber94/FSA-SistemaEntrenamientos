@@ -8,11 +8,12 @@ import { CorsOptions } from 'cors';
 import { BASE_URL } from './config';
 import {
   startDeleteExpiredSessionsRoutine,
-  startPurgueDeletedUsers,
+  startPurgueDeletedUsersRoutine,
   authorizationChecker,
 } from './scripts';
 import { LOGGER } from './utils/Logger';
 
+// Server port
 const PORT = process.env.PORT || 3000;
 
 // Create express server
@@ -45,13 +46,18 @@ useExpressServer(app, {
 createConnection()
   .then(async (connection) => {
     await connection.runMigrations();
-    startDeleteExpiredSessionsRoutine();
-    startPurgueDeletedUsers();
+    runRoutines();
     LOGGER.info(`Connected to database "${connection.driver.database}"`);
   })
   .catch((err) => {
     console.error(err);
   });
+
+// Server routines
+function runRoutines() {
+  startDeleteExpiredSessionsRoutine();
+  startPurgueDeletedUsersRoutine();
+}
 
 // Start listening
 app.listen(PORT, () => {

@@ -37,6 +37,9 @@ export async function authenticateUser(
             resolve(true);
           }
         }
+
+        // Fallback
+        resolve(false);
       });
     });
   }
