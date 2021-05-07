@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import {
   ClassTaskDTO,
+  ClassTaskMove,
   CourseClassDTO,
   CourseClassNew,
   TaskType,
@@ -48,6 +49,14 @@ export class CourseClassService {
 
     return this.apiService.get<ClassTaskDTO[]>(
       `courses/${courseId}/classes/${classId}/tasks`
+    );
+  }
+
+  moveTask(courseId: number, classId: number, taskMove: ClassTaskMove) {
+    return this.apiService.put<ClassTaskMove, void>(
+      `courses/${courseId}/classes/${classId}/tasks/move`,
+      taskMove,
+      { responseType: 'text' }
     );
   }
 

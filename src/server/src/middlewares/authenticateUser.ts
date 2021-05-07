@@ -21,7 +21,7 @@ export async function authenticateUser(
     return new Promise((resolve) => {
       jwt.verify(accessToken, ACCESS_TOKEN_SECRET, async (err, decoded) => {
         if (err) {
-          resolve(false);
+          return resolve(false);
         }
 
         // Check if user still logged
@@ -34,7 +34,7 @@ export async function authenticateUser(
           /* prettier-ignore */
           // Check if the user have a session, otherwise `401 Unauthorized`
           if (checkUserSession(request, user) && hasValidRole(user, allowedRoles)) {
-            resolve(true);
+            return resolve(true);
           }
         }
 

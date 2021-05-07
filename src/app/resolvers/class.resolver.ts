@@ -5,7 +5,7 @@ import {
   RouterStateSnapshot,
   ActivatedRouteSnapshot,
 } from '@angular/router';
-import { Observable, of } from 'rxjs';
+import { from, Observable, of } from 'rxjs';
 import { CourseClassDTO } from 'src/shared';
 import { CourseClassService } from '../services/course-class.service';
 import { RedirectService } from '../services/redirect.service';
@@ -26,7 +26,7 @@ export class ClassResolver implements Resolve<CourseClassDTO> {
     if (courseId && classId) {
       return this.classService.getClassById(courseId, classId).toPromise();
     } else {
-      return this.redirectService.navigateTo404() as never;
+      return from(this.redirectService.navigateTo404()) as never;
     }
   }
 }

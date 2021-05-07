@@ -29,7 +29,7 @@ export class ClassLessonController {
 
     const lessons = await Lesson.createQueryBuilder('lesson')
       .leftJoinAndSelect('lesson.classTask', 'classTask')
-      .leftJoinAndSelect('classTask.courseClass', 'courseClass')
+      .leftJoinAndSelect('lesson.courseClass', 'courseClass')
       .leftJoinAndSelect('courseClass.course', 'course')
       .andWhere('courseClass.courseId = course.id')
       .where('course.id = :courseId AND courseClass.id = :classId', {
@@ -58,7 +58,7 @@ export class ClassLessonController {
 
     const lesson = await Lesson.createQueryBuilder('lesson')
       .leftJoinAndSelect('lesson.classTask', 'classTask')
-      .leftJoinAndSelect('classTask.courseClass', 'courseClass')
+      .leftJoinAndSelect('lesson.courseClass', 'courseClass')
       .leftJoinAndSelect('courseClass.course', 'course')
       .andWhere('courseClass.courseId = course.id')
       .where(

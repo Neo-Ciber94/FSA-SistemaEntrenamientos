@@ -52,7 +52,7 @@ export class ClassTask extends BaseEntity {
     }
 
     // We change the order of the tasks
-    const tasks = courseClass.tasks.sort((t1, t2) => t2.order - t1.order);
+    const tasks = courseClass.tasks.sort((t1, t2) => t1.order - t2.order);
     for (let i = this.order; i < tasks.length; i++) {
       tasks[i].order = i;
     }

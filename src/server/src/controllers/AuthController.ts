@@ -185,13 +185,28 @@ export class AuthController {
           email: user.email,
           role: user.role.name as RoleName,
         };
-        const session = newSession(claims);
-        setRefreshTokenCookie(response, session.refreshToken);
 
-        // Updates refresh token in the database
-        userSession.refreshToken = session.refreshToken;
-        await UserSession.save(userSession);
+        const { token, tokenExpiration } = newAccessToken(claims);
+        const session: Session = {
+          token,
+          tokenExpiration,
+          refreshToken: userSession.refreshToken,
+        };
+
         return session;
+
+        // const claims: Claims = {
+        //   id: user.id,
+        //   email: user.email,
+        //   role: user.role.name as RoleName,
+        // };
+        // // We provide a new refresh token
+        // const session = newSession(claims);
+        // setRefreshTokenCookie(response, session.refreshToken);
+        // // Updates refresh token in the database
+        // userSession.refreshToken = session.refreshToken;
+        // await UserSession.save(userSession);
+        // return session;
       }
     }
 
@@ -272,10 +287,16 @@ export class AuthController {
 
 // prettier-ignore
 function newSession(claims: Claims): Session {
-  const token = jwt.sign(claims, ACCESS_TOKEN_SECRET, {expiresIn: `${JWT_ACCESS_EXPIRATION_MS}ms`});
-  const tokenExpiration = new Date(new Date().getTime() + JWT_ACCESS_EXPIRATION_MS);
+  const { token, tokenExpiration } = newAccessToken(claims);
   const refreshToken = uuidv4();
   return { token, tokenExpiration, refreshToken };
+}
+
+// prettier-ignore
+function newAccessToken(claims: Claims): {token: string, tokenExpiration: Date} {
+  const token = jwt.sign(claims, ACCESS_TOKEN_SECRET, {expiresIn: `${JWT_ACCESS_EXPIRATION_MS}ms`});
+  const tokenExpiration = new Date(new Date().getTime() + JWT_ACCESS_EXPIRATION_MS);
+  return { token, tokenExpiration }
 }
 
 function getRefreshTokenCookie(request: Request): string | undefined {

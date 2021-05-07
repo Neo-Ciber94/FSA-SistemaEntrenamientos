@@ -1,20 +1,36 @@
 <ol class="breadcrumb">
   <li class="breadcrumb-item"><a routerLink="/courses">Courses</a></li>
-  <li class="breadcrumb-item"><a routerLink="/courses/1">Web Design</a></li>
   <li class="breadcrumb-item">
-    <a routerLink="/courses/1/classes/1">Basic HTML</a>
+    <a [routerLink]="['/courses', lesson.courseClass.courseId]">{{
+      lesson.courseClass.course.name
+    }}</a>
   </li>
-  <li class="breadcrumb-item active">HTML and HTML5</li>
+  <li class="breadcrumb-item">
+    <a
+      [routerLink]="[
+        '/courses',
+        lesson.courseClass.courseId,
+        'classes',
+        lesson.courseClass.id
+      ]"
+      >{{ lesson.courseClass.name }}</a
+    >
+  </li>
+  <li class="breadcrumb-item active">{{ lesson.title }}</li>
 </ol>
 
 <div class="container p-4">
-  <!-- Markdown -->
-  <div *ngIf="isMarkdown" class="markdown-body">
-    <markdown [data]="content" emoji></markdown>
-  </div>
+  <h3 class="text-center mb-2" *ngIf="!isMarkdown">{{ lesson.title }}</h3>
 
-  <!-- Text -->
-  <div *ngIf="!isMarkdown" [innerText]="content"></div>
+  <div class="mt-2 mb-4">
+    <!-- Markdown -->
+    <div *ngIf="isMarkdown" class="markdown-body">
+      <markdown [data]="lesson.content" emoji></markdown>
+    </div>
+
+    <!-- Text -->
+    <div *ngIf="!isMarkdown" [innerText]="lesson.content"></div>
+  </div>
 
   <!-- Buttons -->
   <div class="flex-buttons gap-2">

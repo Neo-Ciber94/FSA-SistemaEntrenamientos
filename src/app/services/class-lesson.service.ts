@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { LessonDTO } from 'src/shared';
-import { ApiService } from '.';
+import { LessonDTO, LessonNew } from 'src/shared';
+import { ApiService } from './api.service';
 
 @Injectable({
   providedIn: 'root',
@@ -11,23 +11,23 @@ export class ClassLessonService {
 
   getAllLessons(courseId: number, classId: number) {
     return this.apiService.get<LessonDTO[]>(
-      `courses/${courseId}/classes/${classId}/lesson`
+      `courses/${courseId}/classes/${classId}/lessons`
     );
   }
 
   getLessonById(courseId: number, classId: number, lessonId: number) {
     return this.apiService.get<LessonDTO>(
-      `courses/${courseId}/classes/${classId}/lesson/${lessonId}`
+      `courses/${courseId}/classes/${classId}/lessons/${lessonId}`
     );
   }
 
   createLesson(
     courseId: number,
     classId: number,
-    lesson: Omit<LessonDTO, 'id'>
-  ): Observable<LessonDTO> {
+    lesson: LessonNew
+  ): Observable<LessonNew> {
     return this.apiService.post(
-      `courses/${courseId}/classes/${classId}/lesson`,
+      `courses/${courseId}/classes/${classId}/lessons`,
       lesson
     );
   }
@@ -35,10 +35,10 @@ export class ClassLessonService {
   updateLesson(
     courseId: number,
     classId: number,
-    lesson: LessonDTO
-  ): Observable<LessonDTO> {
+    lesson: LessonNew
+  ): Observable<LessonNew> {
     return this.apiService.put(
-      `courses/${courseId}/classes/${classId}/lesson`,
+      `courses/${courseId}/classes/${classId}/lessons`,
       lesson
     );
   }
@@ -49,7 +49,7 @@ export class ClassLessonService {
     assessmentId: number
   ): Observable<LessonDTO> {
     return this.apiService.delete(
-      `courses/${courseId}/classes/${classId}/lesson/${assessmentId}`
+      `courses/${courseId}/classes/${classId}/lessons/${assessmentId}`
     );
   }
 }

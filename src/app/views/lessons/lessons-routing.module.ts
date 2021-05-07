@@ -1,8 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { CanNotLoadGuard } from 'src/app/guards/can-not-load.guard';
+import { LessonResolver } from 'src/app/resolvers/lesson.resolver';
 import { LessonsCreateComponent } from './lessons-create/lessons-create.component';
 import { LessonsDetailsComponent } from './lessons-details/lessons-details.component';
+
+const lessonResolver = {
+  lesson: LessonResolver,
+};
 
 const routes: Routes = [
   {
@@ -15,11 +20,13 @@ const routes: Routes = [
     component: LessonsCreateComponent,
   },
   {
-    path: ':id',
+    path: ':lessonId',
+    resolve: lessonResolver,
     component: LessonsDetailsComponent,
   },
   {
-    path: ':id/edit',
+    path: ':lessonId/edit',
+    resolve: lessonResolver,
     component: LessonsCreateComponent,
   },
 ];

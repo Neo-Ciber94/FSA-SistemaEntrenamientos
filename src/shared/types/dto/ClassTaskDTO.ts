@@ -12,12 +12,12 @@ interface ClassTaskBase {
 
 interface ClassTaskLesson extends ClassTaskBase {
   taskType: TaskType.Lesson;
-  classTask: LessonDTO;
+  task: LessonDTO;
 }
 
 interface ClassTaskAssessment extends ClassTaskBase {
   taskType: TaskType.Assessment;
-  classTask: AssessmentDTO;
+  task: AssessmentDTO;
 }
 
 export type ClassTaskDTO = ClassTaskLesson | ClassTaskAssessment;

@@ -28,13 +28,20 @@
     </div>
   </div>
 
-  <div class="class-card my-1" *ngFor="let task of classTasks">
+  <div class="class-card my-1" *ngFor="let classTask of classTasks">
     <app-card
       theme="light"
       iconClass="fs-5"
-      [editRoute]="[getRoute(task), 'edit']"
+      [editRoute]="[getRoute(classTask), 'edit']"
+      (onDelete)="deleteTask(classTask)"
     >
-      <a [routerLink]="getRoute(task)">
+      <a class="card-icon fs-5 ml-2" (click)="moveUp(classTask)"
+        ><i class="fas fa-angle-up"></i
+      ></a>
+      <a class="card-icon fs-5 ml-2" (click)="moveDown(classTask)"
+        ><i class="fas fa-angle-down"></i
+      ></a>
+      <a [routerLink]="getRoute(classTask)">
         <div class="d-flex flex-row align-items-center card-title">
           <div class="me-3">
             <!-- Checkmark only for students -->
@@ -42,7 +49,7 @@
             <!-- <i class="far fa-check-circle fs-4"></i> -->
             <!-- <i class="far fa-circle fs-4"></i> -->
           </div>
-          <div class="fs-5">{{ task.classTask.id }}</div>
+          <div class="fs-5">{{ classTask.task.title }}</div>
         </div>
       </a>
     </app-card>

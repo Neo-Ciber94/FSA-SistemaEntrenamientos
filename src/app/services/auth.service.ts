@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, EMPTY, Observable, of } from 'rxjs';
 import { UserLogin } from '../../shared/types/UserLogin';
 import { ApiService } from './api.service';
 import { UserService } from './user.service';
@@ -26,6 +26,7 @@ export class AuthService {
     undefined
   );
 
+  private generateTokenObservable?: Observable<Session>;
   private tokenExpiration?: Date;
   private refreshTokenTimeoutId?: NodeJS.Timeout;
 
@@ -119,16 +120,25 @@ export class AuthService {
   }
 
   generateToken() {
+    if (this.generateTokenObservable) {
+      return this.generateTokenObservable;
+    }
+
     if (this.refreshTokenTimeoutId) {
       clearTimeout(this.refreshTokenTimeoutId);
     }
 
-    return this.apiService.get<Session>('auth/token').pipe(
-      tap((session) => {
-        this.setSession(session);
-        this.startRefreshTokenRoutine();
-      })
-    );
+    this.generateTokenObservable = this.apiService
+      .get<Session>('auth/token')
+      .pipe(
+        tap((session) => {
+          this.setSession(session);
+          this.startRefreshTokenRoutine();
+          this.generateTokenObservable = undefined;
+        })
+      );
+
+    return this.generateTokenObservable;
   }
 
   getSessionToken() {
@@ -164,12 +174,19 @@ export class AuthService {
     return `/profile/${user.id}`;
   }
 
+  clearCurrentUser() {
+    this.clearUserData(this.getCurrentUser()?.id!);
+  }
+
   private startRefreshTokenRoutine() {
+    const nextRefreshMilliseconds =
+      new Date(this.tokenExpiration!).getTime() - Date.now();
+
     this.refreshTokenTimeoutId = setTimeout(() => {
       this.generateToken().subscribe((newSession) => {
         this.setSession(newSession);
       });
-    }, new Date(this.tokenExpiration!).getTime());
+    }, nextRefreshMilliseconds);
   }
 
   private setUserData(user: UserDTO) {
@@ -186,7 +203,13 @@ export class AuthService {
   }
 
   private setSession(session: Session) {
-    this.tokenExpiration = session.tokenExpiration;
+    // The refresh will be `accessTokenExpiration - 1min`
+    // We add a delay due the time for the request
+    const refreshTime = new Date(
+      new Date(session.tokenExpiration).getTime() - 1000 * 60
+    );
+
+    this.tokenExpiration = new Date(refreshTime);
     this.tokenBehaviourSubject.next(session.token);
   }
 }

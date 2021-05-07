@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
-import { Observable } from 'rxjs';
+import { from, Observable } from 'rxjs';
 import { CourseDTO } from 'src/shared';
 import { CourseService } from '../services/course.service';
 import { RedirectService } from '../services/redirect.service';
@@ -19,7 +19,7 @@ export class CourseResolver implements Resolve<CourseDTO> {
     if (id) {
       return this.courseService.getCourseById(id, { includeClasses: true });
     } else {
-      return this.redirectService.navigateTo404() as never;
+      return from(this.redirectService.navigateTo404()) as never;
     }
   }
 }

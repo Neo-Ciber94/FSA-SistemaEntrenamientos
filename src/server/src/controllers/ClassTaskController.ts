@@ -58,6 +58,7 @@ export class ClassTaskController {
       relations: ['tasks'],
     });
 
+    console.log(task);
     if (
       task &&
       course &&
@@ -67,6 +68,7 @@ export class ClassTaskController {
     ) {
       const courseTasks = courseClass.tasks;
 
+      console.log('MOVING...');
       if (taskMove.order > courseTasks.length || taskMove.order < 0) {
         return response
           .status(400)
@@ -86,12 +88,18 @@ export class ClassTaskController {
       task.order = oldTask.order;
       oldTask.order = -1;
 
-      await ClassTask.save(oldTask);
-      await ClassTask.save(task);
+      await ClassTask.update(oldTask.id, oldTask);
+      await ClassTask.update(task.id, task);
 
       oldTask.order = tempOrder;
-      await ClassTask.save(oldTask);
+      await ClassTask.update(oldTask.id, oldTask);
+
+      console.log('Exit!');
+      // Ok
+      return response.status(200);
     }
+
+    console.log('undefined');
   }
 }
 
@@ -107,28 +115,30 @@ async function mapToClassTaskDTO(
     }
     return result;
   } else {
-    let classTask: LessonDTO | AssessmentDTO | undefined;
+    let classTask: Lesson | Assessment | undefined;
 
     switch (tasks.taskType) {
       case TaskType.Assessment:
-        classTask = ((await Lesson.findOne({
+        classTask = await Assessment.findOne({
           where: { classTaskId: tasks.id },
-        })) as unknown) as LessonDTO;
+        });
         break;
       case TaskType.Lesson:
-        classTask = ((await Assessment.findOne({
+        classTask = await Lesson.findOne({
           where: { classTaskId: tasks.id },
-        })) as unknown) as AssessmentDTO;
+        });
         break;
+      default:
+        throw new Error(`Invalid task type: ${tasks.taskType}`);
     }
 
     if (classTask == null) {
-      throw new Error('classTask is undefined');
+      throw new Error(`classTask is undefined: ${JSON.stringify(tasks)}`);
     }
 
     // Conversion is safe due ClassTask have the same fields than ClassTaskDTO except 'classTask'
     const ret = (tasks as unknown) as ClassTaskDTO;
-    ret.classTask = classTask;
+    ret.task = (classTask as unknown) as LessonDTO | AssessmentDTO;
     return ret;
   }
 }

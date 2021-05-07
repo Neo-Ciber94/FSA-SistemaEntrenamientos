@@ -11,13 +11,13 @@ export class ClassAssessmentService {
 
   getAllAssessments(courseId: number, classId: number) {
     return this.apiService.get<AssessmentDTO[]>(
-      `courses/${courseId}/classes/${classId}/assessment`
+      `courses/${courseId}/classes/${classId}/assessments`
     );
   }
 
   getAssessmentById(courseId: number, classId: number, assessmentId: number) {
     return this.apiService.get<AssessmentDTO>(
-      `courses/${courseId}/classes/${classId}/assessment/${assessmentId}`
+      `courses/${courseId}/classes/${classId}/assessments/${assessmentId}`
     );
   }
 
@@ -27,7 +27,7 @@ export class ClassAssessmentService {
     assessment: Omit<AssessmentDTO, 'id'>
   ): Observable<AssessmentDTO> {
     return this.apiService.post(
-      `courses/${courseId}/classes/${classId}/assessment`,
+      `courses/${courseId}/classes/${classId}/assessments`,
       assessment
     );
   }
@@ -38,7 +38,7 @@ export class ClassAssessmentService {
     assessment: AssessmentDTO
   ): Observable<AssessmentDTO> {
     return this.apiService.put(
-      `courses/${courseId}/classes/${classId}/assessment`,
+      `courses/${courseId}/classes/${classId}/assessments`,
       assessment
     );
   }
@@ -49,7 +49,7 @@ export class ClassAssessmentService {
     assessmentId: number
   ): Observable<AssessmentDTO> {
     return this.apiService.delete(
-      `courses/${courseId}/classes/${classId}/assessment/${assessmentId}`
+      `courses/${courseId}/classes/${classId}/assessments/${assessmentId}`
     );
   }
 }

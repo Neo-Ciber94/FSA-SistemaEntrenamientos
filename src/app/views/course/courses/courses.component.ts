@@ -24,7 +24,6 @@ export class CoursesComponent implements OnInit {
   user: UserDTO;
 
   set showCourses(show: ShowCourses) {
-    console.log(show);
     this.loadCourses();
     this._showCourses = show;
   }
