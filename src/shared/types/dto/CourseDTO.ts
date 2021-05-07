@@ -1,5 +1,5 @@
 import { CourseClassDTO } from './CourseClassDTO';
-import { StudentCourseDTO } from './CourseStudentDTO';
+import { CourseStudentDTO } from './CourseStudentDTO';
 import { UserDTO } from './UserDTO';
 
 export interface CourseDTO {
@@ -9,5 +9,5 @@ export interface CourseDTO {
   teacher: UserDTO;
   isAvailable: boolean;
   classes: CourseClassDTO[];
-  students: StudentCourseDTO[];
+  students: CourseStudentDTO[];
 }

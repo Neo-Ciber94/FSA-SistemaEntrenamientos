@@ -17,13 +17,6 @@ export class CourseService {
 
   getAllCourses(userId?: number, options: CourseQueryOptions = {}) {
     const params = getCourseQueryParams({ ...options, userId });
-
-    if (userId) {
-      return this.apiService.get<CourseDTO[]>(`courses?user=${userId}`, {
-        params,
-      });
-    }
-
     return this.apiService.get<CourseDTO[]>('courses', { params });
   }
 

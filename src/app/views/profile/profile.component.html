@@ -42,28 +42,17 @@
       </div>
     </div>
     <!-- Course details -->
-    <div class="">
+    <div *ngIf="courses.length > 0">
       <div class="card rounded p-3 m-2">
         <div class="fs-5 fw-light mb-3">Courses</div>
         <div class="card-content">
           <ul class="list-group">
-            <li class="list-group-item">
-              <a class="link link-danger" routerLink="/courses/1">Web Design</a>
-            </li>
-            <li class="list-group-item">
-              <a class="link link-danger" routerLink="/courses/1">Web Design</a>
-            </li>
-            <li class="list-group-item">
-              <a class="link link-danger" routerLink="/courses/1">Web Design</a>
-            </li>
-            <li class="list-group-item">
-              <a class="link link-danger" routerLink="/courses/1">Web Design</a>
-            </li>
-            <li class="list-group-item">
-              <a class="link link-danger" routerLink="/courses/1">Web Design</a>
-            </li>
-            <li class="list-group-item">
-              <a class="link link-danger" routerLink="/courses/1">Web Design</a>
+            <li class="list-group-item" *ngFor="let course of courses">
+              <a
+                class="link link-danger"
+                [routerLink]="['/courses', course.id]"
+                >{{ course.name }}</a
+              >
             </li>
           </ul>
         </div>

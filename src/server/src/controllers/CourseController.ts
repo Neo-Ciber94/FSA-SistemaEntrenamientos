@@ -25,7 +25,7 @@ export class CourseController {
   @Get()
   async getAllCourses(
     @Res() response: Response,
-    @QueryParam('userId') userId?: number,
+    @QueryParam('user') userId?: number,
     @QueryParam('include') include?: string
   ) {
     const result = this.includes.getRelations(response, include);
@@ -37,23 +37,22 @@ export class CourseController {
 
     if (userId) {
       const user = await User.findOne(userId, {
-        relations: ['role', ...result.relations],
+        relations: ['role'],
       });
       if (user == null) {
         return null;
       }
-
       switch (user.role.name) {
         case RoleName.Student:
           {
             courses = await loadRelationsAndQuery(
-              CourseStudent.getRepository(),
-              'courseStudent',
-              ['user', ...result.relations]
+              Course.getRepository(),
+              'course',
+              result.relations
             )
-              .where('courseStudent.userId = :id', { id: userId })
-              .getMany()
-              .then((e) => e.map((e) => e.course));
+              .leftJoinAndSelect('course.students', 'students')
+              .where('students.id = :userId', { userId })
+              .getMany();
           }
           break;
         case RoleName.Teacher:
@@ -63,7 +62,7 @@ export class CourseController {
               'course',
               result.relations
             )
-              .where('teacherId = :id', { id: userId })
+              .where('teacherId = :userId', { id: userId })
               .getMany();
           }
           break;

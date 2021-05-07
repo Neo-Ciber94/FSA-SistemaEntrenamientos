@@ -1,10 +1,19 @@
 import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
 import { ClassAssessmentService } from 'src/app/services/class-assessment.service';
 import { ClassLessonService } from 'src/app/services/class-lesson.service';
 import { CourseClassService } from 'src/app/services/course-class.service';
-import { ClassTaskDTO, CourseClassDTO, TaskType } from 'src/shared';
+import { PermissionService } from 'src/app/services/permission.service';
+import { StudentService } from 'src/app/services/student.service';
+import {
+  ClassTaskDTO,
+  CourseClassDTO,
+  CourseStudentDTO,
+  RoleName,
+  TaskType,
+} from 'src/shared';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -13,13 +22,17 @@ import Swal from 'sweetalert2';
   styleUrls: ['./class-details.component.css'],
 })
 export class ClassDetailsComponent implements OnInit {
+  student?: CourseStudentDTO;
   courseClass!: CourseClassDTO;
   classTasks: ClassTaskDTO[] = [];
 
   constructor(
+    private authService: AuthService,
     private classService: CourseClassService,
     private lessonService: ClassLessonService,
     private assessmentService: ClassAssessmentService,
+    private permissionService: PermissionService,
+    private studentService: StudentService,
     private route: ActivatedRoute,
     private location: Location,
     private router: Router
@@ -36,6 +49,18 @@ export class ClassDetailsComponent implements OnInit {
           this.classTasks = tasks.sort((t1, t2) => t1.order - t2.order);
         });
     });
+  }
+
+  canWrite() {
+    return this.permissionService.canWrite(this.courseClass.course);
+  }
+
+  isStudent() {
+    // Check if the user is in the course
+  }
+
+  get TaskType() {
+    return TaskType;
   }
 
   getRoute(classTask: ClassTaskDTO) {

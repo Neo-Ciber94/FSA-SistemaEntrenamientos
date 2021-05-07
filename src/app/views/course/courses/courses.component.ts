@@ -23,9 +23,16 @@ export class CoursesComponent implements OnInit {
   searchCourse = '';
   user: UserDTO;
 
+  constructor(
+    private courseService: CourseService,
+    private authService: AuthService
+  ) {
+    this.user = this.authService.getCurrentUser()!;
+  }
+
   set showCourses(show: ShowCourses) {
-    this.loadCourses();
     this._showCourses = show;
+    this.loadCourses();
   }
 
   get showCourses() {
@@ -45,13 +52,6 @@ export class CoursesComponent implements OnInit {
 
   isAdmin() {
     return this.authService.isAdmin();
-  }
-
-  constructor(
-    private courseService: CourseService,
-    private authService: AuthService
-  ) {
-    this.user = this.authService.getCurrentUser()!;
   }
 
   ngOnInit(): void {

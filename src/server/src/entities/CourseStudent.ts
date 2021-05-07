@@ -16,9 +16,15 @@ export class CourseStudent extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
+  @Column()
+  userId!: number;
+
   @OneToOne(() => User)
   @JoinColumn()
   user!: User;
+
+  @Column()
+  courseId!: number;
 
   @ManyToOne(() => Course, (course) => course.students)
   @JoinColumn()

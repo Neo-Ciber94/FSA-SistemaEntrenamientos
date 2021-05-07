@@ -6,18 +6,16 @@ import {
   HttpInterceptor,
   HttpErrorResponse,
 } from '@angular/common/http';
-import { Observable, ObservableInput } from 'rxjs';
+import { from, Observable, ObservableInput, throwError } from 'rxjs';
 import { AuthService } from '../services/auth.service';
-import { catchError, map, mergeMap, tap } from 'rxjs/operators';
+import { catchError, map, mergeMap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Router } from '@angular/router';
 import { needsAuthentication } from 'src/shared';
 
 @Injectable()
 export class HttpTokenInterceptor implements HttpInterceptor {
-  constructor(private authService: AuthService, private router: Router) {
-    console.log(this);
-  }
+  constructor(private authService: AuthService, private router: Router) {}
 
   intercept(
     request: HttpRequest<any>,
@@ -31,8 +29,8 @@ export class HttpTokenInterceptor implements HttpInterceptor {
     if (token && !isExpired) {
       const newRequest = this.setAuthorizationToken(request, token);
       return next.handle(newRequest).pipe(
-        catchError((err, caught) => {
-          return this.handleUnauthorizedError(request, next, err, caught);
+        catchError((err) => {
+          return this.handleUnauthorizedError(request, next, err);
         })
       );
     }
@@ -41,9 +39,7 @@ export class HttpTokenInterceptor implements HttpInterceptor {
     if (needsAuthentication(environment.apiUrl, request.url) === false) {
       return next
         .handle(request)
-        .pipe(
-          catchError((err, caught) => this.logoutOnError(this, err, caught))
-        );
+        .pipe(catchError((err) => this.logoutOnError(this, err)));
     }
 
     // Generate a new token for the request
@@ -69,28 +65,25 @@ export class HttpTokenInterceptor implements HttpInterceptor {
     });
   }
 
-  logoutOnError(
-    interceptor: HttpTokenInterceptor,
-    error: any,
-    caught: ObservableInput<any>
-  ) {
+  logoutOnError(interceptor: HttpTokenInterceptor, error: any) {
     if (is401Unauthorized(error)) {
       interceptor.authService.clearCurrentUser();
-      return interceptor.router.navigateByUrl('/login');
+      return from(
+        interceptor.router.navigateByUrl('/login')
+      ) as Observable<never>;
     }
-    return caught;
+    return throwError(error);
   }
 
   handleUnauthorizedError(
     request: HttpRequest<any>,
     next: HttpHandler,
-    error: any,
-    caught: ObservableInput<any>
+    error: any
   ) {
     // Unauthorized
     if (is401Unauthorized(error)) {
       return this.authService.generateToken().pipe(
-        map((session) => {
+        mergeMap((session) => {
           const newRequest = this.setAuthorizationToken(request, session.token);
           const result = next.handle(newRequest);
 
@@ -114,7 +107,7 @@ export class HttpTokenInterceptor implements HttpInterceptor {
     }
 
     // Fallback
-    return caught;
+    return throwError(error);
   }
 }
 

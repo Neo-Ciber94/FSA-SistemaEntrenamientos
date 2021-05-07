@@ -1,9 +1,12 @@
 import {
   BodyParam,
+  Delete,
   Get,
   JsonController,
+  OnUndefined,
   Param,
   Post,
+  QueryParam,
   Res,
 } from 'routing-controllers';
 import { Response } from 'express';
@@ -13,30 +16,41 @@ import { MIN_NUMBER_OF_CLASS_ASSESSMENTS } from '../config';
 
 @JsonController('/courses')
 export class CourseStudentController {
-  @Get('/:id/students')
-  async getAllStudents(@Param('id') courseId: number) {
-    const course = await Course.findOne(courseId, { relations: ['students'] });
+  @Get('/students')
+  async getAllStudents(@QueryParam('course') courseId?: number) {
+    if (courseId) {
+      const students = CourseStudent.createQueryBuilder('student')
+        .leftJoinAndSelect('student.user', 'user')
+        .where('student.courseId = :courseId', { courseId })
+        .getMany();
 
-    if (course) {
-      return course.students;
+      return students;
+    } else {
+      return CourseStudent.find({ relations: ['course, user'] });
     }
   }
 
-  @Get('/:id/students/:studentId')
-  async getStudentById(
-    @Param('id') courseId: number,
-    @Param('studentId') studentId: number
-  ) {
-    const course = await Course.findOne(courseId, { relations: ['students'] });
-
-    if (course) {
-      return course.students.find((s) => s.id === studentId);
-    }
+  @Get('/students/:studentId')
+  @OnUndefined(200)
+  async getStudentById(@Param('studentId') studentId: number) {
+    return CourseStudent.findOne(studentId, { relations: ['user', 'course'] });
   }
 
-  @Post('/:id/students')
+  @Get('/students/user/:userId')
+  @OnUndefined(200)
+  async getStudentByUserId(@Param('userId') userId: number) {
+    const student = await CourseStudent.findOne({
+      where: {
+        userId,
+      },
+    });
+
+    return student;
+  }
+
+  @Post('/:courseId/students')
   async addStudent(
-    @Param(':id') courseId: number,
+    @Param('courseId') courseId: number,
     @BodyParam('userId') userId: number,
     @Res() response: Response
   ) {
@@ -62,6 +76,28 @@ export class CourseStudentController {
       const student = CourseStudent.create({ user });
       student.course = course;
       return CourseStudent.save(student);
+    }
+  }
+
+  @Delete('/students/:studentId')
+  async deleteStudent(
+    @Param('studentId') studentId: number,
+    @Res() response: Response
+  ) {
+    const student = await CourseStudent.findOne(studentId);
+
+    if (student) {
+      if (student.isCompleted) {
+        return response
+          .status(400)
+          .send('Cannot remove a student with a complete course');
+      }
+
+      const result = await CourseStudent.delete(student);
+
+      if (result.affected && result.affected > 0) {
+        return student;
+      }
     }
   }
 
