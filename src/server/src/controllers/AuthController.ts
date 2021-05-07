@@ -194,19 +194,6 @@ export class AuthController {
         };
 
         return session;
-
-        // const claims: Claims = {
-        //   id: user.id,
-        //   email: user.email,
-        //   role: user.role.name as RoleName,
-        // };
-        // // We provide a new refresh token
-        // const session = newSession(claims);
-        // setRefreshTokenCookie(response, session.refreshToken);
-        // // Updates refresh token in the database
-        // userSession.refreshToken = session.refreshToken;
-        // await UserSession.save(userSession);
-        // return session;
       }
     }
 
