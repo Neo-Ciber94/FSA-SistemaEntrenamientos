@@ -103,7 +103,7 @@ export class ClassCreateComponent implements OnInit {
         await this.classService.createClass(newClass).toPromise();
       }
 
-      await this.router.navigateByUrl(`/courses/${this.course.id}`);
+      await this.router.navigate(['/courses', this.course.id]);
     } finally {
       this.isSubmitting = false;
     }

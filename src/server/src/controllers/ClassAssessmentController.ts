@@ -4,13 +4,16 @@ import {
   AssessmentDTO,
   AssessmentNew,
   AssessmentQuestions,
+  ClassTaskDTO,
   TaskType,
 } from '../types';
 import {
   Body,
+  BodyParam,
   Delete,
   Get,
   JsonController,
+  OnUndefined,
   Param,
   Post,
   Put,
@@ -26,25 +29,44 @@ import {
   CourseStudent,
 } from '../entities';
 import { Response } from 'express';
+import { getManager } from 'typeorm';
 
 @JsonController('/courses/:courseId/classes/:classId/assessments')
 export class ClassAssessmentController {
   @Get()
+  @OnUndefined(200)
   async getAllAssessments(
     @Param('courseId') courseId: number,
-    @Param('classId') classId: number
+    @Param('classId') classId: number,
+    @QueryParam('title') assessmentTitle?: string
   ) {
     const course = await Course.findOne(courseId);
     const courseClass = await CourseClass.findOne(classId);
 
     if (course && courseClass && course.id === courseClass.courseId) {
-      const result = await Assessment.find({
-        where: {
-          courseClassId: courseClass.id,
-        },
-      });
+      let result: Assessment | Assessment[] | undefined;
 
-      return mapAssessmentToDTO(result);
+      if (assessmentTitle) {
+        result = await Assessment.findOne({
+          where: {
+            title: assessmentTitle,
+            courseClassId: classId,
+          },
+        });
+      } else {
+        result = await Assessment.find({
+          where: {
+            courseClassId: courseClass.id,
+          },
+          relations: ['coursesClass', 'classTask', 'courseClass.course'],
+        });
+      }
+
+      if (result == null) {
+        return undefined;
+      }
+
+      return mapAssessmentToDTO(result as any);
     }
   }
 
@@ -58,7 +80,9 @@ export class ClassAssessmentController {
     const courseClass = await CourseClass.findOne(classId);
 
     if (course && courseClass && course.id === courseClass.courseId) {
-      const result = await Assessment.findOne(assessmentId);
+      const result = await Assessment.findOne(assessmentId, {
+        relations: ['courseClass', 'classTask', 'courseClass.course'],
+      });
       if (result) {
         return mapAssessmentToDTO(result);
       }
@@ -85,47 +109,53 @@ export class ClassAssessmentController {
         courseClass,
       });
 
-      const order = await ClassTask.nextOrder(classId);
-      const newTask = ClassTask.create({
-        taskType: TaskType.Assessment,
-        courseClass,
-        order,
+      const result = await getManager().transaction(async (manager) => {
+        const order = await ClassTask.nextOrder(classId);
+        const newTask = ClassTask.create({
+          taskType: TaskType.Assessment,
+          courseClass,
+          order,
+        });
+
+        newAssessment.classTask = newTask;
+
+        await manager.save(ClassTask, newTask);
+        return manager.save(Assessment, newAssessment);
       });
 
-      newAssessment.classTask = newTask;
-      return Assessment.save(newAssessment);
+      return mapAssessmentToDTO(result);
     }
   }
 
-  @Put('/:assessmentId')
+  @Put()
   async updateAssessment(
     @Param('courseId') courseId: number,
     @Param('classId') classId: number,
-    @Param('assessmentId') assessmentId: number,
     @Body() assessmentDTO: AssessmentNew
   ) {
     const course = await Course.findOne(courseId);
     const courseClass = await CourseClass.findOne(classId);
-    const assessment = await Assessment.findOne(assessmentId);
+    const assessment = await Assessment.findOne(assessmentDTO.id);
 
     if (
       course &&
       courseClass &&
       assessment &&
       course.id === courseClass.courseId &&
-      assessment.courseClassId === courseClass.id &&
-      assessment.id === assessmentDTO.id
+      assessment.courseClassId === courseClass.id
     ) {
       const assessmentQuestion = new AssessmentQuestions(
         assessmentDTO.questions
       );
 
       const newAssessment = Assessment.create({
+        ...assessment,
         title: assessmentDTO.title,
         questionsJson: assessmentQuestion.toJson(),
       });
 
-      return Assessment.save(newAssessment);
+      const result = await Assessment.save(newAssessment);
+      return mapAssessmentToDTO(result);
     }
   }
 
@@ -146,6 +176,7 @@ export class ClassAssessmentController {
       course.id === courseClass.courseId &&
       assessment.courseClassId === courseClass.id
     ) {
+      await ClassTask.delete(assessment.classTaskId);
       return Assessment.remove(assessment);
     }
   }
@@ -254,10 +285,16 @@ function mapAssessmentToDTO(
       assessment.questionsJson
     );
 
-    // SAFETY: Both types have same layout except for `questions`
-    const assessmentDTO = (assessment as unknown) as AssessmentDTO;
-    // Sets the questions
-    assessmentDTO.questions = assessmentQuestions.questions;
-    return assessmentDTO;
+    const result: AssessmentDTO = {
+      id: assessment.id,
+      title: assessment.title,
+      classTaskId: assessment.classTaskId,
+      classTask: assessment.classTask as any,
+      courseClassId: assessment.courseClassId,
+      courseClass: assessment.courseClass as any,
+      questions: assessmentQuestions.questions,
+    };
+
+    return result;
   }
 }

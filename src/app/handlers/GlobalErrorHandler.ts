@@ -17,6 +17,7 @@ export class GlobalErrorHandler implements ErrorHandler {
     });
 
     if (error instanceof HttpErrorResponse) {
+      // TODO: Show a cleaner error
       errorSwal.fire({
         title: `Status Code ${error.status}`,
         html: `

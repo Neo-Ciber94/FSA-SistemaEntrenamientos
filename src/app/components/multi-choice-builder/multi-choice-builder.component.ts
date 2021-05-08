@@ -30,6 +30,9 @@ export class MultiChoiceBuilderComponent implements OnInit {
     questions: MultiChoiceQuestion[];
   }>();
 
+  @Input()
+  disabled = false;
+
   @ViewChild('questionEditor')
   private modalTemplate!: TemplateRef<any>;
   private questionEditorModal?: NgbModalRef;
@@ -147,14 +150,15 @@ export class MultiChoiceBuilderComponent implements OnInit {
 
     this.formGroup.markAllAsTouched();
     this.wasValidated = true;
-    this.isSubmitting = true;
 
     if (this.formGroup.invalid || this.elements.length === 0) {
       return;
     }
 
+    this.isSubmitting = true;
     const title = this.formGroup.get('assessmentTitle')?.value as string;
     const questions = this.elements.map((e) => e.multipleChoiceQuestion);
+
     this.submitForm.emit({ title, questions });
     this.isSubmitting = false;
   }
@@ -165,7 +169,7 @@ export class MultiChoiceBuilderComponent implements OnInit {
     for (const e of this.elements) {
       const multiChoiceQuestion = e.multipleChoiceQuestion;
       controls[multiChoiceQuestion.key] = new FormControl(
-        multiChoiceQuestion.selected,
+        { value: multiChoiceQuestion.selected, disabled: this.disabled },
         Validators.required
       );
     }

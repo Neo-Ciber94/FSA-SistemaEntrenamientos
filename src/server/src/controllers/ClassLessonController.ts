@@ -7,6 +7,7 @@ import {
   Post,
   Put,
 } from 'routing-controllers';
+import { getManager } from 'typeorm';
 
 import { ClassTask, Course, CourseClass, Lesson } from '../entities';
 import { LessonDTO, LessonNew, TaskType } from '../types';
@@ -88,17 +89,21 @@ export class ClassLessonController {
     if (course && courseClass && course.id === courseClass.courseId) {
       const newLesson = Lesson.create(lessonDTO);
 
-      const order = await ClassTask.nextOrder(classId);
-      const newTask = ClassTask.create({
-        taskType: TaskType.Lesson,
-        courseClass,
-        order,
+      const result = await getManager().transaction(async (manager) => {
+        const order = await ClassTask.nextOrder(classId);
+        const newTask = ClassTask.create({
+          taskType: TaskType.Lesson,
+          courseClass,
+          order,
+        });
+
+        newLesson.classTask = newTask;
+
+        await manager.save(ClassTask, newTask);
+        return manager.save(Lesson, newLesson);
       });
 
-      newLesson.classTask = newTask;
-
-      await ClassTask.save(newTask);
-      return Lesson.save(newLesson);
+      return result;
     }
   }
 
@@ -139,6 +144,7 @@ export class ClassLessonController {
       course.id === courseClass.courseId &&
       lessonToDelete
     ) {
+      await ClassTask.delete(lessonToDelete.classTaskId);
       await Lesson.delete(lessonToDelete);
       return lessonToDelete;
     }

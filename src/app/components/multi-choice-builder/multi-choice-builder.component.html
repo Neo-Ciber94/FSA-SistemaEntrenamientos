@@ -18,7 +18,7 @@
     No questions
   </div>
   <div *ngFor="let e of elements" class="question py-2 px-4 m-1">
-    <div class="question-btn-options">
+    <div class="question-btn-options" *ngIf="!disabled">
       <button (click)="moveQuestionUp(e.id)">
         <i class="fas fa-angle-up"></i>
       </button>
@@ -33,11 +33,10 @@
       </button>
     </div>
     <app-multi-choice
-      [isInvalid]="
-        wasValidated && e.multipleChoiceQuestion.selected?.value == null
-      "
+      [isInvalid]="wasValidated && e.multipleChoiceQuestion.selected == null"
       [formGroup]="formGroup"
       [multiChoice]="e.multipleChoiceQuestion"
+      [disabled]="disabled"
     ></app-multi-choice>
   </div>
 

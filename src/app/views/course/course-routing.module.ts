@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { IsTeacherGuard } from 'src/app/guards/is-teacher.guard';
+import { PermissionGuard } from 'src/app/guards/permission.guard';
 import { CourseResolver } from 'src/app/resolvers/course.resolver';
 import { AdminCoursesComponent } from '../admin/admin-courses/admin-courses.component';
 import { adminCoursesUrlMatcher } from './adminCoursesUrlMatcher';

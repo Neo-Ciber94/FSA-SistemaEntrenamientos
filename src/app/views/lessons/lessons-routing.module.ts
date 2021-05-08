@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { CanNotLoadGuard } from 'src/app/guards/can-not-load.guard';
+import { PermissionGuard } from 'src/app/guards/permission.guard';
 import { LessonResolver } from 'src/app/resolvers/lesson.resolver';
 import { LessonsCreateComponent } from './lessons-create/lessons-create.component';
 import { LessonsDetailsComponent } from './lessons-details/lessons-details.component';
@@ -17,6 +18,7 @@ const routes: Routes = [
   },
   {
     path: 'new',
+    canActivate: [PermissionGuard],
     component: LessonsCreateComponent,
   },
   {
@@ -27,6 +29,7 @@ const routes: Routes = [
   {
     path: ':lessonId/edit',
     resolve: lessonResolver,
+    canActivate: [PermissionGuard],
     component: LessonsCreateComponent,
   },
 ];

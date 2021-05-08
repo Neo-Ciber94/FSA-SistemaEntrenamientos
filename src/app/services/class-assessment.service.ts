@@ -1,6 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { AssessmentDTO, AssessmentNew } from 'src/shared';
+import {
+  AssessmentAnswerDTO,
+  AssessmentAnswerNew,
+  AssessmentDTO,
+  AssessmentNew,
+} from 'src/shared';
 import { ApiService } from './api.service';
 
 @Injectable({
@@ -18,6 +23,12 @@ export class ClassAssessmentService {
   getAssessmentById(courseId: number, classId: number, assessmentId: number) {
     return this.apiService.get<AssessmentDTO>(
       `courses/${courseId}/classes/${classId}/assessments/${assessmentId}`
+    );
+  }
+
+  getAssessmentByTitle(courseId: number, classId: number, title: string) {
+    return this.apiService.get<AssessmentDTO | undefined>(
+      `courses/${courseId}/classes/${classId}/assessments?title=${title}`
     );
   }
 
@@ -50,6 +61,29 @@ export class ClassAssessmentService {
   ): Observable<AssessmentDTO> {
     return this.apiService.delete(
       `courses/${courseId}/classes/${classId}/assessments/${assessmentId}`
+    );
+  }
+
+  postAssessmentResponse(
+    courseId: number,
+    classId: number,
+    assessmentId: number,
+    response: AssessmentAnswerNew
+  ): Observable<AssessmentAnswerDTO> {
+    return this.apiService.post(
+      `courses/${courseId}/classes/${classId}/assessments/${assessmentId}/responses`,
+      response
+    );
+  }
+
+  getAssessmentResponse(
+    courseId: number,
+    classId: number,
+    assessmentId: number,
+    studentId: number
+  ) {
+    return this.apiService.get<AssessmentAnswerDTO>(
+      `courses/${courseId}/classes/${classId}/assessments/${assessmentId}/responses?student=${studentId}`
     );
   }
 }

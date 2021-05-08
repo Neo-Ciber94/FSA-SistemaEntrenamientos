@@ -1,17 +1,33 @@
 <ol class="breadcrumb">
   <li class="breadcrumb-item"><a routerLink="/courses">Courses</a></li>
-  <li class="breadcrumb-item"><a routerLink="/courses/1">Web Design</a></li>
   <li class="breadcrumb-item">
-    <a routerLink="/courses/1/classes/1">Basic HTML</a>
+    <a [routerLink]="['/courses', courseClass.courseId]">{{
+      courseClass.course.name
+    }}</a>
+  </li>
+  <li class="breadcrumb-item">
+    <a
+      [routerLink]="[
+        '/courses',
+        courseClass.courseId,
+        'classes',
+        courseClass.id
+      ]"
+      >{{ courseClass.name }}</a
+    >
   </li>
   <li
     class="breadcrumb-item active"
-    [innerHTML]="isEditing ? 'Edit Assessment' : 'Create Assessment'"
+    [innerText]="isEditing ? 'Edit Assessment' : 'Create Assessment'"
   ></li>
 </ol>
 
 <div class="container p-4">
-  <app-multi-choice-builder (submitForm)="onSubmit($event)">
+  <div class="validation-error" *ngIf="titleError">{{ titleError }}</div>
+  <app-multi-choice-builder
+    (submitForm)="onSubmit($event)"
+    [questions]="questions"
+  >
     <div class="flex-buttons gap-2">
       <button type="button" class="btn btn-secondary fs-5" (click)="back()">
         Cancel

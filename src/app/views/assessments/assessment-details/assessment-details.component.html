@@ -1,22 +1,68 @@
 <ol class="breadcrumb">
   <li class="breadcrumb-item"><a routerLink="/courses">Courses</a></li>
-  <li class="breadcrumb-item"><a routerLink="/courses/1">Web Design</a></li>
   <li class="breadcrumb-item">
-    <a routerLink="/courses/1/classes/1">Basic HTML</a>
+    <a [routerLink]="['/courses', assessment.courseClass.courseId]">{{
+      assessment.courseClass.course.name
+    }}</a>
   </li>
-  <li class="breadcrumb-item active">HTML and Headers</li>
+  <li class="breadcrumb-item">
+    <a
+      [routerLink]="[
+        '/courses',
+        assessment.courseClass.courseId,
+        'classes',
+        assessment.courseClass.id
+      ]"
+      >{{ assessment.courseClass.name }}</a
+    >
+  </li>
+  <li class="breadcrumb-item active">{{ assessment.title }}</li>
 </ol>
+<h1 class="text-center">{{ assessment.title }}</h1>
 
-<h1 class="text-center">{{ title }}</h1>
-<div class="container p-4">
+<!-- Editor View -->
+<div class="container p-4" *ngIf="!isStudent">
   <app-multi-choice
-    *ngFor="let question of multiChoiceQuestions"
+    *ngFor="let question of assessment.questions"
     [multiChoice]="question"
+    [disabled]="true"
   ></app-multi-choice>
 
   <!-- Actions -->
-  <div class="flex-buttons gap-2">
+  <div class="flex-buttons gap-2 mt-4">
     <button class="btn btn-secondary" (click)="back()">Back</button>
     <a class="btn btn-danger" routerLink="edit">Edit</a>
+  </div>
+</div>
+
+<!-- Student View -->
+<div class="container p-4" *ngIf="isStudent && assessmentAnswer == null">
+  <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+    <app-multi-choice
+      *ngFor="let question of assessment.questions"
+      [formGroup]="formGroup"
+      [isInvalid]="wasValidated && formGroup.get(question.key)!.invalid"
+      [multiChoice]="question"
+    ></app-multi-choice>
+  </form>
+
+  <!-- Actions -->
+  <div class="flex-buttons gap-2 mt-4">
+    <button class="btn btn-secondary" (click)="back()">Cancel</button>
+    <a class="btn btn-danger">Send</a>
+  </div>
+</div>
+
+<!-- Student Answer -->
+<div class="container p-4" *ngIf="isStudent && assessmentAnswer != null">
+  <h3 class="text-center">{{ assessment.title }}</h3>
+  <!-- prettier-ignore -->
+  <h5 class="text-center my-4">
+    Calification: {{ assessmentAnswer.calification }} / {{ assessment.questions.length }}
+  </h5>
+
+  <!-- Actions -->
+  <div class="flex-buttons gap-2 mt-4">
+    <button class="btn btn-secondary" (click)="back()">Cancel</button>
   </div>
 </div>

@@ -1,7 +1,18 @@
 import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { MultiChoiceQuestion } from 'src/app/components/multi-choice/MultiChoiceQuestion';
+import { FormControl, FormGroup } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
+import { ClassAssessmentService } from 'src/app/services/class-assessment.service';
+import { PermissionService } from 'src/app/services/permission.service';
+import { StudentService } from 'src/app/services/student.service';
+import {
+  AssessmentAnswerDTO,
+  AssessmentAnswerNew,
+  AssessmentDTO,
+  MultiChoiceQuestion,
+  RoleName,
+} from 'src/shared';
 
 @Component({
   selector: 'app-assessment-details',
@@ -9,35 +20,100 @@ import { MultiChoiceQuestion } from 'src/app/components/multi-choice/MultiChoice
   styleUrls: ['./assessment-details.component.css'],
 })
 export class AssessmentDetailsComponent implements OnInit {
-  title = 'HTML and Headers';
-  multiChoiceQuestions: MultiChoiceQuestion[] = [];
+  formGroup!: FormGroup;
+  assessmentAnswer!: AssessmentAnswerDTO;
+  assessment!: AssessmentDTO;
 
-  constructor(private router: Router, private location: Location) {}
+  wasValidated = false;
+  isSubmitting = false;
+
+  constructor(
+    private router: Router,
+    private location: Location,
+    private route: ActivatedRoute,
+    private authService: AuthService,
+    private studentService: StudentService,
+    private assessmentService: ClassAssessmentService,
+    private permissionService: PermissionService
+  ) {}
 
   ngOnInit(): void {
-    this.multiChoiceQuestions = [
-      {
-        key: '1',
-        question: 'What is HTML?',
-        choices: [
-          { value: 'Hypertext Markup languague' },
-          { value: 'HTML text processor' },
-          { value: 'Hyper transform media languague' },
-        ],
-      },
-      {
-        key: '2',
-        question: 'What is H1?',
-        choices: [
-          { value: 'A html tag for big text' },
-          { value: 'A html tag for small text' },
-          { value: 'An invalid html tag' },
-        ],
-      },
-    ];
+    this.route.data.subscribe((data) => {
+      console.assert(data.assessment, data);
+      this.assessment = data.assessment;
+      this.assessmentAnswer = data.assessmentAnswer;
+      this.createForm();
+    });
+  }
+
+  get isStudent() {
+    return this.authService.getCurrentUser()?.role === RoleName.Student;
+  }
+
+  canWrite() {
+    return this.permissionService.canWrite(this.assessment.courseClass.course);
   }
 
   back() {
     this.location.back();
+  }
+
+  private createForm() {
+    const controls: any = {};
+
+    for (const c of this.assessment.questions) {
+      c.selected = c.answer;
+      controls[c.key] = new FormControl(c.answer);
+    }
+
+    this.formGroup = new FormGroup(controls);
+  }
+
+  async onSubmit() {
+    this.wasValidated = true;
+    this.formGroup.markAllAsTouched();
+
+    if (this.formGroup.invalid || this.isSubmitting) {
+      return;
+    }
+
+    this.isSubmitting = true;
+
+    const student = await this.studentService
+      .getStudentByUserId(this.authService.getCurrentUser()?.id!)
+      .toPromise();
+
+    const answer: AssessmentAnswerNew = {
+      assessmentId: this.assessment.id,
+      studentId: student.id,
+      questionsAnswer: this.getAnswers(),
+    };
+
+    try {
+      await this.assessmentService
+        .postAssessmentResponse(
+          this.assessment.courseClass.courseId,
+          this.assessment.courseClassId,
+          this.assessment.id,
+          answer
+        )
+        .toPromise();
+
+      window.location.reload();
+    } finally {
+      this.isSubmitting = false;
+    }
+  }
+
+  private getAnswers(): MultiChoiceQuestion[] {
+    const result: MultiChoiceQuestion[] = [];
+
+    for (const question of this.assessment.questions) {
+      const control = this.formGroup.get(question.key)!;
+      question.selected = control.value;
+      result.push(question);
+    }
+
+    return result;
   }
 }

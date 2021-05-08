@@ -10,16 +10,18 @@
       class="form-check-input"
       [ngClass]="isInvalid ? 'is-invalid' : ''"
       type="radio"
-      formControlName="{{ multiChoice.key }}"
-      value="{{ choice.value }}"
+      [formControlName]="multiChoice.key"
+      value="{{ choice }}"
+      [attr.disabled]="disabled ? 'disabled' : null"
+      (change)="onChange(choice)"
       checked="{{ multiChoice.selected === choice ? 'checked' : '' }}"
     />
     <label class="form-check-label" for="{{ multiChoice.key }}">
-      {{ choice.value }}
+      {{ choice }}
     </label>
   </div>
 
-  <div *ngIf="isInvalid" class="invalid-feedback">Select an answer</div>
+  <div *ngIf="isInvalid" class="validation-error">Select an answer</div>
 </div>
 
 <!-- Only view -->
@@ -34,13 +36,14 @@
       [ngClass]="isInvalid ? 'is-invalid' : ''"
       class="form-check-input"
       type="radio"
-      value="{{ choice.value }}"
+      value="{{ choice }}"
+      [attr.disabled]="disabled ? 'disabled' : null"
       checked="{{ multiChoice.selected === choice ? 'checked' : '' }}"
     />
     <label class="form-check-label" for="{{ multiChoice.key }}">
-      {{ choice.value }}
+      {{ choice }}
     </label>
   </div>
 
-  <div *ngIf="isInvalid" class="invalid-feedback">Select an answer</div>
+  <div *ngIf="isInvalid" class="validation-error">Select an answer</div>
 </ng-template>

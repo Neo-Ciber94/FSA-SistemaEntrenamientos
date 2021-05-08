@@ -36,10 +36,13 @@ export class ClassTaskController {
 
     if (course && courseClass && course.id === courseClass.courseId) {
       if (taskType) {
-        const result = await ClassTask.find({ where: { taskType } });
+        const result = await ClassTask.find({
+          where: { taskType },
+          relations: ['courseClass'],
+        });
         return mapToClassTaskDTO(result);
       } else {
-        const result = await ClassTask.find();
+        const result = await ClassTask.find({ relations: ['courseClass'] });
         return mapToClassTaskDTO(result);
       }
     }
