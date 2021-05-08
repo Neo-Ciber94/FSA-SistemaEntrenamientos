@@ -4,6 +4,7 @@ export * from './CourseClassNew';
 export * from './CourseNew';
 export * from './dto';
 export * from './LessonNew';
+export * from './QuestionNew';
 export * from './ResponseBody';
 export * from './RoleName';
 export * from './Session';

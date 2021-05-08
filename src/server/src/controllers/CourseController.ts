@@ -62,7 +62,7 @@ export class CourseController {
               'course',
               result.relations
             )
-              .where('teacherId = :userId', { id: userId })
+              .where('teacherId = :userId', { userId })
               .getMany();
           }
           break;

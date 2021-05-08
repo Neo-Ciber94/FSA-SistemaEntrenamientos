@@ -14,6 +14,9 @@
       value="{{ choice.value }}"
       checked="{{ multiChoice.selected === choice ? 'checked' : '' }}"
     />
+    <label class="form-check-label" for="{{ multiChoice.key }}">
+      {{ choice.value }}
+    </label>
   </div>
 
   <div *ngIf="isInvalid" class="invalid-feedback">Select an answer</div>

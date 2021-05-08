@@ -18,7 +18,7 @@ export class PermissionService {
       case RoleName.Admin:
         return true;
       case RoleName.Teacher:
-        return user.id === course.teacher.id;
+        return user.id === course.teacherId;
       case RoleName.Student:
         return false;
     }

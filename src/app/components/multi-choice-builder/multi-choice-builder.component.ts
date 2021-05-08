@@ -46,6 +46,7 @@ export class MultiChoiceBuilderComponent implements OnInit {
   wasValidated = false;
 
   constructor(private modalService: NgbModal) {}
+
   ngOnInit(): void {
     this.render();
   }
@@ -68,7 +69,6 @@ export class MultiChoiceBuilderComponent implements OnInit {
     if (id) {
       const selected = this.elements.find((e) => e.id === id);
       this.selectedItemId = id;
-      // tslint:disable: no-non-null-assertion
       const title = selected!.multipleChoiceQuestion.question;
       const choices = selected!.multipleChoiceQuestion.choices.map(
         (e) => e.value
@@ -108,7 +108,7 @@ export class MultiChoiceBuilderComponent implements OnInit {
     } else {
       // Create new MultiChoiceQuestion
       const newElement: MultiChoiceQuestion = {
-        key: getNextId('multiChoiceQuestion') + '',
+        key: getNextId('multiChoiceQuestion').toString(),
         question,
         choices,
       };
