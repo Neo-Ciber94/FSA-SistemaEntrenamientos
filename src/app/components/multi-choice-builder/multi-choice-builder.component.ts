@@ -1,6 +1,4 @@
 import {
-  AfterViewInit,
-  ChangeDetectorRef,
   Component,
   EventEmitter,
   Input,
@@ -13,12 +11,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { CustomValidators } from 'src/app/utils/forms/CustomValidators';
 import { getNextId } from 'src/app/utils/nextId';
-import { MultiChoiceQuestion } from '../multi-choice/MultiChoiceQuestion';
-
-export interface AssessmentForm {
-  title: string;
-  questions: MultiChoiceQuestion[];
-}
+import { MultiChoiceQuestion } from 'src/shared';
 
 interface EditableMultipleChoice {
   id: number;
@@ -32,7 +25,10 @@ interface EditableMultipleChoice {
 })
 export class MultiChoiceBuilderComponent implements OnInit {
   @Output()
-  readonly submitForm = new EventEmitter<AssessmentForm>();
+  readonly submitForm = new EventEmitter<{
+    title: string;
+    questions: MultiChoiceQuestion[];
+  }>();
 
   @ViewChild('questionEditor')
   private modalTemplate!: TemplateRef<any>;
@@ -70,9 +66,7 @@ export class MultiChoiceBuilderComponent implements OnInit {
       const selected = this.elements.find((e) => e.id === id);
       this.selectedItemId = id;
       const title = selected!.multipleChoiceQuestion.question;
-      const choices = selected!.multipleChoiceQuestion.choices.map(
-        (e) => e.value
-      );
+      const choices = selected!.multipleChoiceQuestion.choices;
       this.resetQuestionEditor({ title, choices });
     } else {
       this.resetQuestionEditor();
@@ -90,10 +84,8 @@ export class MultiChoiceBuilderComponent implements OnInit {
 
     const question = this.questionEditorFormGroup.get('questionTitle')
       ?.value as string;
-    const choices = (this.questionEditorFormGroup.get('questionChoices')
-      ?.value as string[]).map((e) => {
-      return { value: e };
-    });
+    const choices = this.questionEditorFormGroup.get('questionChoices')
+      ?.value as string[];
 
     if (this.selectedItemId) {
       const index = this.elements.findIndex(
@@ -173,7 +165,7 @@ export class MultiChoiceBuilderComponent implements OnInit {
     for (const e of this.elements) {
       const multiChoiceQuestion = e.multipleChoiceQuestion;
       controls[multiChoiceQuestion.key] = new FormControl(
-        multiChoiceQuestion.selected?.value,
+        multiChoiceQuestion.selected,
         Validators.required
       );
     }

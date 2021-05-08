@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { AssessmentDTO } from 'src/shared';
+import { AssessmentDTO, AssessmentNew } from 'src/shared';
 import { ApiService } from './api.service';
 
 @Injectable({
@@ -24,7 +24,7 @@ export class ClassAssessmentService {
   createAssessment(
     courseId: number,
     classId: number,
-    assessment: Omit<AssessmentDTO, 'id'>
+    assessment: AssessmentNew
   ): Observable<AssessmentDTO> {
     return this.apiService.post(
       `courses/${courseId}/classes/${classId}/assessments`,
@@ -35,7 +35,7 @@ export class ClassAssessmentService {
   updateAssessment(
     courseId: number,
     classId: number,
-    assessment: AssessmentDTO
+    assessment: AssessmentNew
   ): Observable<AssessmentDTO> {
     return this.apiService.put(
       `courses/${courseId}/classes/${classId}/assessments`,

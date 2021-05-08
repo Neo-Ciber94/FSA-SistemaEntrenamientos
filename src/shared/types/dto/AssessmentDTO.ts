@@ -1,12 +1,11 @@
+import { MultiChoiceQuestion } from '../MultiChoiceQuestion';
 import { ClassTaskDTO } from './ClassTaskDTO';
 import { CourseClassDTO } from './CourseClassDTO';
-import { QuestionDTO } from './QuestionDTO';
 
 export interface AssessmentDTO {
   id: number;
   title: string;
-  description?: string;
-  questions: QuestionDTO[];
+  questions: MultiChoiceQuestion[];
   courseClassId: number;
   courseClass: CourseClassDTO;
   classTaskId: number;

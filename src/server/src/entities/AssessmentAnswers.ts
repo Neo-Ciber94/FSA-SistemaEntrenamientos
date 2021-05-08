@@ -4,12 +4,11 @@ import {
   Column,
   Entity,
   JoinColumn,
-  ManyToMany,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Answer } from './Answer';
+
 import { Assessment } from './Assessment';
 import { CourseStudent } from './CourseStudent';
 
@@ -23,14 +22,16 @@ export class AssessmentAnswers extends BaseEntity {
   @JoinColumn()
   student!: CourseStudent;
 
+  @Column()
+  assessmentId!: number;
+
   @OneToOne(() => Assessment)
   @JoinColumn()
   assessment!: Assessment;
 
+  @Column({ type: 'text' })
+  questionsAnswerJson!: string;
+
   @Column({ unsigned: true })
   calification!: number;
-
-  @OneToMany(() => Answer, (answer) => answer.assessmentAnswers)
-  @JoinColumn()
-  answers!: Answer[];
 }

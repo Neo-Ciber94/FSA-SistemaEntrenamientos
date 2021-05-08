@@ -1,7 +1,7 @@
 import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AssessmentForm } from 'src/app/components/multi-choice-builder/multi-choice-builder.component';
+import { MultiChoiceQuestion } from 'src/shared';
 
 @Component({
   selector: 'app-assessment-create',
@@ -13,15 +13,16 @@ export class AssessmentCreateComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  onSubmit(assessmentForm: AssessmentForm) {
-    console.log(assessmentForm);
-  }
-
   get isEditing() {
     return this.router.url.includes('edit');
   }
 
   back() {
     this.location.back();
+  }
+
+  onSubmit(assessment: { title: string; questions: MultiChoiceQuestion[] }) {
+    const questions = { questions: assessment.questions };
+    console.log(assessment);
   }
 }

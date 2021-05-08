@@ -1,4 +1,3 @@
-export * from './Answer';
 export * from './Assessment';
 export * from './AssessmentAnswers';
 export * from './ClassTask';
@@ -6,8 +5,6 @@ export * from './Course';
 export * from './CourseClass';
 export * from './CourseStudent';
 export * from './Lesson';
-export * from './Question';
-export * from './QuestionChoice';
 export * from './Role';
 export * from './User';
 export * from './UserSession';

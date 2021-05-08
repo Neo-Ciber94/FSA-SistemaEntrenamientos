@@ -4,14 +4,12 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
-  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
   Unique,
 } from 'typeorm';
 import { ClassTask } from './ClassTask';
 import { CourseClass } from './CourseClass';
-import { Question } from './Question';
 
 @Entity()
 @Unique('unique_lesson_name', ['title', 'courseClassId'])
@@ -22,9 +20,8 @@ export class Assessment extends BaseEntity {
   @Column()
   title!: string;
 
-  @OneToMany(() => Question, (question) => question.assessment)
-  @JoinColumn()
-  questions!: Question[];
+  @Column({ type: 'text' })
+  questionsJson!: string;
 
   @Column()
   courseClassId!: number;

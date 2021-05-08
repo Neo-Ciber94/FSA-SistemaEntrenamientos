@@ -1,7 +1,7 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { MultiChoiceQuestion } from './MultiChoiceQuestion';
+import { MultiChoiceQuestion } from 'src/shared';
 
 @Component({
   selector: 'app-multi-choice',
@@ -19,12 +19,10 @@ export class MultiChoiceComponent implements OnInit, OnDestroy {
 
     if (this.formGroup && this.multiChoice) {
       const control = this.formGroup.get(this.multiChoice.key) as FormControl;
-      this.multiChoice.selected = { value: control.value };
+      this.multiChoice.selected = control.value;
 
       this.subscription = control.valueChanges.subscribe((value) => {
-        const selected = this.multiChoice.choices.find(
-          (e) => e.value === value
-        );
+        const selected = this.multiChoice.choices.find((e) => e === value);
         this.multiChoice.selected = selected;
       });
     }
