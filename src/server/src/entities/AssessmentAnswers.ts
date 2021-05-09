@@ -4,6 +4,7 @@ import {
   Column,
   Entity,
   JoinColumn,
+  ManyToOne,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -21,7 +22,9 @@ export class AssessmentAnswers extends BaseEntity {
   @Column()
   studentId!: number;
 
-  @OneToMany(() => CourseStudent, (student) => student.assessmentAnswers)
+  @ManyToOne(() => CourseStudent, (student) => student.assessmentAnswers, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn()
   student!: CourseStudent;
 

@@ -10,7 +10,7 @@ import {
   Res,
 } from 'routing-controllers';
 import { Response } from 'express';
-import { Course, User, CourseStudent } from '../entities';
+import { Course, User, CourseStudent, AssessmentAnswers } from '../entities';
 import { RoleName, TaskType } from '../types';
 import { MIN_NUMBER_OF_CLASS_ASSESSMENTS } from '../config';
 
@@ -93,11 +93,7 @@ export class CourseStudentController {
           .send('Cannot remove a student with a complete course');
       }
 
-      const result = await CourseStudent.delete(student);
-
-      if (result.affected && result.affected > 0) {
-        return student;
-      }
+      return CourseStudent.remove(student);
     }
   }
 

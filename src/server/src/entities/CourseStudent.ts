@@ -4,6 +4,7 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -33,7 +34,7 @@ export class CourseStudent extends BaseEntity {
   @Column({ default: false })
   isCompleted!: boolean;
 
-  @ManyToOne(() => AssessmentAnswers, (assesment) => assesment.student)
+  @OneToMany(() => AssessmentAnswers, (assesment) => assesment.student)
   @JoinColumn()
   assessmentAnswers!: AssessmentAnswers[];
 }
