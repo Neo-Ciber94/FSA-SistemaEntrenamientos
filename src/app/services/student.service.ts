@@ -26,7 +26,7 @@ export class StudentService {
   }
 
   getStudentByUserId(userId: number) {
-    return this.apiService.get<CourseStudentDTO>(
+    return this.apiService.get<CourseStudentDTO | undefined>(
       `courses/students/user/${userId}`
     );
   }

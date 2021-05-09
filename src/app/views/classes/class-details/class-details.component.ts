@@ -1,6 +1,8 @@
 import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { map, mergeMap } from 'rxjs/operators';
 import { AuthService } from 'src/app/services/auth.service';
 import { ClassAssessmentService } from 'src/app/services/class-assessment.service';
 import { ClassLessonService } from 'src/app/services/class-lesson.service';
@@ -26,6 +28,8 @@ export class ClassDetailsComponent implements OnInit {
   courseClass!: CourseClassDTO;
   classTasks: ClassTaskDTO[] = [];
 
+  isStudent = false;
+
   constructor(
     private authService: AuthService,
     private classService: CourseClassService,
@@ -49,14 +53,17 @@ export class ClassDetailsComponent implements OnInit {
           this.classTasks = tasks.sort((t1, t2) => t1.order - t2.order);
         });
     });
+
+    const currentUser = this.authService.getCurrentUser();
+    this.studentService
+      .getStudentByUserId(currentUser?.id!)
+      .subscribe((student) => {
+        this.isStudent = student != null;
+      });
   }
 
   canWrite() {
     return this.permissionService.canWrite(this.courseClass.course);
-  }
-
-  isStudent() {
-    // Check if the user is in the course
   }
 
   get TaskType() {
@@ -111,6 +118,10 @@ export class ClassDetailsComponent implements OnInit {
         }
       }
     });
+  }
+
+  joinCourseToSee(task: ClassTaskDTO) {
+    Swal.fire(`${task.task.title}`, 'Join the course to see the lessons');
   }
 
   async moveUp(task: ClassTaskDTO) {

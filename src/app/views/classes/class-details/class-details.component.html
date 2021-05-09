@@ -42,7 +42,25 @@
       <a class="card-icon fs-5 ml-2" (click)="moveDown(classTask)"
         ><i class="fas fa-angle-down"></i
       ></a>
-      <a [routerLink]="getRoute(classTask)">
+      <!-- If is an student -->
+      <a [routerLink]="getRoute(classTask)" *ngIf="isStudent">
+        <div class="d-flex flex-row align-items-center card-title mb-0">
+          <div class="me-3">
+            <i
+              class="far fa-file-alt"
+              *ngIf="classTask.taskType === TaskType.Lesson"
+            ></i>
+            <i
+              class="far fa-check-circle"
+              *ngIf="classTask.taskType === TaskType.Assessment"
+            ></i>
+          </div>
+          <div class="fs-5">{{ classTask.task.title }}</div>
+        </div>
+      </a>
+
+      <!-- If is not an student -->
+      <a *ngIf="!isStudent" (click)="joinCourseToSee(classTask)">
         <div class="d-flex flex-row align-items-center card-title mb-0">
           <div class="me-3">
             <i

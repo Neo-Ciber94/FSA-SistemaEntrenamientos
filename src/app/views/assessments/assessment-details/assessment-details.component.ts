@@ -93,7 +93,7 @@ export class AssessmentDetailsComponent implements OnInit {
 
     const answer: AssessmentAnswerNew = {
       assessmentId: this.assessment.id,
-      studentId: student.id,
+      studentId: student!.id,
       questionsAnswer: this.getAnswers(),
     };
 
