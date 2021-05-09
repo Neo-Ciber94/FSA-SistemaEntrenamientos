@@ -42,6 +42,10 @@ export class AssessmentDetailsComponent implements OnInit {
       console.assert(data.assessment, data);
       this.assessment = data.assessment;
       this.assessmentAnswer = data.assessmentAnswer;
+      this.assessment.questions.forEach((e) => {
+        e.answer = undefined;
+        e.selected = undefined;
+      });
       this.createForm();
     });
   }
@@ -70,6 +74,10 @@ export class AssessmentDetailsComponent implements OnInit {
   }
 
   async onSubmit() {
+    if (this.isStudent === false) {
+      return;
+    }
+
     this.wasValidated = true;
     this.formGroup.markAllAsTouched();
 
@@ -109,8 +117,11 @@ export class AssessmentDetailsComponent implements OnInit {
     const result: MultiChoiceQuestion[] = [];
 
     for (const question of this.assessment.questions) {
-      const control = this.formGroup.get(question.key)!;
-      question.selected = control.value;
+      if (!this.isStudent) {
+        const control = this.formGroup.get(question.key)!;
+        question.selected = control.value;
+      }
+
       result.push(question);
     }
 

@@ -35,6 +35,6 @@
   <!-- Buttons -->
   <div class="flex-buttons gap-2">
     <button class="btn btn-secondary" (click)="back()">Back</button>
-    <a class="btn btn-danger" routerLink="edit">Edit</a>
+    <a class="btn btn-danger" routerLink="edit" *ngIf="canWrite()">Edit</a>
   </div>
 </div>

@@ -181,8 +181,8 @@ export class ClassAssessmentController {
     }
   }
 
-  // courses/1/classes/2/assessments/3/responses?student=1
   @Get('/:assessmentId/responses')
+  @OnUndefined(200)
   async getAssessmentAnswer(
     @Param('courseId') courseId: number,
     @Param('classId') classId: number,
@@ -193,7 +193,7 @@ export class ClassAssessmentController {
     const courseClass = await CourseClass.findOne(classId);
     const assessment = await Assessment.findOne(assessmentId);
     const answer = await AssessmentAnswers.findOne({
-      where: { studentId },
+      where: { studentId, assessmentId },
     });
 
     if (
@@ -248,8 +248,14 @@ export class ClassAssessmentController {
 
       if (assessmentAnswer == null) {
         const assessmentQuestions = new AssessmentQuestions(
-          assessmentAnswerDTO.questionsAnswer
+          assessment.questionsJson
         );
+
+        for (let i = 0; i < assessmentQuestions.length; i++) {
+          const question = assessmentQuestions.questions[i];
+          question.selected = assessmentAnswerDTO.questionsAnswer[i].selected;
+        }
+
         if (!assessmentQuestions.isCompleted) {
           return response.status(400).send('Assessment is not completed');
         }
@@ -258,8 +264,8 @@ export class ClassAssessmentController {
 
         const newAssessmentAnswer = AssessmentAnswers.create({
           assessment,
-          student,
           calification,
+          studentId: student.id,
           questionsAnswerJson: assessmentQuestions.toJson(),
         });
 

@@ -44,22 +44,31 @@
       [isInvalid]="wasValidated && formGroup.get(question.key)!.invalid"
       [multiChoice]="question"
     ></app-multi-choice>
-  </form>
 
-  <!-- Actions -->
-  <div class="flex-buttons gap-2 mt-4">
-    <button class="btn btn-secondary" (click)="back()">Cancel</button>
-    <a class="btn btn-danger">Send</a>
-  </div>
+    <!-- Actions -->
+    <div class="flex-buttons gap-2 mt-4">
+      <button type="button" class="btn btn-secondary" (click)="back()">
+        Cancel
+      </button>
+      <button class="btn btn-danger">Send</button>
+    </div>
+  </form>
 </div>
 
 <!-- Student Answer -->
 <div class="container p-4" *ngIf="isStudent && assessmentAnswer != null">
-  <h3 class="text-center">{{ assessment.title }}</h3>
-  <!-- prettier-ignore -->
-  <h5 class="text-center my-4">
-    Calification: {{ assessmentAnswer.calification }} / {{ assessment.questions.length }}
-  </h5>
+  <div
+    class="d-flex flex-row align-items-center justify-content-center"
+    style="height: 100px"
+  >
+    <h4>
+      Calification:
+      <span class="text-danger"
+        >{{ assessmentAnswer.calification }} /
+        {{ assessment.questions.length }}</span
+      >
+    </h4>
+  </div>
 
   <!-- Actions -->
   <div class="flex-buttons gap-2 mt-4">

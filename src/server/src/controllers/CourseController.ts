@@ -51,7 +51,7 @@ export class CourseController {
               result.relations
             )
               .leftJoinAndSelect('course.students', 'students')
-              .where('students.id = :userId', { userId })
+              .where('students.userId = :userId', { userId })
               .getMany();
           }
           break;

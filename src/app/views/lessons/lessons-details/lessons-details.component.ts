@@ -2,6 +2,7 @@ import { Location } from '@angular/common';
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import * as marked from 'marked';
+import { PermissionService } from 'src/app/services/permission.service';
 import { LessonDTO } from 'src/shared';
 
 @Component({
@@ -12,7 +13,11 @@ import { LessonDTO } from 'src/shared';
 export class LessonsDetailsComponent implements OnInit {
   lesson!: LessonDTO;
 
-  constructor(private location: Location, private route: ActivatedRoute) {}
+  constructor(
+    private location: Location,
+    private route: ActivatedRoute,
+    private permissionService: PermissionService
+  ) {}
 
   ngOnInit(): void {
     this.route.data.subscribe((data) => {
@@ -23,6 +28,10 @@ export class LessonsDetailsComponent implements OnInit {
 
   isMarkdown() {
     return this.lesson.isMarkdown;
+  }
+
+  canWrite() {
+    return this.permissionService.canWrite(this.lesson.courseClass.course);
   }
 
   back() {

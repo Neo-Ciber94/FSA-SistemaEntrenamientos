@@ -18,6 +18,9 @@ export class AssessmentAnswers extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
+  @Column()
+  studentId!: number;
+
   @OneToMany(() => CourseStudent, (student) => student.assessmentAnswers)
   @JoinColumn()
   student!: CourseStudent;
