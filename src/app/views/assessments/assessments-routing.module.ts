@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { CanNotLoadGuard } from 'src/app/guards/can-not-load.guard';
+import { IsStudentGuard } from 'src/app/guards/is-student.guard';
 import { PermissionGuard } from 'src/app/guards/permission.guard';
 import { AssessmentAnswerResolver } from 'src/app/resolvers/assessment-answer.resolver';
 import { AssessmentResolver } from 'src/app/resolvers/assessment.resolver';
@@ -26,6 +27,7 @@ const routes: Routes = [
   {
     path: ':assessmentId',
     resolve: assessmentResolver,
+    canActivate: [IsStudentGuard],
     component: AssessmentDetailsComponent,
   },
   {

@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { CanNotLoadGuard } from 'src/app/guards/can-not-load.guard';
+import { IsStudentGuard } from 'src/app/guards/is-student.guard';
 import { PermissionGuard } from 'src/app/guards/permission.guard';
 import { LessonResolver } from 'src/app/resolvers/lesson.resolver';
 import { LessonsCreateComponent } from './lessons-create/lessons-create.component';
@@ -24,6 +25,7 @@ const routes: Routes = [
   {
     path: ':lessonId',
     resolve: lessonResolver,
+    canActivate: [IsStudentGuard],
     component: LessonsDetailsComponent,
   },
   {
