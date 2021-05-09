@@ -95,13 +95,19 @@ export class CourseDetailsComponent implements OnInit {
         title: 'Leave course',
         html: `Are you sure about leaving the <strong>${this.course.name}</strong> course?`,
         showCancelButton: true,
-      }).then((result) => {
-        if (result.isConfirmed) {
-          this.studentService.deleteStudent(this.student?.id!).subscribe(() => {
-            this.student = undefined;
-          });
-        }
-      });
+      })
+        .then((result) => {
+          if (result.isConfirmed) {
+            this.studentService
+              .deleteStudent(this.student?.id!)
+              .subscribe(() => {
+                this.student = undefined;
+              });
+          }
+        })
+        .finally(() => {
+          this.isProccesing = false;
+        });
     }
   }
 
